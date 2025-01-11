@@ -1,7 +1,4 @@
-"use client"
-
 import { ChartConfig, ChartContainer } from "@nutrigym/components/ui/chart"
-import * as React from "react"
 import {
   Card,
   CardContent,
@@ -16,13 +13,13 @@ import {
   RadialBarChart,
 } from "recharts"
 
-export type CaloriePieChartProps = {
+export type GoalChartProps = {
   title: string
   curr: number
   goal: number
 }
 
-export function GoalPieChart(props: CaloriePieChartProps) {
+export function GoalChart(props: GoalChartProps) {
   const chartConfig = {
     progress: {
       label: "Progress ",

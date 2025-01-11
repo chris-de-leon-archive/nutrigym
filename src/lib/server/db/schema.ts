@@ -1,5 +1,5 @@
-import { Gender } from "@nutrigym/lib/enums";
-import { sql } from "drizzle-orm";
+import { Gender } from "@nutrigym/lib/enums"
+import { sql } from "drizzle-orm"
 import {
   check,
   integer,
@@ -7,60 +7,95 @@ import {
   sqliteTable,
   text,
   unique,
-} from "drizzle-orm/sqlite-core";
+} from "drizzle-orm/sqlite-core"
 
 export const user = sqliteTable("user", {
   id: text("id").primaryKey(),
-});
+})
 
-export const userBody = sqliteTable("user_body", {
-  id: text("id").primaryKey(),
-  userId: text("user_id").notNull().unique().references(() => user.id),
-  birthday: integer("birthday").notNull(),
-  gender: text("gender").notNull(),
-}, () => [
-  check(
-    "valid_gender",
-    sql`gender IN (${
-      sql.join(Object.values(Gender).map((g) => sql.raw("'" + g + "'")), sql`,`)
-    })`,
-  ),
-]);
+export const userBody = sqliteTable(
+  "user_body",
+  {
+    id: text("id").primaryKey(),
+    userId: text("user_id")
+      .notNull()
+      .unique()
+      .references(() => user.id),
+    birthday: integer("birthday").notNull(),
+    gender: text("gender").notNull(),
+  },
+  () => [
+    check(
+      "valid_gender",
+      sql`gender IN (${sql.join(
+        Object.values(Gender).map((g) => sql.raw("'" + g + "'")),
+        sql`,`,
+      )})`,
+    ),
+  ],
+)
 
-export const userGoal = sqliteTable("user_goal", {
-  id: text("id").primaryKey(),
-  createdAt: integer("created_at").notNull().default(sql`(current_timestamp)`),
-  userId: text("user_id").notNull().references(() => user.id),
-  waterInMilliliters: real("water_in_milliliters").notNull(),
-  weightInPounds: real("weight_in_pounds").notNull(),
-  proteinPercentage: real("protein_percentage").notNull(),
-  carbsPercentage: real("carbs_percentage").notNull(),
-  fatPercentage: real("fat_percentage").notNull(),
-  calories: real("calories").notNull(),
-  version: integer("version").notNull(),
-}, (t) => [
-  unique().on(t.userId, t.version),
-]);
+export const userGoal = sqliteTable(
+  "user_goal",
+  {
+    id: text("id").primaryKey(),
+    createdAt: integer("created_at")
+      .notNull()
+      .default(sql`(current_timestamp)`),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id),
+    waterInMilliliters: real("water_in_milliliters").notNull(),
+    weightInPounds: real("weight_in_pounds").notNull(),
+    sleepInHours: real("sleep_in_hours").notNull(),
+    proteinPercentage: real("protein_percentage").notNull(),
+    carbsPercentage: real("carbs_percentage").notNull(),
+    fatPercentage: real("fat_percentage").notNull(),
+    calories: real("calories").notNull(),
+    steps: integer("steps").notNull(),
+    version: integer("version").notNull(),
+  },
+  (t) => [unique().on(t.userId, t.version)],
+)
 
-export const userLog = sqliteTable("user_log", {
-  id: text("id").primaryKey(),
-  createdAt: integer("created_at").notNull().default(sql`(current_timestamp)`),
-  goalsId: text("macros_id").notNull().references(() => userGoal.id),
-  userId: text("user_id").notNull().references(() => user.id),
-  month: integer("month").notNull(),
-  year: integer("year").notNull(),
-  day: integer("day").notNull(),
-}, (t) => [
-  unique().on(t.userId, t.year, t.month, t.day),
-]);
+export const userMeasurementLog = sqliteTable(
+  "user_measurement_log",
+  {
+    id: text("id").primaryKey(),
+    createdAt: integer("created_at")
+      .notNull()
+      .default(sql`(current_timestamp)`),
+    goalsId: text("macros_id")
+      .notNull()
+      .references(() => userGoal.id),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id),
+    month: integer("month").notNull(),
+    year: integer("year").notNull(),
+    day: integer("day").notNull(),
+  },
+  (t) => [unique().on(t.userId, t.year, t.month, t.day)],
+)
 
-export const loggedFood = sqliteTable("logged_food", {
+export const foodMeasurement = sqliteTable("food_measurement", {
   id: text("id").primaryKey(),
-  createdAt: integer("created_at").notNull().default(sql`(current_timestamp)`),
-  logId: text("meal_id").notNull().references(() => userLog.id),
+  createdAt: integer("created_at")
+    .notNull()
+    .default(sql`(current_timestamp)`),
+  logId: text("meal_id")
+    .notNull()
+    .references(() => userMeasurementLog.id),
   name: text("name").notNull(),
   url: text("url").notNull(),
   calories: real("calories").notNull(),
+
+  // TODO: rename
+  servingsConsumed: real("servings_consumed").notNull(),
+
+  // TODO: rename
+  servingSize: real("serving_size").notNull(),
+
   totalProteinInGrams: real("total_protein_in_grams"),
   totalCarbsInGrams: real("total_carbs_in_grams"),
   totalFatInGrams: real("total_fat_in_grams"),
@@ -74,14 +109,19 @@ export const loggedFood = sqliteTable("logged_food", {
   cholesterolInMilligrams: real("cholesterol_in_milligrams"),
   calciumInMilligrams: real("calcium_in_milligrams"),
   ironInMilligrams: real("iron_in_milligrams"),
-});
+})
 
-export const loggedMeasurement = sqliteTable("logged_measurement", {
+export const bodyMeasurement = sqliteTable("body_measurement", {
   id: text("id").primaryKey(),
-  createdAt: text("created_at").notNull().default(sql`(current_timestamp)`),
-  logId: text("meal_id").notNull().references(() => userLog.id),
+  createdAt: text("created_at")
+    .notNull()
+    .default(sql`(current_timestamp)`),
+  logId: text("meal_id")
+    .notNull()
+    .references(() => userMeasurementLog.id),
   weightInPounds: real("weight_in_pounds").notNull(),
   heightInInches: real("height_in_inches").notNull(),
+  waterInMilliliters: real("water_in_milliliters"),
   shouldersInInches: real("shoulders_in_inches"),
   forearmsInInches: real("forearms_in_inches"),
   calvesInInches: real("calves_in_inches"),
@@ -91,8 +131,10 @@ export const loggedMeasurement = sqliteTable("logged_measurement", {
   armsInInches: real("arms_in_inches"),
   neckInInches: real("neck_in_inches"),
   hipsInInches: real("hips_in_inches"),
+  sleepInHours: real("sleep_in_hours"),
+  steps: real("steps"),
   photoUrls: text("photo_urls"),
-});
+})
 
 // TODO:
 
