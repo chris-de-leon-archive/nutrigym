@@ -26,6 +26,7 @@ const documents = {
     "mutation UpdateBodyMeasurement($id: Uuid!, $data: UpdateBodyMeasurementInput!) {\n  updateBodyMeasurement(id: $id, data: $data) {\n    count\n  }\n}": types.UpdateBodyMeasurementDocument,
     "mutation CreateFoodMeasurementFromFoodDetails($data: CreateFoodMeasurementFromFoodDetailsInput!) {\n  createFoodMeasurementFromFoodDetails(data: $data) {\n    id\n  }\n}": types.CreateFoodMeasurementFromFoodDetailsDocument,
     "mutation CreateFoodMeasurementFromFoodID($data: CreateFoodMeasurementFromFoodIdInput!) {\n  createFoodMeasurementFromFoodID(data: $data) {\n    id\n  }\n}": types.CreateFoodMeasurementFromFoodIdDocument,
+    "query ListFoodMeasurements($date: Date!) {\n  listFoodMeasurements(date: $date) {\n    id\n    createdAt\n    logId\n    foodId\n    servingsConsumed\n  }\n}": types.ListFoodMeasurementsDocument,
 };
 
 /**
@@ -90,6 +91,10 @@ export function graphql(source: "mutation CreateFoodMeasurementFromFoodDetails($
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(source: "mutation CreateFoodMeasurementFromFoodID($data: CreateFoodMeasurementFromFoodIdInput!) {\n  createFoodMeasurementFromFoodID(data: $data) {\n    id\n  }\n}"): (typeof documents)["mutation CreateFoodMeasurementFromFoodID($data: CreateFoodMeasurementFromFoodIdInput!) {\n  createFoodMeasurementFromFoodID(data: $data) {\n    id\n  }\n}"];
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(source: "query ListFoodMeasurements($date: Date!) {\n  listFoodMeasurements(date: $date) {\n    id\n    createdAt\n    logId\n    foodId\n    servingsConsumed\n  }\n}"): (typeof documents)["query ListFoodMeasurements($date: Date!) {\n  listFoodMeasurements(date: $date) {\n    id\n    createdAt\n    logId\n    foodId\n    servingsConsumed\n  }\n}"];
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {};

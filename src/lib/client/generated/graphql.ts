@@ -118,6 +118,41 @@ export type CreateGoalInput = {
   weightInPounds: Scalars['Float']['input'];
 };
 
+export type DateInput = {
+  date: Scalars['Date']['input'];
+};
+
+export type Food = {
+  __typename?: 'Food';
+  brand: Scalars['String']['output'];
+  calciumInMilligrams?: Maybe<Scalars['Float']['output']>;
+  calories: Scalars['Float']['output'];
+  cholesterolInMilligrams?: Maybe<Scalars['Float']['output']>;
+  dietaryFiberInGrams?: Maybe<Scalars['Float']['output']>;
+  ironInMilligrams?: Maybe<Scalars['Float']['output']>;
+  monounsaturatedFatInGrams?: Maybe<Scalars['Float']['output']>;
+  name: Scalars['String']['output'];
+  polyunsaturatedFatInGrams?: Maybe<Scalars['Float']['output']>;
+  potassiumInMilligrams?: Maybe<Scalars['Float']['output']>;
+  saturatedFatInGrams?: Maybe<Scalars['Float']['output']>;
+  servingSize: Scalars['Float']['output'];
+  servingUnit: Scalars['String']['output'];
+  sodiumInMilligrams?: Maybe<Scalars['Float']['output']>;
+  sugarsInGrams?: Maybe<Scalars['Float']['output']>;
+  totalCarbsInGrams?: Maybe<Scalars['Float']['output']>;
+  totalFatInGrams?: Maybe<Scalars['Float']['output']>;
+  totalProteinInGrams?: Maybe<Scalars['Float']['output']>;
+};
+
+export type FoodMeasurement = {
+  __typename?: 'FoodMeasurement';
+  createdAt: Scalars['Date']['output'];
+  foodId: Scalars['String']['output'];
+  id: Scalars['String']['output'];
+  logId: Scalars['String']['output'];
+  servingsConsumed: Scalars['Float']['output'];
+};
+
 export type Gender =
   | 'Female'
   | 'Male';
@@ -203,6 +238,7 @@ export type Query = {
   bodyMeasurementByDate?: Maybe<BodyMeasurement>;
   goalByDate?: Maybe<Goal>;
   goalByID?: Maybe<Goal>;
+  listFoodMeasurements: Array<FoodMeasurement>;
 };
 
 
@@ -223,6 +259,11 @@ export type QueryGoalByDateArgs = {
 
 export type QueryGoalByIdArgs = {
   id: Scalars['Uuid']['input'];
+};
+
+
+export type QueryListFoodMeasurementsArgs = {
+  date: Scalars['Date']['input'];
 };
 
 export type UpdateBodyInput = {
@@ -337,6 +378,13 @@ export type CreateFoodMeasurementFromFoodIdMutationVariables = Exact<{
 
 export type CreateFoodMeasurementFromFoodIdMutation = { __typename?: 'Mutation', createFoodMeasurementFromFoodID: { __typename?: 'GenericID', id: string } };
 
+export type ListFoodMeasurementsQueryVariables = Exact<{
+  date: Scalars['Date']['input'];
+}>;
+
+
+export type ListFoodMeasurementsQuery = { __typename?: 'Query', listFoodMeasurements: Array<{ __typename?: 'FoodMeasurement', id: string, createdAt: any, logId: string, foodId: string, servingsConsumed: number }> };
+
 
 export const CreateBodyDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateBody"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateBodyInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createBody"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateBodyMutation, CreateBodyMutationVariables>;
 export const BodyDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"Body"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Uuid"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bodyByID"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"userId"}},{"kind":"Field","name":{"kind":"Name","value":"birthday"}},{"kind":"Field","name":{"kind":"Name","value":"gender"}}]}}]}}]} as unknown as DocumentNode<BodyQuery, BodyQueryVariables>;
@@ -350,3 +398,4 @@ export const RemoveBodyMeasurementsDocument = {"kind":"Document","definitions":[
 export const UpdateBodyMeasurementDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"UpdateBodyMeasurement"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Uuid"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"UpdateBodyMeasurementInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"updateBodyMeasurement"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}},{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"count"}}]}}]}}]} as unknown as DocumentNode<UpdateBodyMeasurementMutation, UpdateBodyMeasurementMutationVariables>;
 export const CreateFoodMeasurementFromFoodDetailsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateFoodMeasurementFromFoodDetails"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateFoodMeasurementFromFoodDetailsInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createFoodMeasurementFromFoodDetails"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateFoodMeasurementFromFoodDetailsMutation, CreateFoodMeasurementFromFoodDetailsMutationVariables>;
 export const CreateFoodMeasurementFromFoodIdDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateFoodMeasurementFromFoodID"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"data"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"CreateFoodMeasurementFromFoodIdInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createFoodMeasurementFromFoodID"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"data"},"value":{"kind":"Variable","name":{"kind":"Name","value":"data"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateFoodMeasurementFromFoodIdMutation, CreateFoodMeasurementFromFoodIdMutationVariables>;
+export const ListFoodMeasurementsDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"ListFoodMeasurements"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"date"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"Date"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"listFoodMeasurements"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"date"},"value":{"kind":"Variable","name":{"kind":"Name","value":"date"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"createdAt"}},{"kind":"Field","name":{"kind":"Name","value":"logId"}},{"kind":"Field","name":{"kind":"Name","value":"foodId"}},{"kind":"Field","name":{"kind":"Name","value":"servingsConsumed"}}]}}]}}]} as unknown as DocumentNode<ListFoodMeasurementsQuery, ListFoodMeasurementsQueryVariables>;

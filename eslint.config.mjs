@@ -13,7 +13,7 @@ const eslintConfig = [
   ...compat.extends(
     "next/core-web-vitals",
     "next/typescript",
-    "plugin:@tanstack/query/recommended",
+    "plugin:@tanstack/eslint-plugin-query/recommended",
   ),
 ]
 

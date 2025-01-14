@@ -98,6 +98,39 @@ A date string, such as 2007-12-03, compliant with the `full-date` format outline
 """
 scalar Date
 
+input DateInput {
+  date: Date!
+}
+
+type Food {
+  brand: String!
+  calciumInMilligrams: Float
+  calories: Float!
+  cholesterolInMilligrams: Float
+  dietaryFiberInGrams: Float
+  ironInMilligrams: Float
+  monounsaturatedFatInGrams: Float
+  name: String!
+  polyunsaturatedFatInGrams: Float
+  potassiumInMilligrams: Float
+  saturatedFatInGrams: Float
+  servingSize: Float!
+  servingUnit: String!
+  sodiumInMilligrams: Float
+  sugarsInGrams: Float
+  totalCarbsInGrams: Float
+  totalFatInGrams: Float
+  totalProteinInGrams: Float
+}
+
+type FoodMeasurement {
+  createdAt: Date!
+  foodId: String!
+  id: String!
+  logId: String!
+  servingsConsumed: Float!
+}
+
 enum Gender {
   Female
   Male
@@ -138,6 +171,7 @@ type Query {
   bodyMeasurementByDate(date: Date!): BodyMeasurement
   goalByDate(date: Date!): Goal
   goalByID(id: Uuid!): Goal
+  listFoodMeasurements(date: Date!): [FoodMeasurement!]!
 }
 
 input UpdateBodyInput {
