@@ -3,7 +3,7 @@ import { handler, zInput } from "./resolver"
 import { scalars } from "../../../scalars"
 import { types } from "../types"
 
-builder.queryField("listFoodMeasurements", (t) =>
+builder.queryField("foodMeasurementsByDate", (t) =>
   t.field({
     type: [types.foodMeasurement],
     args: {

@@ -74,6 +74,7 @@ export const handler = async (
       throw ERR_LOG_NOT_FOUND
     }
 
+    // TODO: only one body measurement per day
     return await tx
       .insert(schema.bodyMeasurement)
       .values({

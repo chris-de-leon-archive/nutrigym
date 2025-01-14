@@ -197,8 +197,10 @@ export type Mutation = {
   createFoodMeasurementFromFoodID: GenericId
   createGoal: GenericId
   removeBodyMeasurements: Count
+  removeFoodMeasurements: Count
   updateBody: Count
   updateBodyMeasurement: Count
+  updateFoodMeasurement: Count
 }
 
 export type MutationCreateBodyArgs = {
@@ -222,7 +224,11 @@ export type MutationCreateGoalArgs = {
 }
 
 export type MutationRemoveBodyMeasurementsArgs = {
-  ids: Array<Scalars["Uuid"]["input"]>
+  ids?: InputMaybe<Array<Scalars["Uuid"]["input"]>>
+}
+
+export type MutationRemoveFoodMeasurementsArgs = {
+  ids?: InputMaybe<Array<Scalars["Uuid"]["input"]>>
 }
 
 export type MutationUpdateBodyArgs = {
@@ -235,13 +241,18 @@ export type MutationUpdateBodyMeasurementArgs = {
   id: Scalars["Uuid"]["input"]
 }
 
+export type MutationUpdateFoodMeasurementArgs = {
+  data: UpdateFoodMeasurementInput
+  id: Scalars["Uuid"]["input"]
+}
+
 export type Query = {
   __typename?: "Query"
   bodyByID?: Maybe<Body>
   bodyMeasurementByDate?: Maybe<BodyMeasurement>
+  foodMeasurementsByDate: Array<FoodMeasurement>
   goalByDate?: Maybe<Goal>
   goalByID?: Maybe<Goal>
-  listFoodMeasurements: Array<FoodMeasurement>
 }
 
 export type QueryBodyByIdArgs = {
@@ -252,16 +263,16 @@ export type QueryBodyMeasurementByDateArgs = {
   date: Scalars["Date"]["input"]
 }
 
+export type QueryFoodMeasurementsByDateArgs = {
+  date: Scalars["Date"]["input"]
+}
+
 export type QueryGoalByDateArgs = {
   date: Scalars["Date"]["input"]
 }
 
 export type QueryGoalByIdArgs = {
   id: Scalars["Uuid"]["input"]
-}
-
-export type QueryListFoodMeasurementsArgs = {
-  date: Scalars["Date"]["input"]
 }
 
 export type UpdateBodyInput = {
@@ -284,6 +295,10 @@ export type UpdateBodyMeasurementInput = {
   waistInInches?: InputMaybe<Scalars["Float"]["input"]>
   waterInMilliliters?: InputMaybe<Scalars["Float"]["input"]>
   weightInPounds?: InputMaybe<Scalars["Float"]["input"]>
+}
+
+export type UpdateFoodMeasurementInput = {
+  servingsConsumed?: InputMaybe<Scalars["Float"]["input"]>
 }
 
 export type UuidInput = {
@@ -445,13 +460,13 @@ export type CreateFoodMeasurementFromFoodIdMutation = {
   createFoodMeasurementFromFoodID: { __typename?: "GenericID"; id: string }
 }
 
-export type ListFoodMeasurementsQueryVariables = Exact<{
+export type FoodMeasurementsByDateQueryVariables = Exact<{
   date: Scalars["Date"]["input"]
 }>
 
-export type ListFoodMeasurementsQuery = {
+export type FoodMeasurementsByDateQuery = {
   __typename?: "Query"
-  listFoodMeasurements: Array<{
+  foodMeasurementsByDate: Array<{
     __typename?: "FoodMeasurement"
     id: string
     createdAt: any
@@ -459,6 +474,25 @@ export type ListFoodMeasurementsQuery = {
     foodId: string
     servingsConsumed: number
   }>
+}
+
+export type RemoveFoodMeasurementsMutationVariables = Exact<{
+  ids: Array<Scalars["Uuid"]["input"]> | Scalars["Uuid"]["input"]
+}>
+
+export type RemoveFoodMeasurementsMutation = {
+  __typename?: "Mutation"
+  removeFoodMeasurements: { __typename?: "Count"; count: number }
+}
+
+export type UpdateFoodMeasurementMutationVariables = Exact<{
+  id: Scalars["Uuid"]["input"]
+  data: UpdateFoodMeasurementInput
+}>
+
+export type UpdateFoodMeasurementMutation = {
+  __typename?: "Mutation"
+  updateFoodMeasurement: { __typename?: "Count"; count: number }
 }
 
 export const CreateBodyDocument = {
@@ -1198,13 +1232,13 @@ export const CreateFoodMeasurementFromFoodIdDocument = {
   CreateFoodMeasurementFromFoodIdMutation,
   CreateFoodMeasurementFromFoodIdMutationVariables
 >
-export const ListFoodMeasurementsDocument = {
+export const FoodMeasurementsByDateDocument = {
   kind: "Document",
   definitions: [
     {
       kind: "OperationDefinition",
       operation: "query",
-      name: { kind: "Name", value: "ListFoodMeasurements" },
+      name: { kind: "Name", value: "FoodMeasurementsByDate" },
       variableDefinitions: [
         {
           kind: "VariableDefinition",
@@ -1220,7 +1254,7 @@ export const ListFoodMeasurementsDocument = {
         selections: [
           {
             kind: "Field",
-            name: { kind: "Name", value: "listFoodMeasurements" },
+            name: { kind: "Name", value: "foodMeasurementsByDate" },
             arguments: [
               {
                 kind: "Argument",
@@ -1250,6 +1284,130 @@ export const ListFoodMeasurementsDocument = {
     },
   ],
 } as unknown as DocumentNode<
-  ListFoodMeasurementsQuery,
-  ListFoodMeasurementsQueryVariables
+  FoodMeasurementsByDateQuery,
+  FoodMeasurementsByDateQueryVariables
+>
+export const RemoveFoodMeasurementsDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "RemoveFoodMeasurements" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "ids" } },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "ListType",
+              type: {
+                kind: "NonNullType",
+                type: {
+                  kind: "NamedType",
+                  name: { kind: "Name", value: "Uuid" },
+                },
+              },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "removeFoodMeasurements" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "ids" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "ids" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "count" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  RemoveFoodMeasurementsMutation,
+  RemoveFoodMeasurementsMutationVariables
+>
+export const UpdateFoodMeasurementDocument = {
+  kind: "Document",
+  definitions: [
+    {
+      kind: "OperationDefinition",
+      operation: "mutation",
+      name: { kind: "Name", value: "UpdateFoodMeasurement" },
+      variableDefinitions: [
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "id" } },
+          type: {
+            kind: "NonNullType",
+            type: { kind: "NamedType", name: { kind: "Name", value: "Uuid" } },
+          },
+        },
+        {
+          kind: "VariableDefinition",
+          variable: { kind: "Variable", name: { kind: "Name", value: "data" } },
+          type: {
+            kind: "NonNullType",
+            type: {
+              kind: "NamedType",
+              name: { kind: "Name", value: "UpdateFoodMeasurementInput" },
+            },
+          },
+        },
+      ],
+      selectionSet: {
+        kind: "SelectionSet",
+        selections: [
+          {
+            kind: "Field",
+            name: { kind: "Name", value: "updateFoodMeasurement" },
+            arguments: [
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "id" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "id" },
+                },
+              },
+              {
+                kind: "Argument",
+                name: { kind: "Name", value: "data" },
+                value: {
+                  kind: "Variable",
+                  name: { kind: "Name", value: "data" },
+                },
+              },
+            ],
+            selectionSet: {
+              kind: "SelectionSet",
+              selections: [
+                { kind: "Field", name: { kind: "Name", value: "count" } },
+              ],
+            },
+          },
+        ],
+      },
+    },
+  ],
+} as unknown as DocumentNode<
+  UpdateFoodMeasurementMutation,
+  UpdateFoodMeasurementMutationVariables
 >

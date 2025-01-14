@@ -1,7 +1,7 @@
 import * as resolver from "./resolver"
 import * as types from "./types"
 
-export const list = {
+export const update = {
   resolver,
   types,
 }

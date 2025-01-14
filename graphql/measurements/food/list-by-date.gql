@@ -1,0 +1,9 @@
+query FoodMeasurementsByDate($date: Date!) {
+  foodMeasurementsByDate(date: $date) {
+    id
+    createdAt
+    logId
+    foodId
+    servingsConsumed
+  }
+}

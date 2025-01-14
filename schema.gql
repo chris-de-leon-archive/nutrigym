@@ -165,17 +165,19 @@ type Mutation {
     data: CreateFoodMeasurementFromFoodIdInput!
   ): GenericID!
   createGoal(data: CreateGoalInput!): GenericID!
-  removeBodyMeasurements(ids: [Uuid!]!): Count!
+  removeBodyMeasurements(ids: [Uuid!]): Count!
+  removeFoodMeasurements(ids: [Uuid!]): Count!
   updateBody(data: UpdateBodyInput!, id: Uuid!): Count!
   updateBodyMeasurement(data: UpdateBodyMeasurementInput!, id: Uuid!): Count!
+  updateFoodMeasurement(data: UpdateFoodMeasurementInput!, id: Uuid!): Count!
 }
 
 type Query {
   bodyByID(id: Uuid!): Body
   bodyMeasurementByDate(date: Date!): BodyMeasurement
+  foodMeasurementsByDate(date: Date!): [FoodMeasurement!]!
   goalByDate(date: Date!): Goal
   goalByID(id: Uuid!): Goal
-  listFoodMeasurements(date: Date!): [FoodMeasurement!]!
 }
 
 input UpdateBodyInput {
@@ -198,6 +200,10 @@ input UpdateBodyMeasurementInput {
   waistInInches: Float
   waterInMilliliters: Float
   weightInPounds: Float
+}
+
+input UpdateFoodMeasurementInput {
+  servingsConsumed: Float
 }
 
 """

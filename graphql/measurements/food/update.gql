@@ -1,0 +1,5 @@
+mutation UpdateFoodMeasurement($id: Uuid!, $data: UpdateFoodMeasurementInput!) {
+  updateFoodMeasurement(id: $id, data: $data) {
+    count
+  }
+}

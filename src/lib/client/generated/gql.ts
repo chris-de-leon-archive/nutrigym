@@ -38,8 +38,12 @@ const documents = {
     types.CreateFoodMeasurementFromFoodDetailsDocument,
   "mutation CreateFoodMeasurementFromFoodID($data: CreateFoodMeasurementFromFoodIdInput!) {\n  createFoodMeasurementFromFoodID(data: $data) {\n    id\n  }\n}":
     types.CreateFoodMeasurementFromFoodIdDocument,
-  "query ListFoodMeasurements($date: Date!) {\n  listFoodMeasurements(date: $date) {\n    id\n    createdAt\n    logId\n    foodId\n    servingsConsumed\n  }\n}":
-    types.ListFoodMeasurementsDocument,
+  "query FoodMeasurementsByDate($date: Date!) {\n  foodMeasurementsByDate(date: $date) {\n    id\n    createdAt\n    logId\n    foodId\n    servingsConsumed\n  }\n}":
+    types.FoodMeasurementsByDateDocument,
+  "mutation RemoveFoodMeasurements($ids: [Uuid!]!) {\n  removeFoodMeasurements(ids: $ids) {\n    count\n  }\n}":
+    types.RemoveFoodMeasurementsDocument,
+  "mutation UpdateFoodMeasurement($id: Uuid!, $data: UpdateFoodMeasurementInput!) {\n  updateFoodMeasurement(id: $id, data: $data) {\n    count\n  }\n}":
+    types.UpdateFoodMeasurementDocument,
 }
 
 /**
@@ -132,8 +136,20 @@ export function graphql(
  * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
  */
 export function graphql(
-  source: "query ListFoodMeasurements($date: Date!) {\n  listFoodMeasurements(date: $date) {\n    id\n    createdAt\n    logId\n    foodId\n    servingsConsumed\n  }\n}",
-): (typeof documents)["query ListFoodMeasurements($date: Date!) {\n  listFoodMeasurements(date: $date) {\n    id\n    createdAt\n    logId\n    foodId\n    servingsConsumed\n  }\n}"]
+  source: "query FoodMeasurementsByDate($date: Date!) {\n  foodMeasurementsByDate(date: $date) {\n    id\n    createdAt\n    logId\n    foodId\n    servingsConsumed\n  }\n}",
+): (typeof documents)["query FoodMeasurementsByDate($date: Date!) {\n  foodMeasurementsByDate(date: $date) {\n    id\n    createdAt\n    logId\n    foodId\n    servingsConsumed\n  }\n}"]
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "mutation RemoveFoodMeasurements($ids: [Uuid!]!) {\n  removeFoodMeasurements(ids: $ids) {\n    count\n  }\n}",
+): (typeof documents)["mutation RemoveFoodMeasurements($ids: [Uuid!]!) {\n  removeFoodMeasurements(ids: $ids) {\n    count\n  }\n}"]
+/**
+ * The graphql function is used to parse GraphQL queries into a document that can be used by GraphQL clients.
+ */
+export function graphql(
+  source: "mutation UpdateFoodMeasurement($id: Uuid!, $data: UpdateFoodMeasurementInput!) {\n  updateFoodMeasurement(id: $id, data: $data) {\n    count\n  }\n}",
+): (typeof documents)["mutation UpdateFoodMeasurement($id: Uuid!, $data: UpdateFoodMeasurementInput!) {\n  updateFoodMeasurement(id: $id, data: $data) {\n    count\n  }\n}"]
 
 export function graphql(source: string) {
   return (documents as any)[source] ?? {}
