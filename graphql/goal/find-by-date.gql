@@ -1,0 +1,12 @@
+query GoalByDate($date: Date!) {
+  goalByDate(date: $date) {
+    waterInMilliliters
+    weightInPounds
+    sleepInHours
+    proteinPercentage
+    carbsPercentage
+    fatPercentage
+    calories
+    steps
+  }
+}

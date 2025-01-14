@@ -1,0 +1,5 @@
+mutation RemoveBodyMeasurements($ids: [Uuid!]!) {
+  removeBodyMeasurements(ids: $ids) {
+    count
+  }
+}

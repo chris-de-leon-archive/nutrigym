@@ -1,0 +1,172 @@
+type Body {
+  birthday: Date!
+  gender: String!
+  id: String!
+  userId: String!
+}
+
+type BodyMeasurement {
+  armsInInches: Float
+  calvesInInches: Float
+  chestInInches: Float
+  createdAt: Date!
+  forearmsInInches: Float
+  heightInInches: Float!
+  hipsInInches: Float
+  id: String!
+  logId: String!
+  neckInInches: Float
+  shouldersInInches: Float
+  sleepInHours: Float
+  steps: Int
+  thighsInInches: Float
+  waistInInches: Float
+  waterInMilliliters: Float
+  weightInPounds: Float!
+}
+
+type Count {
+  count: Int!
+}
+
+input CreateBodyInput {
+  birthday: Date!
+  gender: Gender!
+}
+
+input CreateBodyMeasurementInput {
+  armsInInches: Float
+  calvesInInches: Float
+  chestInInches: Float
+  forearmsInInches: Float
+  heightInInches: Float!
+  hipsInInches: Float
+  neckInInches: Float
+  shouldersInInches: Float
+  sleepInHours: Float
+  steps: Int
+  thighsInInches: Float
+  waistInInches: Float
+  waterInMilliliters: Float
+  weightInPounds: Float!
+}
+
+input CreateFoodInput {
+  brand: String!
+  calciumInMilligrams: Float
+  calories: Float!
+  cholesterolInMilligrams: Float
+  dietaryFiberInGrams: Float
+  ironInMilligrams: Float
+  monounsaturatedFatInGrams: Float
+  name: String!
+  polyunsaturatedFatInGrams: Float
+  potassiumInMilligrams: Float
+  saturatedFatInGrams: Float
+  servingSize: Float!
+  servingUnit: String!
+  sodiumInMilligrams: Float
+  sugarsInGrams: Float
+  totalCarbsInGrams: Float
+  totalFatInGrams: Float
+  totalProteinInGrams: Float
+}
+
+input CreateFoodMeasurementFromFoodDetailsInput {
+  food: CreateFoodInput!
+  servingsConsumed: Float!
+}
+
+input CreateFoodMeasurementFromFoodIdInput {
+  food: UuidInput!
+  servingsConsumed: Float!
+}
+
+input CreateGoalInput {
+  calories: Float!
+  carbsPercentage: Float!
+  fatPercentage: Float!
+  proteinPercentage: Float!
+  sleepInHours: Float!
+  steps: Int!
+  waterInMilliliters: Float!
+  weightInPounds: Float!
+}
+
+"""
+A date string, such as 2007-12-03, compliant with the `full-date` format outlined in section 5.6 of the RFC 3339 profile of the ISO 8601 standard for representation of dates and times using the Gregorian calendar.
+"""
+scalar Date
+
+enum Gender {
+  Female
+  Male
+}
+
+type GenericID {
+  id: String!
+}
+
+type Goal {
+  calories: Float!
+  carbsPercentage: Float!
+  createdAt: Date!
+  fatPercentage: Float!
+  id: String!
+  latest: Boolean!
+  proteinPercentage: Float!
+  sleepInHours: Float!
+  steps: Int!
+  version: String!
+  waterInMilliliters: Float!
+  weightInPounds: Float!
+}
+
+type Mutation {
+  createBody(data: CreateBodyInput!): GenericID!
+  createBodyMeasurement(data: CreateBodyMeasurementInput!): GenericID!
+  createFoodMeasurementFromFoodDetails(data: CreateFoodMeasurementFromFoodDetailsInput!): GenericID!
+  createFoodMeasurementFromFoodID(data: CreateFoodMeasurementFromFoodIdInput!): GenericID!
+  createGoal(data: CreateGoalInput!): GenericID!
+  removeBodyMeasurements(ids: [Uuid!]!): Count!
+  updateBody(data: UpdateBodyInput!, id: Uuid!): Count!
+  updateBodyMeasurement(data: UpdateBodyMeasurementInput!, id: Uuid!): Count!
+}
+
+type Query {
+  bodyByID(id: Uuid!): Body
+  bodyMeasurementByDate(date: Date!): BodyMeasurement
+  goalByDate(date: Date!): Goal
+  goalByID(id: Uuid!): Goal
+}
+
+input UpdateBodyInput {
+  birthday: Date
+  gender: Gender
+}
+
+input UpdateBodyMeasurementInput {
+  armsInInches: Float
+  calvesInInches: Float
+  chestInInches: Float
+  forearmsInInches: Float
+  heightInInches: Float
+  hipsInInches: Float
+  neckInInches: Float
+  shouldersInInches: Float
+  sleepInHours: Float
+  steps: Int
+  thighsInInches: Float
+  waistInInches: Float
+  waterInMilliliters: Float
+  weightInPounds: Float
+}
+
+"""
+A field whose value is a generic Universally Unique Identifier: https://en.wikipedia.org/wiki/Universally_unique_identifier.
+"""
+scalar Uuid
+
+input UuidInput {
+  id: Uuid!
+}

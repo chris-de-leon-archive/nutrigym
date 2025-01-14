@@ -1,0 +1,7 @@
+mutation CreateFoodMeasurementFromFoodID(
+  $data: CreateFoodMeasurementFromFoodIdInput!
+) {
+  createFoodMeasurementFromFoodID(data: $data) {
+    id
+  }
+}

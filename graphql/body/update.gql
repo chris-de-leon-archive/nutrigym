@@ -1,0 +1,5 @@
+mutation UpdateBody($id: Uuid!, $data: UpdateBodyInput!) {
+  updateBody(id: $id, data: $data) {
+    count
+  }
+}

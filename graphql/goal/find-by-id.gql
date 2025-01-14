@@ -1,0 +1,12 @@
+query GoalByID($id: Uuid!) {
+  goalByID(id: $id) {
+    waterInMilliliters
+    weightInPounds
+    sleepInHours
+    proteinPercentage
+    carbsPercentage
+    fatPercentage
+    calories
+    steps
+  }
+}

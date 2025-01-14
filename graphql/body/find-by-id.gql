@@ -1,0 +1,8 @@
+query Body($id: Uuid!) {
+  bodyByID(id: $id) {
+    id
+    userId
+    birthday
+    gender
+  }
+}

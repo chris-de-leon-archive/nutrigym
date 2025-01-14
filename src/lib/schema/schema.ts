@@ -1,27 +1,36 @@
 import { Gender } from "@nutrigym/lib/enums"
 import { sql } from "drizzle-orm"
 import {
-  check,
-  integer,
-  real,
   sqliteTable,
-  text,
+  integer,
   unique,
+  check,
+  index,
+  real,
+  text,
 } from "drizzle-orm/sqlite-core"
+
+// TODO: add cascading user deletion
 
 export const user = sqliteTable("user", {
   id: text("id").primaryKey(),
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
+    .notNull()
+    .default(sql`(unixepoch() * 1000)`),
 })
 
 export const userBody = sqliteTable(
   "user_body",
   {
     id: text("id").primaryKey(),
+    createdAt: integer("created_at", { mode: "timestamp_ms" })
+      .notNull()
+      .default(sql`(unixepoch() * 1000)`),
     userId: text("user_id")
       .notNull()
       .unique()
       .references(() => user.id),
-    birthday: integer("birthday").notNull(),
+    birthday: integer("birthday", { mode: "timestamp" }).notNull(),
     gender: text("gender").notNull(),
   },
   () => [
@@ -35,13 +44,14 @@ export const userBody = sqliteTable(
   ],
 )
 
+// TODO: should we add a DB trigger that automatically sets new versions to latest?
 export const userGoal = sqliteTable(
   "user_goal",
   {
     id: text("id").primaryKey(),
-    createdAt: integer("created_at")
+    createdAt: integer("created_at", { mode: "timestamp_ms" })
       .notNull()
-      .default(sql`(current_timestamp)`),
+      .default(sql`(unixepoch() * 1000)`),
     userId: text("user_id")
       .notNull()
       .references(() => user.id),
@@ -53,19 +63,57 @@ export const userGoal = sqliteTable(
     fatPercentage: real("fat_percentage").notNull(),
     calories: real("calories").notNull(),
     steps: integer("steps").notNull(),
-    version: integer("version").notNull(),
+    version: text("version").notNull(),
+    latest: integer("latest", { mode: "boolean" }).notNull(),
   },
-  (t) => [unique().on(t.userId, t.version)],
+  (t) => [
+    unique().on(t.userId, t.version),
+    index("no_more_than_one_latest_version_per_user")
+      .on(t.userId)
+      .where(sql`latest = 1`),
+  ],
+)
+
+export const userFood = sqliteTable(
+  "user_food",
+  {
+    id: text("id").primaryKey(),
+    createdAt: integer("created_at", { mode: "timestamp_ms" })
+      .notNull()
+      .default(sql`(unixepoch() * 1000)`),
+    userId: text("user_id")
+      .notNull()
+      .references(() => user.id),
+    name: text("name").notNull(),
+    brand: text("brand").notNull(),
+    calories: real("calories").notNull(),
+    servingSize: real("serving_size").notNull(),
+    servingUnit: text("serving_unit").notNull(),
+    totalProteinInGrams: real("total_protein_in_grams"),
+    totalCarbsInGrams: real("total_carbs_in_grams"),
+    totalFatInGrams: real("total_fat_in_grams"),
+    polyunsaturatedFatInGrams: real("polyunsaturated_fat_in_grams"),
+    monounsaturatedFatInGrams: real("monounsaturated_fat_in_grams"),
+    saturatedFatInGrams: real("saturated_fat_in_grams"),
+    potassiumInMilligrams: real("potassium_in_milligrams"),
+    sodiumInMilligrams: real("sodium_in_milligrams"),
+    dietaryFiberInGrams: real("dietary_fiber_in_grams"),
+    sugarsInGrams: real("sugars_in_grams"),
+    cholesterolInMilligrams: real("cholesterol_in_milligrams"),
+    calciumInMilligrams: real("calcium_in_milligrams"),
+    ironInMilligrams: real("iron_in_milligrams"),
+  },
+  (t) => [unique().on(t.userId, t.name, t.brand)],
 )
 
 export const userMeasurementLog = sqliteTable(
   "user_measurement_log",
   {
     id: text("id").primaryKey(),
-    createdAt: integer("created_at")
+    createdAt: integer("created_at", { mode: "timestamp_ms" })
       .notNull()
-      .default(sql`(current_timestamp)`),
-    goalsId: text("macros_id")
+      .default(sql`(unixepoch() * 1000)`),
+    goalId: text("goal_id")
       .notNull()
       .references(() => userGoal.id),
     userId: text("user_id")
@@ -80,44 +128,26 @@ export const userMeasurementLog = sqliteTable(
 
 export const foodMeasurement = sqliteTable("food_measurement", {
   id: text("id").primaryKey(),
-  createdAt: integer("created_at")
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
     .notNull()
-    .default(sql`(current_timestamp)`),
-  logId: text("meal_id")
+    .default(sql`(unixepoch() * 1000)`),
+  logId: text("log_id")
     .notNull()
     .references(() => userMeasurementLog.id),
-  name: text("name").notNull(),
-  url: text("url").notNull(),
-  calories: real("calories").notNull(),
-
-  // TODO: rename
+  foodId: text("food_id")
+    .notNull()
+    .references(() => userFood.id),
   servingsConsumed: real("servings_consumed").notNull(),
-
-  // TODO: rename
-  servingSize: real("serving_size").notNull(),
-
-  totalProteinInGrams: real("total_protein_in_grams"),
-  totalCarbsInGrams: real("total_carbs_in_grams"),
-  totalFatInGrams: real("total_fat_in_grams"),
-  polyunsaturatedFatInGrams: real("polyunsaturated_fat_in_grams"),
-  monounsaturatedFatInGrams: real("monounsaturated_fat_in_grams"),
-  saturatedFatInGrams: real("saturated_fat_in_grams"),
-  potassiumInMilligrams: real("potassium_in_milligrams"),
-  sodiumInMilligrams: real("sodium_in_milligrams"),
-  dietaryFiberInGrams: real("dietary_fiber_in_grams"),
-  sugarsInGrams: real("sugars_in_grams"),
-  cholesterolInMilligrams: real("cholesterol_in_milligrams"),
-  calciumInMilligrams: real("calcium_in_milligrams"),
-  ironInMilligrams: real("iron_in_milligrams"),
 })
 
 export const bodyMeasurement = sqliteTable("body_measurement", {
   id: text("id").primaryKey(),
-  createdAt: text("created_at")
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
     .notNull()
-    .default(sql`(current_timestamp)`),
-  logId: text("meal_id")
+    .default(sql`(unixepoch() * 1000)`),
+  logId: text("log_id")
     .notNull()
+    .unique()
     .references(() => userMeasurementLog.id),
   weightInPounds: real("weight_in_pounds").notNull(),
   heightInInches: real("height_in_inches").notNull(),
@@ -132,8 +162,18 @@ export const bodyMeasurement = sqliteTable("body_measurement", {
   neckInInches: real("neck_in_inches"),
   hipsInInches: real("hips_in_inches"),
   sleepInHours: real("sleep_in_hours"),
-  steps: real("steps"),
-  photoUrls: text("photo_urls"),
+  steps: integer("steps"),
+})
+
+export const photoMeasurement = sqliteTable("photo_measurement", {
+  id: text("id").primaryKey(),
+  createdAt: integer("created_at", { mode: "timestamp_ms" })
+    .notNull()
+    .default(sql`(unixepoch() * 1000)`),
+  logId: text("log_id")
+    .notNull()
+    .references(() => userMeasurementLog.id),
+  url: text("url"),
 })
 
 // TODO:
