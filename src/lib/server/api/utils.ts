@@ -7,9 +7,7 @@ export const withAuth = async <T>(
 ) => {
   const state = await ctx.providers.clerk.authenticateRequest(
     ctx.yoga.request,
-    {
-      jwtKey: ctx.env.CLERK_JWT_KEY,
-    },
+    { jwtKey: ctx.env.CLERK_JWT_KEY },
   )
 
   if (!state.isSignedIn) {

@@ -50,7 +50,7 @@ export const ERR_CREATE_BODY = errors.InternalServerError(
 )
 
 export const ERR_CREATE_GOAL = errors.InternalServerError(
-  "failed to create body",
+  "failed to create goal",
 )
 
 export const ERR_LOG_NOT_FOUND = errors.InternalServerError(
