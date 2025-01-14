@@ -1,8 +1,8 @@
-import { FoodMeasurement } from "@nutrigym/lib/schema";
-import { builder } from "@nutrigym/lib/server/api";
-import { scalars } from "../../scalars";
+import { FoodMeasurement } from "@nutrigym/lib/schema"
+import { builder } from "@nutrigym/lib/server/api"
+import { scalars } from "../../scalars"
 
-const foodMeasurement = builder.objectRef<FoodMeasurement>("FoodMeasurement");
+const foodMeasurement = builder.objectRef<FoodMeasurement>("FoodMeasurement")
 
 builder.objectType(foodMeasurement, {
   fields: (t) => ({
@@ -12,8 +12,8 @@ builder.objectType(foodMeasurement, {
     foodId: t.exposeString("foodId"),
     servingsConsumed: t.exposeFloat("servingsConsumed"),
   }),
-});
+})
 
 export const types = {
   foodMeasurement,
-};
+}

@@ -1,7 +1,7 @@
-import { builder, withAuth } from "@nutrigym/lib/server/api";
-import { handler, zInput } from "./resolver";
-import { scalars } from "../../../scalars";
-import { types } from "../types";
+import { builder, withAuth } from "@nutrigym/lib/server/api"
+import { handler, zInput } from "./resolver"
+import { scalars } from "../../../scalars"
+import { types } from "../types"
 
 builder.queryField("listFoodMeasurements", (t) =>
   t.field({
@@ -14,7 +14,8 @@ builder.queryField("listFoodMeasurements", (t) =>
     },
     resolve: async (_, args, ctx) => {
       return await withAuth(ctx, async (auth) => {
-        return await handler(args, { ...ctx, ...auth });
-      });
+        return await handler(args, { ...ctx, ...auth })
+      })
     },
-  }));
+  }),
+)

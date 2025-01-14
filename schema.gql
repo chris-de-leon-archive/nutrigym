@@ -158,8 +158,12 @@ type Goal {
 type Mutation {
   createBody(data: CreateBodyInput!): GenericID!
   createBodyMeasurement(data: CreateBodyMeasurementInput!): GenericID!
-  createFoodMeasurementFromFoodDetails(data: CreateFoodMeasurementFromFoodDetailsInput!): GenericID!
-  createFoodMeasurementFromFoodID(data: CreateFoodMeasurementFromFoodIdInput!): GenericID!
+  createFoodMeasurementFromFoodDetails(
+    data: CreateFoodMeasurementFromFoodDetailsInput!
+  ): GenericID!
+  createFoodMeasurementFromFoodID(
+    data: CreateFoodMeasurementFromFoodIdInput!
+  ): GenericID!
   createGoal(data: CreateGoalInput!): GenericID!
   removeBodyMeasurements(ids: [Uuid!]!): Count!
   updateBody(data: UpdateBodyInput!, id: Uuid!): Count!
