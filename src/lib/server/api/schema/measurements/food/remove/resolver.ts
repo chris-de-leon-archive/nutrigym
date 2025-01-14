@@ -26,15 +26,15 @@ export const handler = async (
 
     if (input.ids == null) {
       return await tx
-        .delete(schema.bodyMeasurement)
-        .where(eq(schema.bodyMeasurement.logId, log.id))
+        .delete(schema.foodMeasurement)
+        .where(eq(schema.foodMeasurement.logId, log.id))
     } else {
       return await tx
-        .delete(schema.bodyMeasurement)
+        .delete(schema.foodMeasurement)
         .where(
           and(
-            eq(schema.bodyMeasurement.logId, log.id),
-            inArray(schema.bodyMeasurement.id, input.ids),
+            eq(schema.foodMeasurement.logId, log.id),
+            inArray(schema.foodMeasurement.id, input.ids),
           ),
         )
     }

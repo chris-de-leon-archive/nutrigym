@@ -2,28 +2,28 @@ import { schema } from "@nutrigym/lib/schema"
 import { and, eq } from "drizzle-orm"
 import { z } from "zod"
 import {
-  isValidUpdateObject,
   GraphQLAuthContext,
+  isValidUpdateObject,
   stripNull,
 } from "@nutrigym/lib/server/api"
 
 export const zInput = z.object({
   id: z.string().uuid(),
   data: z.object({
-    sleepInHours: z.number().min(0).max(24).optional().nullable(),
-    waterInMilliliters: z.number().min(0).optional().nullable(),
-    shouldersInInches: z.number().min(0).optional().nullable(),
-    forearmsInInches: z.number().min(0).optional().nullable(),
-    calvesInInches: z.number().min(0).optional().nullable(),
-    thighsInInches: z.number().min(0).optional().nullable(),
-    waistInInches: z.number().min(0).optional().nullable(),
-    chestInInches: z.number().min(0).optional().nullable(),
-    armsInInches: z.number().min(0).optional().nullable(),
-    neckInInches: z.number().min(0).optional().nullable(),
-    hipsInInches: z.number().min(0).optional().nullable(),
-    steps: z.number().int().min(0).optional().nullable(),
-    heightInInches: z.number().min(0).optional().nullable(),
-    weightInPounds: z.number().min(0).optional().nullable(),
+    sleepInHours: z.number().min(0).max(24).nullish(),
+    waterInMilliliters: z.number().min(0).nullish(),
+    shouldersInInches: z.number().min(0).nullish(),
+    forearmsInInches: z.number().min(0).nullish(),
+    calvesInInches: z.number().min(0).nullish(),
+    thighsInInches: z.number().min(0).nullish(),
+    waistInInches: z.number().min(0).nullish(),
+    chestInInches: z.number().min(0).nullish(),
+    armsInInches: z.number().min(0).nullish(),
+    neckInInches: z.number().min(0).nullish(),
+    hipsInInches: z.number().min(0).nullish(),
+    steps: z.number().int().min(0).nullish(),
+    heightInInches: z.number().min(0).nullish(),
+    weightInPounds: z.number().min(0).nullish(),
   }),
 })
 

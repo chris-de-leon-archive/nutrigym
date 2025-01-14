@@ -11,8 +11,8 @@ import {
 export const zInput = z.object({
   id: z.string().uuid(),
   data: z.object({
-    birthday: z.date().optional().nullable(),
-    gender: z.nativeEnum(Gender).optional().nullable(),
+    birthday: z.date().nullish(),
+    gender: z.nativeEnum(Gender).nullish(),
   }),
 })
 
