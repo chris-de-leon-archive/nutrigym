@@ -1,10 +1,12 @@
 import { builder } from "@nutrigym/lib/server/api"
 import { Food } from "@nutrigym/lib/schema"
+import { scalars } from "../scalars"
 
 const food = builder.objectRef<Food>("Food")
 
 builder.objectType(food, {
   fields: (t) => ({
+    id: t.expose("id", { type: scalars.uuid }),
     name: t.exposeString("name"),
     brand: t.exposeString("brand"),
     calories: t.exposeFloat("calories"),

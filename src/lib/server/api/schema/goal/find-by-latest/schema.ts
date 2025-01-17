@@ -1,15 +1,12 @@
 import { withAuth, builder } from "@nutrigym/lib/server/api"
 import { handler, zInput } from "./resolver"
-import { scalars } from "../../scalars"
 import { types } from "../types"
 
-builder.queryField("bodyByID", (t) =>
+builder.queryField("goalByLatest", (t) =>
   t.field({
-    type: types.body,
+    type: types.goal,
     nullable: true,
-    args: {
-      id: t.arg({ type: scalars.uuid, required: true }),
-    },
+    args: {},
     validate: {
       schema: zInput,
     },

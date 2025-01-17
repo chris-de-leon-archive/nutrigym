@@ -30,7 +30,7 @@ export const userBody = sqliteTable(
       .notNull()
       .unique()
       .references(() => user.id),
-    birthday: integer("birthday", { mode: "timestamp" }).notNull(),
+    birthday: integer("birthday", { mode: "timestamp_ms" }).notNull(),
     gender: text("gender").notNull(),
   },
   () => [

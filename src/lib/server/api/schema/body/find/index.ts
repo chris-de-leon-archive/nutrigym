@@ -1,5 +1,5 @@
 import * as resolver from "./resolver"
 
-export const findByID = {
+export const find = {
   resolver,
 }

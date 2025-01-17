@@ -11,8 +11,7 @@ import { initContextCache } from "@pothos/core"
 import { env } from "@nutrigym/lib/server/env"
 import { createYoga } from "graphql-yoga"
 
-const { handleRequest: handleGqlRequest } = createYoga({
-  graphqlEndpoint: "/api/graphql",
+export const yoga = createYoga({
   fetchAPI: { Response },
   schema,
   context: async (yoga): Promise<GraphQLBaseContext> => {
@@ -39,9 +38,3 @@ const { handleRequest: handleGqlRequest } = createYoga({
     maxDepthPlugin(),
   ],
 })
-
-export {
-  handleGqlRequest as OPTIONS,
-  handleGqlRequest as POST,
-  handleGqlRequest as GET,
-}

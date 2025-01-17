@@ -5,16 +5,22 @@ import { schema } from "@nutrigym/lib/schema"
 import { NextResponse } from "next/server"
 
 export async function GET(req: Request) {
-  const auth = await clerk.authenticateRequest(req, {
+  const { isSignedIn, toAuth } = await clerk.authenticateRequest(req, {
     jwtKey: env.CLERK_JWT_KEY,
   })
 
-  if (auth.isSignedIn) {
-    await db
-      .insert(schema.user)
-      .values({ id: auth.toAuth().userId })
-      .onConflictDoNothing()
+  if (isSignedIn) {
+    const { userId } = toAuth()
+    await db.transaction(async (tx) => {
+      await tx.insert(schema.user).values({ id: userId }).onConflictDoNothing()
+    })
   }
 
-  return NextResponse.redirect(new URL("/", req.url))
+  const host = req.headers.get("host")
+  const url = new URL(req.url)
+  if (host != null) {
+    return NextResponse.redirect(new URL(`${url.protocol}//${host}`))
+  } else {
+    return NextResponse.redirect(new URL(url.origin))
+  }
 }

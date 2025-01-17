@@ -1,0 +1,12 @@
+query GoalByLatest {
+  goalByLatest {
+    waterInMilliliters
+    weightInPounds
+    sleepInHours
+    proteinPercentage
+    carbsPercentage
+    fatPercentage
+    calories
+    steps
+  }
+}

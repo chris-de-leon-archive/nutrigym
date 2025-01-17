@@ -3,7 +3,6 @@
 import { type TypedDocumentNode } from "@graphql-typed-document-node/core"
 import { ExecutableDefinitionNode } from "graphql"
 import { makeRequestOrThrow } from "./requests"
-import { useAuth } from "@clerk/nextjs"
 import {
   useMutation,
   UseMutationOptions,
@@ -11,15 +10,12 @@ import {
   UseQueryOptions,
 } from "@tanstack/react-query"
 
-type GetTokenFn = ReturnType<typeof useAuth>["getToken"]
-
 export function useGraphQLQuery<
   TResult,
-  TVariables extends Record<string, unknown> | undefined,
+  TVariables extends Record<string, unknown>,
 >(
   document: TypedDocumentNode<TResult, TVariables>,
   variables: TVariables,
-  getToken: GetTokenFn,
   options: Partial<
     Omit<
       UseQueryOptions<TResult, Error, TResult, unknown[]>,
@@ -33,17 +29,16 @@ export function useGraphQLQuery<
     ...options,
     queryKey: [docName, document, variables],
     queryFn: async () => {
-      return await makeRequestOrThrow(document, variables, await getToken())
+      return await makeRequestOrThrow(document, variables)
     },
   })
 }
 
 export function useGraphQLMutation<
   TResult,
-  TVariables extends Record<string, unknown> | undefined,
+  TVariables extends Record<string, unknown>,
 >(
   document: TypedDocumentNode<TResult, TVariables>,
-  getToken: GetTokenFn,
   options: Partial<
     Omit<UseMutationOptions<TResult, Error, TVariables, unknown>, "mutationFn">
   > = {},
@@ -51,7 +46,7 @@ export function useGraphQLMutation<
   return useMutation({
     ...options,
     mutationFn: async (variables: TVariables) => {
-      return await makeRequestOrThrow(document, variables, await getToken())
+      return await makeRequestOrThrow(document, variables)
     },
   })
 }

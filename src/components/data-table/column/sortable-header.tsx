@@ -15,7 +15,7 @@ interface DataTableColumnHeaderProps<TData, TValue>
   title: string
 }
 
-export function DataTableColumnHeader<TData, TValue>({
+export function DataTableColumnSortableHeader<TData, TValue>({
   column,
   title,
   className,

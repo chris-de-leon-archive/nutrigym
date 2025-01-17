@@ -5,5 +5,5 @@ import { drizzle } from "drizzle-orm/libsql"
 
 export const db = drizzle<typeof schema>(
   createClient({ url: env.DATABASE_URL }),
-  { schema },
+  { schema, logger: true },
 )

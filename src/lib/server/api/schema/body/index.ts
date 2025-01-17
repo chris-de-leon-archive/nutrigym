@@ -1,11 +1,11 @@
-import { findByID } from "./find-by-id"
 import { update } from "./update"
 import { create } from "./create"
 import { types } from "./types"
+import { find } from "./find"
 
 export const body = {
-  findByID,
   update,
   create,
+  find,
   types,
 }

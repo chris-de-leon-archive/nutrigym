@@ -5,5 +5,26 @@ query FoodMeasurementsByDate($date: Date!) {
     logId
     foodId
     servingsConsumed
+    food {
+      id
+      name
+      brand
+      calories
+      servingSize
+      servingUnit
+      totalProteinInGrams
+      totalCarbsInGrams
+      totalFatInGrams
+      polyunsaturatedFatInGrams
+      monounsaturatedFatInGrams
+      saturatedFatInGrams
+      potassiumInMilligrams
+      sodiumInMilligrams
+      dietaryFiberInGrams
+      sugarsInGrams
+      cholesterolInMilligrams
+      calciumInMilligrams
+      ironInMilligrams
+    }
   }
 }

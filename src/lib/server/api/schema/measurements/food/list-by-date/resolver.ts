@@ -1,11 +1,7 @@
+import { GraphQLAuthContext } from "@nutrigym/lib/server/api"
 import { schema } from "@nutrigym/lib/schema"
 import { and, eq } from "drizzle-orm"
 import { z } from "zod"
-import {
-  ERR_LOG_NOT_FOUND,
-  ERR_NO_GOALS_SET,
-  GraphQLAuthContext,
-} from "@nutrigym/lib/server/api"
 
 export const zInput = z.object({
   date: z.date(),
@@ -28,7 +24,7 @@ export const handler = async (
       ),
     })
     if (goal == null) {
-      throw ERR_NO_GOALS_SET
+      return []
     }
 
     const log = await tx.query.userMeasurementLog.findFirst({
@@ -40,7 +36,7 @@ export const handler = async (
       ),
     })
     if (log == null) {
-      throw ERR_LOG_NOT_FOUND
+      return []
     }
 
     return await tx.query.foodMeasurement.findMany({

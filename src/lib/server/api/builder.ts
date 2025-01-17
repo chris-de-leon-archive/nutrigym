@@ -1,3 +1,4 @@
+import DataloaderPlugin from "@pothos/plugin-dataloader"
 import { GraphQLBaseContext } from "./types"
 import ZodPlugin from "@pothos/plugin-zod"
 import SchemaBuilder from "@pothos/core"
@@ -18,7 +19,7 @@ export const builder = new SchemaBuilder<{
   }
 }>({
   defaultFieldNullability: false,
-  plugins: [ZodPlugin],
+  plugins: [ZodPlugin, DataloaderPlugin],
   zod: {
     validationError: (err) => {
       return errors.BadRequest(err.errors.at(0)?.message ?? err.message)

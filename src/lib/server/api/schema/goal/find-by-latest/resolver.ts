@@ -3,18 +3,16 @@ import { schema } from "@nutrigym/lib/schema"
 import { and, eq } from "drizzle-orm"
 import { z } from "zod"
 
-export const zInput = z.object({
-  id: z.string().uuid(),
-})
+export const zInput = z.object({})
 
 export const handler = async (
-  input: z.infer<typeof zInput>,
+  _: z.infer<typeof zInput>,
   ctx: GraphQLAuthContext,
 ) => {
-  return await ctx.providers.db.query.userBody.findFirst({
+  return await ctx.providers.db.query.userGoal.findFirst({
     where: and(
-      eq(schema.userBody.userId, ctx.auth.user.id),
-      eq(schema.userBody.id, input.id),
+      eq(schema.userGoal.userId, ctx.auth.user.id),
+      eq(schema.userGoal.latest, true),
     ),
   })
 }

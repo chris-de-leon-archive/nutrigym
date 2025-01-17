@@ -1,5 +1,5 @@
-query Body($id: Uuid!) {
-  bodyByID(id: $id) {
+query Body {
+  body {
     id
     userId
     birthday

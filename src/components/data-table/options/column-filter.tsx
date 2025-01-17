@@ -18,12 +18,14 @@ export function DataTableColumnFilter<TData>({
           (column) =>
             typeof column.accessorFn !== "undefined" && column.getCanHide(),
         )
-        .map((column) => {
+        .map((column, i) => {
           return (
-            <div className="flex flex-row items-center justify-start gap-x-2">
+            <div
+              key={i}
+              className="flex flex-row items-center justify-start gap-x-2"
+            >
               <Checkbox
                 id={column.id}
-                key={column.id}
                 className="capitalize"
                 checked={column.getIsVisible()}
                 onCheckedChange={(value) => column.toggleVisibility(!!value)}

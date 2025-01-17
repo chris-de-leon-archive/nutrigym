@@ -1,8 +1,8 @@
 "use client"
 
 import { Button } from "@nutrigym/components/ui/button"
-import { DataTableOptions } from "./options/options"
 import { DataTableNavigation } from "./navigation"
+import { DataTableOptions } from "./options"
 import { TrashIcon } from "lucide-react"
 import { cn } from "@nutrigym/lib/utils"
 import { type ClassValue } from "clsx"
@@ -83,7 +83,9 @@ export function DataTable<TData, TValue, TColumn extends keyof TData>({
   const canDelete = table.getFilteredSelectedRowModel().rows.length > 0
   const handleDelete = () => {
     const selectedRows = table.getFilteredSelectedRowModel().rows
-    onDelete != null && onDelete(selectedRows)
+    if (onDelete != null) {
+      onDelete(selectedRows)
+    }
     setShowDeleteDialog(false)
     setRowSelection({})
   }

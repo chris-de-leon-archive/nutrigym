@@ -22,7 +22,16 @@ export default {
         [path.join("src", "lib", "client", "generated/")]: {
           preset: "client",
           config: {
-            enumsAsTypes: true,
+            scalars: {
+              Uuid: {
+                input: "string",
+                output: "string",
+              },
+              Date: {
+                input: "Date",
+                output: "Date",
+              },
+            },
           },
         },
       },
