@@ -1,6 +1,10 @@
 export const MAX_MONTHS_IN_A_YEAR = 12
 export const MAX_LOOKBACK_YEARS = 200
 
+export const stringToDate = (date: Date | string) => {
+  return typeof date === "string" ? new Date(date) : date
+}
+
 export const getMonthName = (date: Date) => {
   return date.toLocaleString("default", {
     month: "long",

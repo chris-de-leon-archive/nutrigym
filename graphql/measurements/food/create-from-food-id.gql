@@ -1,7 +1,8 @@
 mutation CreateFoodMeasurementFromFoodID(
+  $date: Date!
   $data: CreateFoodMeasurementFromFoodIdInput!
 ) {
-  createFoodMeasurementFromFoodID(data: $data) {
+  createFoodMeasurementFromFoodID(date: $date, data: $data) {
     id
   }
 }

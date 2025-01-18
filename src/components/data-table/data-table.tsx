@@ -169,7 +169,7 @@ export function DataTable<TData, TValue, TColumn extends keyof TData>({
 
       {/* Alert Dialogs */}
       <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <AlertDialogContent>
+        <AlertDialogContent className="w-11/12">
           <AlertDialogHeader>
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>

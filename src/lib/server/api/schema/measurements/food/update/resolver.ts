@@ -1,3 +1,4 @@
+import { stripNull } from "@nutrigym/lib/utils"
 import { schema } from "@nutrigym/lib/schema"
 import { and, eq } from "drizzle-orm"
 import { z } from "zod"
@@ -5,11 +6,11 @@ import {
   GraphQLAuthContext,
   ERR_LOG_NOT_FOUND,
   isValidUpdateObject,
-  stripNull,
 } from "@nutrigym/lib/server/api"
 
 export const zInput = z.object({
   id: z.string().uuid(),
+  date: z.date(),
   data: z.object({
     servingsConsumed: z.number().min(0).nullish(),
   }),
@@ -27,9 +28,9 @@ export const handler = async (
     const log = await tx.query.userMeasurementLog.findFirst({
       where: and(
         eq(schema.userMeasurementLog.userId, ctx.auth.user.id),
-        eq(schema.userMeasurementLog.month, ctx.date.getUTCMonth()),
-        eq(schema.userMeasurementLog.year, ctx.date.getUTCFullYear()),
-        eq(schema.userMeasurementLog.day, ctx.date.getUTCDay()),
+        eq(schema.userMeasurementLog.month, input.date.getUTCMonth()),
+        eq(schema.userMeasurementLog.year, input.date.getUTCFullYear()),
+        eq(schema.userMeasurementLog.day, input.date.getUTCDay()),
       ),
     })
     if (log == null) {

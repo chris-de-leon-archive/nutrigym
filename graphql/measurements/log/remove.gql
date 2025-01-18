@@ -1,0 +1,5 @@
+mutation RemoveMeasurements($id: Uuid!, $data: RemoveMeasurementsInput!) {
+  removeMeasurements(id: $id, data: $data) {
+    count
+  }
+}

@@ -1,5 +1,0 @@
-mutation RemoveFoodMeasurements($ids: [Uuid!]!) {
-  removeFoodMeasurements(ids: $ids) {
-    count
-  }
-}

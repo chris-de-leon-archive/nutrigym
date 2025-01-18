@@ -1,5 +1,9 @@
-mutation UpdateFoodMeasurement($id: Uuid!, $data: UpdateFoodMeasurementInput!) {
-  updateFoodMeasurement(id: $id, data: $data) {
+mutation UpdateFoodMeasurement(
+  $id: Uuid!
+  $date: Date!
+  $data: UpdateFoodMeasurementInput!
+) {
+  updateFoodMeasurement(id: $id, date: $date, data: $data) {
     count
   }
 }

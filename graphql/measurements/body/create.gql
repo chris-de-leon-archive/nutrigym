@@ -1,5 +1,0 @@
-mutation CreateBodyMeasurement($data: CreateBodyMeasurementInput!) {
-  createBodyMeasurement(data: $data) {
-    id
-  }
-}

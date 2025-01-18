@@ -1,5 +1,0 @@
-mutation UpdateBodyMeasurement($id: Uuid!, $data: UpdateBodyMeasurementInput!) {
-  updateBodyMeasurement(id: $id, data: $data) {
-    count
-  }
-}

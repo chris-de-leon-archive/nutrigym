@@ -1,0 +1,8 @@
+mutation UpsertBodyMeasurement(
+  $date: Date!
+  $data: UpsertBodyMeasurementInput!
+) {
+  upsertBodyMeasurement(date: $date, data: $data) {
+    count
+  }
+}

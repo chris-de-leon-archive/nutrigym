@@ -39,13 +39,13 @@ export function Combobox(props: ComboboxProps) {
           variant="outline"
           role="combobox"
           aria-expanded={open}
-          className="w-[200px] justify-between"
+          className="w-full justify-between"
         >
           {label ?? props.placeholder}
           <ChevronsUpDown className="opacity-50" />
         </Button>
       </PopoverTrigger>
-      <PopoverContent className="w-[200px] p-0">
+      <PopoverContent className="p-0">
         <Command>
           <CommandInput placeholder="Search..." />
           <CommandList>
@@ -59,10 +59,18 @@ export function Combobox(props: ComboboxProps) {
                     const selectedValue = props.choices.find(
                       (c) => c.label === selectedLabel,
                     )?.value
-                    setValue(selectedValue)
-                    setLabel(selectedLabel)
+
+                    if (selectedValue === value && selectedLabel === label) {
+                      setValue(undefined)
+                      setLabel(undefined)
+                      props.onSelect(undefined)
+                    } else {
+                      setValue(selectedValue)
+                      setLabel(selectedLabel)
+                      props.onSelect(selectedValue)
+                    }
+
                     setOpen(false)
-                    props.onSelect(selectedValue)
                   }}
                 >
                   {c.label}

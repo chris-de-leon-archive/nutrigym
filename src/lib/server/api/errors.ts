@@ -61,8 +61,8 @@ export const ERR_CREATE_FOOD_MEASUREMENT = errors.InternalServerError(
   "failed to record food measurement",
 )
 
-export const ERR_CREATE_BODY_MEASUREMENT = errors.InternalServerError(
-  "failed to record body measurement",
+export const ERR_UPSERT_BODY_MEASUREMENT = errors.InternalServerError(
+  "failed to create or update body measurement",
 )
 
 export const ERR_CREATE_FOOD = errors.InternalServerError(

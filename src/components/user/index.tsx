@@ -9,8 +9,8 @@ import {
 } from "@nutrigym/lib/client"
 
 type UserContext = Required<{
-  goal: GoalByLatestQuery["goalByLatest"]
-  body: BodyQuery["body"]
+  goal: NonNullable<GoalByLatestQuery["goalByLatest"]>
+  body: NonNullable<BodyQuery["body"]>
 }>
 
 export function withUserInfo(

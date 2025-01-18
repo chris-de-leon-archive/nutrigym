@@ -1,18 +1,20 @@
 import { withUserInfo } from "@nutrigym/components/user"
 import { Button } from "@nutrigym/components/ui/button"
-import { BodyGoalCharts } from "./body-goal-charts"
 import { Title } from "@nutrigym/components/title"
-import { EditIcon, PlusIcon } from "lucide-react"
-import { BodyMeasurementsLog } from "./body-measurements-log"
+import { BodyDataTable } from "./body.data-table"
+import { BodyCharts } from "./body.charts"
+import { EditIcon } from "lucide-react"
 import {
   BodyMeasurementByDateDocument,
   makeRequestOrThrow,
 } from "@nutrigym/lib/client"
+import { MeasurementsDialog } from "./measurements.dialog"
 
 export default withUserInfo(async (ctx) => {
+  // TODO: modify <Title> component to make date updatable
   const date = new Date()
 
-  const { bodyMeasurementByDate: measurements } = await makeRequestOrThrow(
+  const { measurementsByDate: log } = await makeRequestOrThrow(
     BodyMeasurementByDateDocument,
     { date },
   )
@@ -28,16 +30,14 @@ export default withUserInfo(async (ctx) => {
               <EditIcon />
             </Button>
           </div>
-          <BodyGoalCharts measurements={measurements} goal={ctx.goal} />
+          <BodyCharts log={log} goal={ctx.goal} />
         </div>
         <div className="flex flex-col justify-start gap-y-2">
           <div className="flex flex-row items-center justify-between">
             <span className="text-2xl font-bold">Measurements</span>
-            <Button variant="secondary">
-              <PlusIcon />
-            </Button>
+            <MeasurementsDialog log={log} date={date} />
           </div>
-          <BodyMeasurementsLog measurements={measurements} />
+          <BodyDataTable log={log} />
         </div>
       </div>
     </div>

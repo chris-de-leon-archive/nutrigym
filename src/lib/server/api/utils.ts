@@ -36,7 +36,7 @@ export const withAuth = async <T>(
   //
   // The consequence of this is that we cannot do something like this:
   //
-  //   // https://clerk.com/docs/references/backend/sessions/authenticate-request#example 
+  //   // https://clerk.com/docs/references/backend/sessions/authenticate-request#example
   //   const result = await ctx.clerk.authenticateRequest(ctx.yoga.request, {
   //     secretKey: ctx.env.CLERK_SECRET_KEY,
   //     jwtKey: ctx.env.JWT_KEY,
@@ -49,7 +49,7 @@ export const withAuth = async <T>(
   //
   //   "Response body object should not be disturbed or locked"
   //
-  // Instead, we need to manually verify the JWT using the following code. The code 
+  // Instead, we need to manually verify the JWT using the following code. The code
   // below is networkless since we pass in the JWT key:
   //
   //  https://clerk.com/docs/references/nodejs/token-verification#networkless-token-verification
@@ -100,8 +100,4 @@ export const withAuth = async <T>(
 
 export const isValidUpdateObject = <T extends object>(obj: T) => {
   return Object.values(obj).filter((v) => v != null).length === 0
-}
-
-export const stripNull = <T>(val: T | undefined | null) => {
-  return val == null ? undefined : val
 }

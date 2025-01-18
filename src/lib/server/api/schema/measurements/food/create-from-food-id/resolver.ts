@@ -11,6 +11,7 @@ import {
 } from "@nutrigym/lib/server/api"
 
 export const zInput = z.object({
+  date: z.date(),
   data: z.object({
     servingsConsumed: z.number().min(0),
     food: z.object({
@@ -26,9 +27,9 @@ export const handler = async (
   const measurementLogId = randomUUID()
   const measurementId = randomUUID()
   const userId = ctx.auth.user.id
-  const month = ctx.date.getUTCMonth()
-  const year = ctx.date.getUTCFullYear()
-  const day = ctx.date.getUTCDay()
+  const month = input.date.getUTCMonth()
+  const year = input.date.getUTCFullYear()
+  const day = input.date.getUTCDay()
 
   const resp = await ctx.providers.db.transaction(async (tx) => {
     const food = await tx.query.userFood.findFirst({

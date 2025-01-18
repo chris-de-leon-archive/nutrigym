@@ -1,18 +1,23 @@
-import { NutritionGoalCharts } from "./nutrition-goal-charts"
+import { NutritionDataTable } from "./nutrition.data-table"
+import { FoodCreatorDialog } from "./food-creator.dialog"
 import { withUserInfo } from "@nutrigym/components/user"
-import { NutritionFoodLog } from "./nutrition-food-log"
 import { Button } from "@nutrigym/components/ui/button"
+import { NutritionCharts } from "./nutrition.charts"
 import { Title } from "@nutrigym/components/title"
-import { EditIcon, PlusIcon } from "lucide-react"
+import { EditIcon } from "lucide-react"
 import {
   FoodMeasurementsByDateDocument,
   makeRequestOrThrow,
+  FoodsDocument,
 } from "@nutrigym/lib/client"
 
 export default withUserInfo(async (ctx) => {
+  // TODO: modify <Title> component to make date updatable
   const date = new Date()
 
-  const { foodMeasurementsByDate: measurements } = await makeRequestOrThrow(
+  const { foods } = await makeRequestOrThrow(FoodsDocument, {})
+
+  const { measurementsByDate: log } = await makeRequestOrThrow(
     FoodMeasurementsByDateDocument,
     { date },
   )
@@ -28,16 +33,14 @@ export default withUserInfo(async (ctx) => {
               <EditIcon />
             </Button>
           </div>
-          <NutritionGoalCharts measurements={measurements} goal={ctx.goal} />
+          <NutritionCharts log={log} goal={ctx.goal} />
         </div>
         <div className="flex flex-col justify-start gap-y-2">
           <div className="flex flex-row items-center justify-between">
             <span className="text-2xl font-bold">Foods</span>
-            <Button variant="secondary">
-              <PlusIcon />
-            </Button>
+            <FoodCreatorDialog date={date} foods={foods} />
           </div>
-          <NutritionFoodLog measurements={measurements} />
+          <NutritionDataTable log={log} />
         </div>
       </div>
     </div>

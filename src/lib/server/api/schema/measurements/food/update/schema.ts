@@ -9,6 +9,7 @@ builder.mutationField("updateFoodMeasurement", (t) =>
     type: objects.count,
     args: {
       id: t.arg({ type: scalars.uuid, required: true }),
+      date: t.arg({ type: scalars.date, required: true }),
       data: t.arg({ type: input, required: true }),
     },
     validate: {

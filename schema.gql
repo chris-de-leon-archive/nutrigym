@@ -34,23 +34,6 @@ input CreateBodyInput {
   gender: Gender!
 }
 
-input CreateBodyMeasurementInput {
-  armsInInches: Float
-  calvesInInches: Float
-  chestInInches: Float
-  forearmsInInches: Float
-  heightInInches: Float!
-  hipsInInches: Float
-  neckInInches: Float
-  shouldersInInches: Float
-  sleepInHours: Float
-  steps: Int
-  thighsInInches: Float
-  waistInInches: Float
-  waterInMilliliters: Float
-  weightInPounds: Float!
-}
-
 input CreateFoodInput {
   brand: String!
   calciumInMilligrams: Float
@@ -157,26 +140,41 @@ type Goal {
   weightInPounds: Float!
 }
 
+type MeasurementLog {
+  bodyMeasurement: BodyMeasurement
+  createdAt: Date!
+  day: Int!
+  foodMeasurements: [FoodMeasurement!]!
+  goalId: String!
+  id: String!
+  month: Int!
+  userId: String!
+  year: Int!
+}
+
 type Mutation {
   createBody(data: CreateBodyInput!): GenericID!
-  createBodyMeasurement(data: CreateBodyMeasurementInput!): GenericID!
-  createFoodMeasurementFromFoodDetails(data: CreateFoodMeasurementFromFoodDetailsInput!): GenericID!
-  createFoodMeasurementFromFoodID(data: CreateFoodMeasurementFromFoodIdInput!): GenericID!
+  createFoodMeasurementFromFoodDetails(data: CreateFoodMeasurementFromFoodDetailsInput!, date: Date!): GenericID!
+  createFoodMeasurementFromFoodID(data: CreateFoodMeasurementFromFoodIdInput!, date: Date!): GenericID!
   createGoal(data: CreateGoalInput!): GenericID!
-  removeBodyMeasurements(ids: [Uuid!]): Count!
-  removeFoodMeasurements(ids: [Uuid!]): Count!
+  removeMeasurements(data: RemoveMeasurementsInput!, id: Uuid!): Count!
   updateBody(data: UpdateBodyInput!, id: Uuid!): Count!
-  updateBodyMeasurement(data: UpdateBodyMeasurementInput!, id: Uuid!): Count!
-  updateFoodMeasurement(data: UpdateFoodMeasurementInput!, id: Uuid!): Count!
+  updateFoodMeasurement(data: UpdateFoodMeasurementInput!, date: Date!, id: Uuid!): Count!
+  upsertBodyMeasurement(data: UpsertBodyMeasurementInput!, date: Date!): Count!
 }
 
 type Query {
   body: Body
-  bodyMeasurementByDate(date: Date!): BodyMeasurement
-  foodMeasurementsByDate(date: Date!): [FoodMeasurement!]!
+  foods: [Food!]!
   goalByDate(date: Date!): Goal
   goalByID(id: Uuid!): Goal
   goalByLatest: Goal
+  measurementsByDate(date: Date!): MeasurementLog
+}
+
+input RemoveMeasurementsInput {
+  bodyIds: [Uuid!]!
+  foodIds: [Uuid!]!
 }
 
 input UpdateBodyInput {
@@ -184,12 +182,16 @@ input UpdateBodyInput {
   gender: Gender
 }
 
-input UpdateBodyMeasurementInput {
+input UpdateFoodMeasurementInput {
+  servingsConsumed: Float
+}
+
+input UpsertBodyMeasurementInput {
   armsInInches: Float
   calvesInInches: Float
   chestInInches: Float
   forearmsInInches: Float
-  heightInInches: Float
+  heightInInches: Float!
   hipsInInches: Float
   neckInInches: Float
   shouldersInInches: Float
@@ -198,11 +200,7 @@ input UpdateBodyMeasurementInput {
   thighsInInches: Float
   waistInInches: Float
   waterInMilliliters: Float
-  weightInPounds: Float
-}
-
-input UpdateFoodMeasurementInput {
-  servingsConsumed: Float
+  weightInPounds: Float!
 }
 
 """

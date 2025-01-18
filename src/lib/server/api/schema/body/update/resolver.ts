@@ -1,3 +1,4 @@
+import { stripNull } from "@nutrigym/lib/utils"
 import { schema } from "@nutrigym/lib/schema"
 import { Gender } from "@nutrigym/lib/enums"
 import { and, eq } from "drizzle-orm"
@@ -5,7 +6,6 @@ import { z } from "zod"
 import {
   isValidUpdateObject,
   GraphQLAuthContext,
-  stripNull,
 } from "@nutrigym/lib/server/api"
 
 export const zInput = z.object({
