@@ -3,8 +3,11 @@ import { FoodCreatorDialog } from "./food-creator.dialog"
 import { withUserInfo } from "@nutrigym/components/user"
 import { Button } from "@nutrigym/components/ui/button"
 import { NutritionCharts } from "./nutrition.charts"
-import { Title } from "@nutrigym/components/title"
 import { EditIcon } from "lucide-react"
+import {
+  PageContainer,
+  PageTitleWithDatePicker,
+} from "@nutrigym/components/page"
 import {
   FoodMeasurementsByDateDocument,
   makeRequestOrThrow,
@@ -23,26 +26,24 @@ export default withUserInfo(async (ctx) => {
   )
 
   return (
-    <div className="container mx-auto">
-      <div className="flex flex-col justify-start gap-y-10">
-        <Title name="Nutrition" />
-        <div className="flex flex-col justify-start gap-y-2">
-          <div className="flex flex-row items-center justify-between">
-            <span className="text-2xl font-bold">Goals</span>
-            <Button variant="secondary">
-              <EditIcon />
-            </Button>
-          </div>
-          <NutritionCharts log={log} goal={ctx.goal} />
+    <PageContainer>
+      <PageTitleWithDatePicker name="Nutrition" />
+      <div className="flex flex-col justify-start gap-y-2">
+        <div className="flex flex-row items-center justify-between">
+          <span className="text-2xl font-bold">Goals</span>
+          <Button variant="secondary">
+            <EditIcon />
+          </Button>
         </div>
-        <div className="flex flex-col justify-start gap-y-2">
-          <div className="flex flex-row items-center justify-between">
-            <span className="text-2xl font-bold">Foods</span>
-            <FoodCreatorDialog date={date} foods={foods} />
-          </div>
-          <NutritionDataTable log={log} />
-        </div>
+        <NutritionCharts log={log} goal={ctx.goal} />
       </div>
-    </div>
+      <div className="flex flex-col justify-start gap-y-2">
+        <div className="flex flex-row items-center justify-between">
+          <span className="text-2xl font-bold">Foods</span>
+          <FoodCreatorDialog date={date} foods={foods} />
+        </div>
+        <NutritionDataTable log={log} />
+      </div>
+    </PageContainer>
   )
 })

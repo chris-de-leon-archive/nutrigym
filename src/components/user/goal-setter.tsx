@@ -2,6 +2,7 @@
 
 import { calculatePortion, caloriesToGrams } from "@nutrigym/lib/conversion"
 import { CreateGoalDocument, makeRequestOrThrow } from "@nutrigym/lib/client"
+import { PageContainer, PageTitle } from "@nutrigym/components/page"
 import { FractionalPieChart } from "@nutrigym/components/charts"
 import { RefreshCwIcon, TriangleAlertIcon } from "lucide-react"
 import { redirect, usePathname } from "next/navigation"
@@ -10,7 +11,6 @@ import { Slider } from "@nutrigym/components/ui/slider"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@nutrigym/components/ui/input"
 import { useForm, useWatch } from "react-hook-form"
-import { Title } from "@nutrigym/components/title"
 import { useMemo } from "react"
 import { z } from "zod"
 import {
@@ -79,122 +79,65 @@ export function GoalSetter() {
   }
 
   return (
-    <div className="container mx-auto">
-      <div className="flex flex-col justify-start gap-y-10">
-        {/* TODO: remove date picker */}
-        <Title name="Onboarding" />
-        <div className="flex flex-col justify-start gap-y-2">
-          <span className="text-2xl font-bold">Set Your Health Goals</span>
-          <FractionalPieChart
-            title="Macro Distribution"
-            description={`Calorie Goal = ${stat.calories}`}
-            slices={[
-              {
-                category: "protein",
-                value: stat.proteinInGrams,
-                label: "Protein",
-                units: "(g)",
-                color: "hsl(var(--chart-1))",
-              },
-              {
-                category: "carbs",
-                value: stat.carbsInGrams,
-                label: "Carbs",
-                units: "(g)",
-                color: "hsl(var(--chart-2))",
-              },
-              {
-                category: "fat",
-                value: stat.fatInGrams,
-                label: "Fats",
-                units: "(g)",
-                color: "hsl(var(--chart-3))",
-              },
-            ]}
-          />
+    <PageContainer>
+      <PageTitle name="Onboarding" />
+      <div className="flex flex-col justify-start gap-y-2">
+        <span className="text-2xl font-bold">Set Your Health Goals</span>
+        <FractionalPieChart
+          title="Macro Distribution"
+          description={`Calorie Goal = ${stat.calories}`}
+          slices={[
+            {
+              category: "protein",
+              value: stat.proteinInGrams,
+              label: "Protein",
+              units: "(g)",
+              color: "hsl(var(--chart-1))",
+            },
+            {
+              category: "carbs",
+              value: stat.carbsInGrams,
+              label: "Carbs",
+              units: "(g)",
+              color: "hsl(var(--chart-2))",
+            },
+            {
+              category: "fat",
+              value: stat.fatInGrams,
+              label: "Fats",
+              units: "(g)",
+              color: "hsl(var(--chart-3))",
+            },
+          ]}
+        />
+      </div>
+      <div className="flex flex-col justify-start gap-y-2">
+        <div className="flex flex-row items-center justify-between">
+          <span className="text-2xl font-bold">Options</span>
+          <Button onClick={() => form.reset()}>
+            <RefreshCwIcon />
+          </Button>
         </div>
-        <div className="flex flex-col justify-start gap-y-2">
-          <div className="flex flex-row items-center justify-between">
-            <span className="text-2xl font-bold">Options</span>
-            <Button onClick={() => form.reset()}>
-              <RefreshCwIcon />
-            </Button>
-          </div>
-          <div className="flex flex-col gap-y-5 rounded-lg border p-4">
-            {stat.percentageSum !== 100 && (
-              <Alert variant="destructive">
-                <TriangleAlertIcon />
-                <AlertTitle>Error</AlertTitle>
-                <AlertDescription>
-                  Percentages must sum to 100%
-                </AlertDescription>
-              </Alert>
-            )}
-            <Form {...form}>
-              <form
-                className="flex flex-col gap-y-5"
-                onSubmit={form.handleSubmit(onSubmit)}
-              >
-                <div className="grid grid-cols-2 gap-5">
-                  <FormField
-                    control={form.control}
-                    name="weightInPounds"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Weight (lbs)</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="waterInMilliliters"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Water (ml)</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="sleepInHours"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Sleep (hrs)</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="steps"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel>Steps</FormLabel>
-                        <FormControl>
-                          <Input {...field} />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                </div>
+        <div className="flex flex-col gap-y-5 rounded-lg border p-4">
+          {stat.percentageSum !== 100 && (
+            <Alert variant="destructive">
+              <TriangleAlertIcon />
+              <AlertTitle>Error</AlertTitle>
+              <AlertDescription>Percentages must sum to 100%</AlertDescription>
+            </Alert>
+          )}
+          <Form {...form}>
+            <form
+              className="flex flex-col gap-y-5"
+              onSubmit={form.handleSubmit(onSubmit)}
+            >
+              <div className="grid grid-cols-2 gap-5">
                 <FormField
                   control={form.control}
-                  name="calories"
+                  name="weightInPounds"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Calories</FormLabel>
+                      <FormLabel>Weight (lbs)</FormLabel>
                       <FormControl>
                         <Input {...field} />
                       </FormControl>
@@ -204,21 +147,12 @@ export function GoalSetter() {
                 />
                 <FormField
                   control={form.control}
-                  name="proteinPercentage"
+                  name="waterInMilliliters"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Protein ({field.value}%)</FormLabel>
+                      <FormLabel>Water (ml)</FormLabel>
                       <FormControl>
-                        <Slider
-                          defaultValue={[field.value]}
-                          value={[field.value]}
-                          min={0}
-                          max={100}
-                          step={0.5}
-                          onValueChange={([val]) =>
-                            form.setValue("proteinPercentage", val)
-                          }
-                        />
+                        <Input {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -226,21 +160,12 @@ export function GoalSetter() {
                 />
                 <FormField
                   control={form.control}
-                  name="carbsPercentage"
+                  name="sleepInHours"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Carbs ({field.value}%)</FormLabel>
+                      <FormLabel>Sleep (hrs)</FormLabel>
                       <FormControl>
-                        <Slider
-                          defaultValue={[field.value]}
-                          value={[field.value]}
-                          min={0}
-                          max={100}
-                          step={0.5}
-                          onValueChange={([val]) =>
-                            form.setValue("carbsPercentage", val)
-                          }
-                        />
+                        <Input {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -248,32 +173,102 @@ export function GoalSetter() {
                 />
                 <FormField
                   control={form.control}
-                  name="fatPercentage"
+                  name="steps"
                   render={({ field }) => (
                     <FormItem>
-                      <FormLabel>Fat ({field.value}%)</FormLabel>
+                      <FormLabel>Steps</FormLabel>
                       <FormControl>
-                        <Slider
-                          defaultValue={[field.value]}
-                          value={[field.value]}
-                          min={0}
-                          max={100}
-                          step={0.5}
-                          onValueChange={([val]) =>
-                            form.setValue("fatPercentage", val)
-                          }
-                        />
+                        <Input {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
                   )}
                 />
-                <Button type="submit">Set Goals</Button>
-              </form>
-            </Form>
-          </div>
+              </div>
+              <FormField
+                control={form.control}
+                name="calories"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Calories</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="proteinPercentage"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Protein ({field.value}%)</FormLabel>
+                    <FormControl>
+                      <Slider
+                        defaultValue={[field.value]}
+                        value={[field.value]}
+                        min={0}
+                        max={100}
+                        step={0.5}
+                        onValueChange={([val]) =>
+                          form.setValue("proteinPercentage", val)
+                        }
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="carbsPercentage"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Carbs ({field.value}%)</FormLabel>
+                    <FormControl>
+                      <Slider
+                        defaultValue={[field.value]}
+                        value={[field.value]}
+                        min={0}
+                        max={100}
+                        step={0.5}
+                        onValueChange={([val]) =>
+                          form.setValue("carbsPercentage", val)
+                        }
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <FormField
+                control={form.control}
+                name="fatPercentage"
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>Fat ({field.value}%)</FormLabel>
+                    <FormControl>
+                      <Slider
+                        defaultValue={[field.value]}
+                        value={[field.value]}
+                        min={0}
+                        max={100}
+                        step={0.5}
+                        onValueChange={([val]) =>
+                          form.setValue("fatPercentage", val)
+                        }
+                      />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+              <Button type="submit">Set Goals</Button>
+            </form>
+          </Form>
         </div>
       </div>
-    </div>
+    </PageContainer>
   )
 }

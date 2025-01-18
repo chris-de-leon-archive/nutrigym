@@ -1,8 +1,10 @@
 "use client"
 
-import { Calendar } from "@nutrigym/components/ui/calendar"
+import { setDay, setMonth, setYear } from "@nutrigym/lib/datetime"
+import { DatePicker } from "@nutrigym/components/date-picker"
 import { Button } from "@nutrigym/components/ui/button"
 import { CalendarIcon } from "lucide-react"
+import { PageTitle } from "./title"
 import { format } from "date-fns"
 import { useState } from "react"
 import {
@@ -12,17 +14,19 @@ import {
 } from "@nutrigym/components/ui/popover"
 
 // TODO: add onSelect hook
-export type TitleProps = {
+export type PageTitleWithDatePickerProps = {
   name: string
 }
 
-export function Title(props: TitleProps) {
-  const [date, setDate] = useState<Date>(new Date())
+export function PageTitleWithDatePicker(props: PageTitleWithDatePickerProps) {
+  const today = new Date()
+
+  const [date, setDate] = useState<Date>(today)
 
   return (
     <div className="flex w-full flex-row items-center justify-between">
       <div className="flex w-1/2 flex-col justify-start">
-        <span className="text-3xl font-bold">{props.name}</span>
+        <PageTitle name={props.name} />
       </div>
       <div className="flex w-1/2 flex-row justify-end">
         <Popover>
@@ -36,11 +40,13 @@ export function Title(props: TitleProps) {
             </Button>
           </PopoverTrigger>
           <PopoverContent className="w-auto p-0">
-            <Calendar
-              mode="single"
-              selected={date}
-              onSelect={(d) => (d != null ? setDate(d) : null)}
-              initialFocus
+            <DatePicker
+              onCalendarChange={(date) => setDate(date)}
+              onMonthChange={(m) => setDate(setMonth(date, m))}
+              onYearChange={(y) => setDate(setYear(date, y))}
+              onDayChange={(d) => setDate(setDay(date, d))}
+              date={date}
+              today={today}
             />
           </PopoverContent>
         </Popover>

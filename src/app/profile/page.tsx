@@ -1,5 +1,6 @@
 "use client"
 
+import { PageContainer, PageTitle } from "@nutrigym/components/page"
 import { Button } from "@nutrigym/components/ui/button"
 import { Input } from "@nutrigym/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -66,125 +67,121 @@ export default function Profile() {
   }
 
   return (
-    <div className="container mx-auto">
-      <div className="flex flex-col justify-start gap-y-5">
-        <div className="flex w-full flex-row items-center justify-between">
-          <span className="text-3xl font-bold">Profile</span>
-          <UserButton
-            appearance={{
-              elements: {
-                avatarBox: "w-[50px] h-[50px]",
-              },
-            }}
-          />
-        </div>
-        <div className="flex flex-col justify-start gap-y-5 rounded border p-5">
-          <div className="flex flex-row items-center justify-between">
-            <span className="text-2xl font-bold">Personal</span>
-          </div>
-          <Form {...forms.personal.form}>
-            <form
-              onSubmit={forms.personal.form.handleSubmit(
-                forms.personal.onSubmit,
-              )}
-              className="space-y-8"
-            >
-              <FormField
-                control={forms.personal.form.control}
-                name="birthday"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Birthday</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={forms.personal.form.control}
-                name="gender"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Gender</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit">Submit</Button>
-            </form>
-          </Form>
-        </div>
-        <div className="flex flex-col justify-start gap-y-5 rounded border p-5">
-          <div className="flex flex-row items-center justify-between">
-            <span className="text-2xl font-bold">Macro Goals</span>
-          </div>
-          <Form {...forms.macros.form}>
-            <form
-              onSubmit={forms.macros.form.handleSubmit(forms.macros.onSubmit)}
-              className="space-y-8"
-            >
-              <FormField
-                control={forms.macros.form.control}
-                name="calories"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Calorie Target</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={forms.macros.form.control}
-                name="protein"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Protein %</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={forms.macros.form.control}
-                name="carbs"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Carbs %</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <FormField
-                control={forms.macros.form.control}
-                name="fat"
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>Fat %</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-              <Button type="submit">Set Goals</Button>
-            </form>
-          </Form>
-        </div>
+    <PageContainer>
+      <div className="flex w-full flex-row items-center justify-between">
+        <PageTitle name="Profile" />
+        <UserButton
+          appearance={{
+            elements: {
+              avatarBox: "w-[50px] h-[50px]",
+            },
+          }}
+        />
       </div>
-    </div>
+      <div className="flex flex-col justify-start gap-y-5 rounded border p-5">
+        <div className="flex flex-row items-center justify-between">
+          <span className="text-2xl font-bold">Personal</span>
+        </div>
+        <Form {...forms.personal.form}>
+          <form
+            onSubmit={forms.personal.form.handleSubmit(forms.personal.onSubmit)}
+            className="space-y-8"
+          >
+            <FormField
+              control={forms.personal.form.control}
+              name="birthday"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Birthday</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={forms.personal.form.control}
+              name="gender"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Gender</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit">Submit</Button>
+          </form>
+        </Form>
+      </div>
+      <div className="flex flex-col justify-start gap-y-5 rounded border p-5">
+        <div className="flex flex-row items-center justify-between">
+          <span className="text-2xl font-bold">Macro Goals</span>
+        </div>
+        <Form {...forms.macros.form}>
+          <form
+            onSubmit={forms.macros.form.handleSubmit(forms.macros.onSubmit)}
+            className="space-y-8"
+          >
+            <FormField
+              control={forms.macros.form.control}
+              name="calories"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Calorie Target</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={forms.macros.form.control}
+              name="protein"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Protein %</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={forms.macros.form.control}
+              name="carbs"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Carbs %</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <FormField
+              control={forms.macros.form.control}
+              name="fat"
+              render={({ field }) => (
+                <FormItem>
+                  <FormLabel>Fat %</FormLabel>
+                  <FormControl>
+                    <Input {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+            <Button type="submit">Set Goals</Button>
+          </form>
+        </Form>
+      </div>
+    </PageContainer>
   )
 }
