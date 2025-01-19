@@ -1,8 +1,7 @@
 "use client"
 
-import { calculatePortion, caloriesToGrams } from "@nutrigym/lib/conversion"
 import { CreateGoalDocument, makeRequestOrThrow } from "@nutrigym/lib/client"
-import { PageContainer, PageTitle } from "@nutrigym/components/page"
+import { calculatePortion, caloriesToGrams } from "@nutrigym/lib/conversion"
 import { FractionalPieChart } from "@nutrigym/components/charts"
 import { RefreshCwIcon, TriangleAlertIcon } from "lucide-react"
 import { redirect, usePathname } from "next/navigation"
@@ -26,6 +25,12 @@ import {
   FormLabel,
   FormMessage,
 } from "@nutrigym/components/ui/form"
+import {
+  PageContainer,
+  PageHeading,
+  PageSubContainer,
+  PageSubHeading,
+} from "@nutrigym/components/page"
 
 const formSchema = z.object({
   waterInMilliliters: z.coerce.number().min(0),
@@ -80,9 +85,9 @@ export function GoalSetter() {
 
   return (
     <PageContainer>
-      <PageTitle name="Onboarding" />
-      <div className="flex flex-col justify-start gap-y-2">
-        <span className="text-2xl font-bold">Set Your Health Goals</span>
+      <PageHeading name="Onboarding" />
+      <PageSubContainer>
+        <PageSubHeading name="Set Your Health Goals" />
         <FractionalPieChart
           title="Macro Distribution"
           description={`Calorie Goal = ${stat.calories}`}
@@ -110,10 +115,10 @@ export function GoalSetter() {
             },
           ]}
         />
-      </div>
-      <div className="flex flex-col justify-start gap-y-2">
+      </PageSubContainer>
+      <PageSubContainer>
         <div className="flex flex-row items-center justify-between">
-          <span className="text-2xl font-bold">Options</span>
+          <PageSubHeading name="Options" />
           <Button onClick={() => form.reset()}>
             <RefreshCwIcon />
           </Button>
@@ -268,7 +273,7 @@ export function GoalSetter() {
             </form>
           </Form>
         </div>
-      </div>
+      </PageSubContainer>
     </PageContainer>
   )
 }

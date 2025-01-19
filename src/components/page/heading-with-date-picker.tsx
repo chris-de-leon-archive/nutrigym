@@ -4,7 +4,7 @@ import { setDay, setMonth, setYear } from "@nutrigym/lib/datetime"
 import { DatePicker } from "@nutrigym/components/date-picker"
 import { Button } from "@nutrigym/components/ui/button"
 import { CalendarIcon } from "lucide-react"
-import { PageTitle } from "./title"
+import { PageHeading } from "./heading"
 import { format } from "date-fns"
 import { useState } from "react"
 import {
@@ -14,11 +14,13 @@ import {
 } from "@nutrigym/components/ui/popover"
 
 // TODO: add onSelect hook
-export type PageTitleWithDatePickerProps = {
+export type PageHeadingWithDatePickerProps = {
   name: string
 }
 
-export function PageTitleWithDatePicker(props: PageTitleWithDatePickerProps) {
+export function PageHeadingWithDatePicker(
+  props: PageHeadingWithDatePickerProps,
+) {
   const today = new Date()
 
   const [date, setDate] = useState<Date>(today)
@@ -26,7 +28,7 @@ export function PageTitleWithDatePicker(props: PageTitleWithDatePickerProps) {
   return (
     <div className="flex w-full flex-row items-center justify-between">
       <div className="flex w-1/2 flex-col justify-start">
-        <PageTitle name={props.name} />
+        <PageHeading name={props.name} />
       </div>
       <div className="flex w-1/2 flex-row justify-end">
         <Popover>

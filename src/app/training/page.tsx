@@ -1,13 +1,13 @@
 import { withUserInfo } from "@nutrigym/components/user"
 import {
-  PageTitleWithDatePicker,
+  PageHeadingWithDatePicker,
   PageContainer,
 } from "@nutrigym/components/page"
 
 export default withUserInfo(async () => {
   return (
     <PageContainer>
-      <PageTitleWithDatePicker name="Training" />
+      <PageHeadingWithDatePicker name="Training" />
     </PageContainer>
   )
 })

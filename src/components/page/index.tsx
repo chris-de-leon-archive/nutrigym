@@ -1,3 +1,5 @@
-export * from "./title-with-date-picker"
+export * from "./heading-with-date-picker"
+export * from "./sub-container"
+export * from "./sub-heading"
 export * from "./container"
-export * from "./title"
+export * from "./heading"

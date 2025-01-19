@@ -6,6 +6,7 @@ import { NextResponse } from "next/server"
 
 export async function GET(req: Request) {
   const { isSignedIn, toAuth } = await clerk.authenticateRequest(req, {
+    secretKey: env.CLERK_SECRET_KEY,
     jwtKey: env.CLERK_JWT_KEY,
   })
 

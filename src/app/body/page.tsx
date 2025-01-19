@@ -6,7 +6,9 @@ import { BodyCharts } from "./body.charts"
 import { EditIcon } from "lucide-react"
 import {
   PageContainer,
-  PageTitleWithDatePicker,
+  PageHeadingWithDatePicker,
+  PageSubContainer,
+  PageSubHeading,
 } from "@nutrigym/components/page"
 import {
   BodyMeasurementByDateDocument,
@@ -24,23 +26,23 @@ export default withUserInfo(async (ctx) => {
 
   return (
     <PageContainer>
-      <PageTitleWithDatePicker name="Nutrition" />
-      <div className="flex flex-col justify-start gap-y-2">
+      <PageHeadingWithDatePicker name="Nutrition" />
+      <PageSubContainer>
         <div className="flex flex-row items-center justify-between">
-          <span className="text-2xl font-bold">Goals</span>
+          <PageSubHeading name="Goals" />
           <Button variant="secondary">
             <EditIcon />
           </Button>
         </div>
         <BodyCharts log={log} goal={ctx.goal} />
-      </div>
-      <div className="flex flex-col justify-start gap-y-2">
+      </PageSubContainer>
+      <PageSubContainer>
         <div className="flex flex-row items-center justify-between">
-          <span className="text-2xl font-bold">Measurements</span>
+          <PageSubHeading name="Measurements" />
           <MeasurementsDialog log={log} date={date} />
         </div>
         <BodyDataTable log={log} />
-      </div>
+      </PageSubContainer>
     </PageContainer>
   )
 })

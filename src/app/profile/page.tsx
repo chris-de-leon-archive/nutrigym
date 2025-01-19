@@ -1,6 +1,6 @@
 "use client"
 
-import { PageContainer, PageTitle } from "@nutrigym/components/page"
+import { PageContainer, PageHeading } from "@nutrigym/components/page"
 import { Button } from "@nutrigym/components/ui/button"
 import { Input } from "@nutrigym/components/ui/input"
 import { zodResolver } from "@hookform/resolvers/zod"
@@ -69,7 +69,7 @@ export default function Profile() {
   return (
     <PageContainer>
       <div className="flex w-full flex-row items-center justify-between">
-        <PageTitle name="Profile" />
+        <PageHeading name="Profile" />
         <UserButton
           appearance={{
             elements: {

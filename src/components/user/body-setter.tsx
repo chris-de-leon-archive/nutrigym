@@ -1,6 +1,11 @@
 "use client"
 
-import { PageContainer, PageTitle } from "@nutrigym/components/page"
+import {
+  PageContainer,
+  PageHeading,
+  PageSubContainer,
+  PageSubHeading,
+} from "@nutrigym/components/page"
 import { setMonth, setYear, setDay } from "@nutrigym/lib/datetime"
 import { DatePicker } from "@nutrigym/components/date-picker"
 import { Button } from "@nutrigym/components/ui/button"
@@ -55,68 +60,63 @@ export function BodySetter() {
 
   return (
     <PageContainer>
-      <PageTitle name="Onboarding" />
-      <div className="flex flex-col justify-start gap-y-5">
-        <span className="text-2xl font-bold">Tell us a little about you</span>
-        <Form {...form}>
-          <form
-            className="flex flex-col gap-y-5"
-            onSubmit={form.handleSubmit(onSubmit)}
-          >
-            <FormField
-              control={form.control}
-              name="gender"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Gender</FormLabel>
-                  <Select
-                    onValueChange={field.onChange}
-                    defaultValue={field.value}
-                  >
-                    <FormControl>
-                      <SelectTrigger>
-                        <SelectValue />
-                      </SelectTrigger>
-                    </FormControl>
-                    <SelectContent>
-                      <SelectItem value={Gender.Male}>Male</SelectItem>
-                      <SelectItem value={Gender.Female}>Female</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </FormItem>
-              )}
-            />
-            <FormField
-              control={form.control}
-              name="birthday"
-              render={({ field }) => (
-                <FormItem>
-                  <FormLabel>Birthday</FormLabel>
+      <PageHeading name="Onboarding" />
+      <Form {...form}>
+        <form
+          className="flex flex-col gap-y-5"
+          onSubmit={form.handleSubmit(onSubmit)}
+        >
+          <FormField
+            control={form.control}
+            name="gender"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Gender</FormLabel>
+                <Select
+                  onValueChange={field.onChange}
+                  defaultValue={field.value}
+                >
                   <FormControl>
-                    <DatePicker
-                      onCalendarChange={(date) =>
-                        form.setValue("birthday", date)
-                      }
-                      onMonthChange={(m) =>
-                        form.setValue("birthday", setMonth(field.value, m))
-                      }
-                      onYearChange={(y) =>
-                        form.setValue("birthday", setYear(field.value, y))
-                      }
-                      onDayChange={(d) =>
-                        form.setValue("birthday", setDay(field.value, d))
-                      }
-                      date={field.value}
-                      today={today}
-                    />
+                    <SelectTrigger>
+                      <SelectValue />
+                    </SelectTrigger>
                   </FormControl>
-                </FormItem>
-              )}
-            />
-            <Button type="submit">Submit</Button>
-          </form>
-        </Form>
-      </div>
+                  <SelectContent>
+                    <SelectItem value={Gender.Male}>Male</SelectItem>
+                    <SelectItem value={Gender.Female}>Female</SelectItem>
+                  </SelectContent>
+                </Select>
+              </FormItem>
+            )}
+          />
+          <FormField
+            control={form.control}
+            name="birthday"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel>Birthday</FormLabel>
+                <FormControl>
+                  <DatePicker
+                    onCalendarChange={(date) => form.setValue("birthday", date)}
+                    onMonthChange={(m) =>
+                      form.setValue("birthday", setMonth(field.value, m))
+                    }
+                    onYearChange={(y) =>
+                      form.setValue("birthday", setYear(field.value, y))
+                    }
+                    onDayChange={(d) =>
+                      form.setValue("birthday", setDay(field.value, d))
+                    }
+                    date={field.value}
+                    today={today}
+                  />
+                </FormControl>
+              </FormItem>
+            )}
+          />
+          <Button type="submit">Submit</Button>
+        </form>
+      </Form>
     </PageContainer>
   )
 }
