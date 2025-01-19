@@ -3,6 +3,7 @@
 import { formatTime, stringToDate } from "@nutrigym/lib/datetime"
 import { ColumnDef } from "@tanstack/react-table"
 import { useRouter } from "next/navigation"
+import { NutritionLabels } from "./labels"
 import {
   DataTableColumnSortableHeader,
   DataTableRowSelectorHeader,
@@ -54,7 +55,10 @@ export function NutritionDataTable(props: NutritionDataTableProps) {
     {
       accessorKey: "name",
       header: ({ column }) => (
-        <DataTableColumnSortableHeader column={column} title="Name" />
+        <DataTableColumnSortableHeader
+          column={column}
+          title={NutritionLabels.get("name")}
+        />
       ),
     },
     {
@@ -66,25 +70,37 @@ export function NutritionDataTable(props: NutritionDataTableProps) {
     {
       accessorKey: "calories",
       header: ({ column }) => (
-        <DataTableColumnSortableHeader column={column} title="Calories" />
+        <DataTableColumnSortableHeader
+          column={column}
+          title={NutritionLabels.get("calories")}
+        />
       ),
     },
     {
       accessorKey: "protein",
       header: ({ column }) => (
-        <DataTableColumnSortableHeader column={column} title="Protein (g)" />
+        <DataTableColumnSortableHeader
+          column={column}
+          title={NutritionLabels.get("totalProteinInGrams")}
+        />
       ),
     },
     {
       accessorKey: "carbs",
       header: ({ column }) => (
-        <DataTableColumnSortableHeader column={column} title="Carbs (g)" />
+        <DataTableColumnSortableHeader
+          column={column}
+          title={NutritionLabels.get("totalCarbsInGrams")}
+        />
       ),
     },
     {
       accessorKey: "fat",
       header: ({ column }) => (
-        <DataTableColumnSortableHeader column={column} title="Fats (g)" />
+        <DataTableColumnSortableHeader
+          column={column}
+          title={NutritionLabels.get("totalFatInGrams")}
+        />
       ),
     },
     {

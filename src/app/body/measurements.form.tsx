@@ -6,6 +6,7 @@ import { Input } from "@nutrigym/components/ui/input"
 import { stripNull } from "@nutrigym/lib/utils"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
+import { BodyLabels } from "./labels"
 import { z } from "zod"
 import {
   Form,
@@ -67,24 +68,6 @@ export function BodyMeasurementsForm(props: BodyMeasurementsFormProps) {
     },
   })
 
-  // TODO: labels are duplicated
-  const labels: Record<keyof z.infer<typeof formSchema>, string> = {
-    steps: "Steps",
-    weightInPounds: "Weight (lbs)",
-    heightInInches: "Height (inches)",
-    waterInMilliliters: "Water (ml)",
-    sleepInHours: "Sleep (hours)",
-    waistInInches: "Waist (inches)",
-    hipsInInches: "Hips (inches)",
-    chestInInches: "Chest (inches)",
-    armsInInches: "Arms (inches)",
-    thighsInInches: "Thighs (inches)",
-    shouldersInInches: "Shoulders (inches)",
-    forearmsInInches: "Forearms (inches)",
-    calvesInInches: "Calves (inches)",
-    neckInInches: "Neck (inches)",
-  }
-
   const router = useRouter()
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     makeRequestOrThrow(UpsertBodyMeasurementDocument, {
@@ -103,24 +86,26 @@ export function BodyMeasurementsForm(props: BodyMeasurementsFormProps) {
         className="flex flex-col gap-y-2"
       >
         <div className="grid grid-cols-2 gap-2">
-          {Object.entries(labels).map(([k, label], i) => {
-            return (
-              <FormField
-                key={i}
-                control={form.control}
-                name={k as keyof typeof labels}
-                render={({ field }) => (
-                  <FormItem>
-                    <FormLabel>{label}</FormLabel>
-                    <FormControl>
-                      <Input {...field} />
-                    </FormControl>
-                    <FormMessage />
-                  </FormItem>
-                )}
-              />
-            )
-          })}
+          {BodyLabels.entries()
+            .toArray()
+            .map(([k, label], i) => {
+              return (
+                <FormField
+                  key={i}
+                  control={form.control}
+                  name={k}
+                  render={({ field }) => (
+                    <FormItem>
+                      <FormLabel>{label}</FormLabel>
+                      <FormControl>
+                        <Input {...field} />
+                      </FormControl>
+                      <FormMessage />
+                    </FormItem>
+                  )}
+                />
+              )
+            })}
         </div>
         <Button type="submit">Submit</Button>
       </form>

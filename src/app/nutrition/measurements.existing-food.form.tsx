@@ -1,17 +1,19 @@
 "use client"
 
+import { NutritionLabels, NutritionLabelsKeys } from "./labels"
 import { Combobox } from "@nutrigym/components/combobox"
 import { Button } from "@nutrigym/components/ui/button"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@nutrigym/components/ui/input"
+import { Border } from "@nutrigym/components/border"
 import { useForm, useWatch } from "react-hook-form"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { z } from "zod"
 import {
   Form,
-  FormControl,
   FormField,
+  FormControl,
   FormItem,
   FormLabel,
   FormMessage,
@@ -45,7 +47,7 @@ export function NutritionMeasurementFromExistingFoodForm(
   props: NutritionMeasurementFromExistingFoodFormProps,
 ) {
   const [selectedFood, setSelectedFood] = useState<
-    (typeof props.foods)[number] | undefined
+    Record<NutritionLabelsKeys, any> | undefined
   >(undefined)
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -55,10 +57,7 @@ export function NutritionMeasurementFromExistingFoodForm(
     },
   })
 
-  const values = useWatch({
-    control: form.control,
-  })
-
+  const values = useWatch({ control: form.control })
   useEffect(() => {
     const id = values.foodId
     if (id == null) {
@@ -72,33 +71,27 @@ export function NutritionMeasurementFromExistingFoodForm(
       return
     }
 
-    setSelectedFood(food)
+    setSelectedFood({
+      name: food.name,
+      brand: food.brand,
+      servingSize: food.servingSize,
+      servingUnit: food.servingUnit,
+      calories: food.calories,
+      totalProteinInGrams: food.totalProteinInGrams ?? 0,
+      totalCarbsInGrams: food.totalCarbsInGrams ?? 0,
+      totalFatInGrams: food.totalFatInGrams ?? 0,
+      polyunsaturatedFatInGrams: food.polyunsaturatedFatInGrams ?? 0,
+      monounsaturatedFatInGrams: food.monounsaturatedFatInGrams ?? 0,
+      saturatedFatInGrams: food.saturatedFatInGrams ?? 0,
+      potassiumInMilligrams: food.potassiumInMilligrams ?? 0,
+      sodiumInMilligrams: food.sodiumInMilligrams ?? 0,
+      dietaryFiberInGrams: food.dietaryFiberInGrams ?? 0,
+      sugarsInGrams: food.sugarsInGrams ?? 0,
+      cholesterolInMilligrams: food.cholesterolInMilligrams ?? 0,
+      calciumInMilligrams: food.calciumInMilligrams ?? 0,
+      ironInMilligrams: food.ironInMilligrams ?? 0,
+    })
   }, [props.foods, values])
-
-  // TODO: this object is duplicated
-  const labels: Record<
-    keyof Omit<NonNullable<typeof selectedFood>, "id" | "__typename">,
-    string
-  > = {
-    name: "Name",
-    brand: "Brand",
-    servingSize: "Serving Size",
-    servingUnit: "Serving Unit",
-    calories: "Calories",
-    totalProteinInGrams: "Protein (g)",
-    totalCarbsInGrams: "Carbs (g)",
-    totalFatInGrams: "Fat (g)",
-    polyunsaturatedFatInGrams: "Poly. Fat (g)",
-    monounsaturatedFatInGrams: "Mono. Fat (g)",
-    saturatedFatInGrams: "Sat. Fat (g)",
-    potassiumInMilligrams: "Potassium (mg)",
-    sodiumInMilligrams: "Sodium (mg)",
-    dietaryFiberInGrams: "Fiber (g)",
-    sugarsInGrams: "Sugars (g)",
-    cholesterolInMilligrams: "Cholesterol (mg)",
-    calciumInMilligrams: "Calcium (mg)",
-    ironInMilligrams: "Iron (mg)",
-  }
 
   const router = useRouter()
   const onSubmit = (values: z.infer<typeof formSchema>) => {
@@ -162,7 +155,7 @@ export function NutritionMeasurementFromExistingFoodForm(
         />
         <div className="flex flex-col gap-y-2">
           <span className="text-sm font-medium">Nutrition Facts</span>
-          <div className="rounded border p-2">
+          <Border>
             <Table>
               <TableHeader>
                 <TableRow>
@@ -171,17 +164,19 @@ export function NutritionMeasurementFromExistingFoodForm(
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {Object.entries(labels).map(([k, label]) => (
-                  <TableRow key={k}>
-                    <TableCell className="font-medium">{label}</TableCell>
-                    <TableCell>
-                      {(selectedFood ?? {})[k as keyof typeof labels]}
-                    </TableCell>
-                  </TableRow>
-                ))}
+                {NutritionLabels.entries()
+                  .toArray()
+                  .map(([k, label]) => (
+                    <TableRow key={k}>
+                      <TableCell className="font-medium">{label}</TableCell>
+                      <TableCell>
+                        {selectedFood == null ? undefined : selectedFood[k]}
+                      </TableCell>
+                    </TableRow>
+                  ))}
               </TableBody>
             </Table>
-          </div>
+          </Border>
         </div>
         <Button type="submit">Submit</Button>
       </form>

@@ -7,6 +7,7 @@ import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@nutrigym/components/ui/input"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
+import { BodyLabels } from "./labels"
 import { z } from "zod"
 import {
   Form,
@@ -71,7 +72,7 @@ export function BodyGoalEditorForm(props: BodyGoalEditorFormProps) {
             name="weightInPounds"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Weight (lbs)</FormLabel>
+                <FormLabel>{BodyLabels.get("weightInPounds")}</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -84,7 +85,7 @@ export function BodyGoalEditorForm(props: BodyGoalEditorFormProps) {
             name="waterInMilliliters"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Water (ml)</FormLabel>
+                <FormLabel>{BodyLabels.get("waterInMilliliters")}</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -97,7 +98,7 @@ export function BodyGoalEditorForm(props: BodyGoalEditorFormProps) {
             name="sleepInHours"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Sleep (hrs)</FormLabel>
+                <FormLabel>{BodyLabels.get("sleepInHours")}</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>
@@ -110,7 +111,7 @@ export function BodyGoalEditorForm(props: BodyGoalEditorFormProps) {
             name="steps"
             render={({ field }) => (
               <FormItem>
-                <FormLabel>Steps</FormLabel>
+                <FormLabel>{BodyLabels.get("steps")}</FormLabel>
                 <FormControl>
                   <Input {...field} />
                 </FormControl>

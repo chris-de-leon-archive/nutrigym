@@ -1,6 +1,7 @@
 "use client"
 
 import { GoalChart } from "@nutrigym/components/charts"
+import { BodyLabels } from "./labels"
 import {
   BodyMeasurementByDateQuery,
   GoalByDateQuery,
@@ -15,22 +16,22 @@ export function BodyCharts({ log, goal }: BodyChartsProps) {
   return (
     <div className="grid grid-cols-2 gap-2 rounded-lg border p-2">
       <GoalChart
-        title="Weight (lbs)"
+        title={BodyLabels.get("weightInPounds")}
         goal={goal?.weightInPounds ?? 0}
         curr={log?.bodyMeasurement?.weightInPounds ?? 0}
       />
       <GoalChart
-        title="Sleep (hrs)"
+        title={BodyLabels.get("sleepInHours")}
         goal={goal?.sleepInHours ?? 0}
         curr={log?.bodyMeasurement?.sleepInHours ?? 0}
       />
       <GoalChart
-        title="Water (ml)"
+        title={BodyLabels.get("waterInMilliliters")}
         goal={goal?.waterInMilliliters ?? 0}
         curr={log?.bodyMeasurement?.waterInMilliliters ?? 0}
       />
       <GoalChart
-        title="Steps"
+        title={BodyLabels.get("steps")}
         goal={goal?.steps ?? 0}
         curr={log?.bodyMeasurement?.steps ?? 0}
       />

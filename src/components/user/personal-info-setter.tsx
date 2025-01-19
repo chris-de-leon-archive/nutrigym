@@ -1,6 +1,6 @@
 "use client"
 
-import { PageContainer, PageHeading } from "@nutrigym/components/page"
+import { PageMainContainer, PageMainHeading } from "@nutrigym/components/page"
 import { setMonth, setYear, setDay } from "@nutrigym/lib/datetime"
 import { DatePicker } from "@nutrigym/components/date-picker"
 import { Button } from "@nutrigym/components/ui/button"
@@ -54,8 +54,8 @@ export function PersonalInfoSetter() {
   }
 
   return (
-    <PageContainer>
-      <PageHeading name="Onboarding" />
+    <PageMainContainer>
+      <PageMainHeading name="Onboarding" />
       <Form {...form}>
         <form
           className="flex flex-col gap-y-5"
@@ -112,6 +112,6 @@ export function PersonalInfoSetter() {
           <Button type="submit">Submit</Button>
         </form>
       </Form>
-    </PageContainer>
+    </PageMainContainer>
   )
 }

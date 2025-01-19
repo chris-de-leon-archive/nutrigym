@@ -3,18 +3,19 @@ import { PersonalInfoTable } from "./personal-info.table"
 import { withUserInfo } from "@nutrigym/components/user"
 import { UserButton } from "@clerk/nextjs"
 import {
-  PageContainer,
-  PageHeading,
+  PageHeadingContainer,
+  PageMainContainer,
+  PageMainHeading,
   PageSubContainer,
   PageSubHeading,
 } from "@nutrigym/components/page"
 
 export default withUserInfo(async (ctx) => {
   return (
-    <PageContainer>
+    <PageMainContainer>
       <PageSubContainer>
-        <div className="flex flex-row items-center justify-between">
-          <PageHeading name="Profile" />
+        <PageHeadingContainer>
+          <PageMainHeading name="Profile" />
           <UserButton
             appearance={{
               elements: {
@@ -22,17 +23,15 @@ export default withUserInfo(async (ctx) => {
               },
             }}
           />
-        </div>
+        </PageHeadingContainer>
       </PageSubContainer>
       <PageSubContainer>
-        <div className="flex flex-row items-center justify-between">
+        <PageHeadingContainer>
           <PageSubHeading name="Personal Info" />
           <PersonalInfoEditorDialog body={ctx.body} />
-        </div>
-        <div className="rounded border p-2">
-          <PersonalInfoTable body={ctx.body} />
-        </div>
+        </PageHeadingContainer>
+        <PersonalInfoTable body={ctx.body} />
       </PageSubContainer>
-    </PageContainer>
+    </PageMainContainer>
   )
 })

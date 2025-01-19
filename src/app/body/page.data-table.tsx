@@ -1,6 +1,8 @@
 "use client"
 
 import { BodyMeasurementByDateQuery } from "@nutrigym/lib/client"
+import { Border } from "@nutrigym/components/border"
+import { BodyLabels } from "./labels"
 import {
   Table,
   TableBody,
@@ -15,81 +17,19 @@ export type BodyDataTableProps = {
 }
 
 export function BodyDataTable(props: BodyDataTableProps) {
-  const table = [
-    {
-      id: "steps",
-      name: "Steps",
-      value: props.log?.bodyMeasurement?.steps?.toString(),
-    },
-    {
-      id: "weight",
-      name: "Weight (lbs)",
-      value: props.log?.bodyMeasurement?.weightInPounds.toString(),
-    },
-    {
-      id: "height",
-      name: "Height (inches)",
-      value: props.log?.bodyMeasurement?.heightInInches.toString(),
-    },
-    {
-      id: "water",
-      name: "Water (ml)",
-      value: props.log?.bodyMeasurement?.waterInMilliliters?.toString(),
-    },
-    {
-      id: "sleep",
-      name: "Sleep (hours)",
-      value: props.log?.bodyMeasurement?.sleepInHours?.toString(),
-    },
-    {
-      id: "waist",
-      name: "Waist (inches)",
-      value: props.log?.bodyMeasurement?.waistInInches?.toString(),
-    },
-    {
-      id: "hips",
-      name: "Hips (inches)",
-      value: props.log?.bodyMeasurement?.hipsInInches?.toString(),
-    },
-    {
-      id: "chest",
-      name: "Chest (inches)",
-      value: props.log?.bodyMeasurement?.chestInInches?.toString(),
-    },
-    {
-      id: "arms",
-      name: "Arms (inches)",
-      value: props.log?.bodyMeasurement?.armsInInches?.toString(),
-    },
-    {
-      id: "thighs",
-      name: "Thighs (inches)",
-      value: props.log?.bodyMeasurement?.thighsInInches?.toString(),
-    },
-    {
-      id: "shoulders",
-      name: "Shoulders (inches)",
-      value: props.log?.bodyMeasurement?.shouldersInInches?.toString(),
-    },
-    {
-      id: "forearms",
-      name: "Forearms (inches)",
-      value: props.log?.bodyMeasurement?.forearmsInInches?.toString(),
-    },
-    {
-      id: "calves",
-      name: "Calves (inches)",
-      value: props.log?.bodyMeasurement?.calvesInInches?.toString(),
-    },
-    {
-      id: "neck",
-      name: "Neck (inches)",
-      value: props.log?.bodyMeasurement?.neckInInches?.toString(),
-    },
-  ]
+  const table = BodyLabels.entries()
+    .toArray()
+    .map(([k, v]) => {
+      const bodyMeasurement = props.log?.bodyMeasurement
+      return {
+        id: k,
+        name: v,
+        value: bodyMeasurement?.[k]?.toString(),
+      }
+    })
 
   return (
-    <div className="rounded-lg border p-2">
+    <Border>
       <Table>
         <TableHeader>
           <TableRow>
@@ -106,6 +46,6 @@ export function BodyDataTable(props: BodyDataTableProps) {
           ))}
         </TableBody>
       </Table>
-    </div>
+    </Border>
   )
 }

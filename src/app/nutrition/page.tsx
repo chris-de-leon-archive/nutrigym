@@ -1,13 +1,15 @@
-import { NutritionGoalEditorDialog } from "./goal-editor.dialog"
+import { DatePickerPopover } from "@nutrigym/components/date-picker"
 import { NutritionMeasurementsDialog } from "./measurements.dialog"
+import { NutritionGoalEditorDialog } from "./goal-editor.dialog"
 import { withUserInfo } from "@nutrigym/components/user"
 import { NutritionDataTable } from "./page.data-table"
 import { NutritionCharts } from "./page.charts"
 import {
-  PageContainer,
+  PageMainContainer,
   PageSubContainer,
   PageSubHeading,
-  PageHeadingWithDatePicker,
+  PageHeadingContainer,
+  PageMainHeading,
 } from "@nutrigym/components/page"
 import {
   FoodMeasurementsByDateDocument,
@@ -27,22 +29,27 @@ export default withUserInfo(async (ctx) => {
   )
 
   return (
-    <PageContainer>
-      <PageHeadingWithDatePicker name="Nutrition" />
+    <PageMainContainer>
       <PageSubContainer>
-        <div className="flex flex-row items-center justify-between">
+        <PageHeadingContainer>
+          <PageMainHeading name="Nutrition" />
+          <DatePickerPopover />
+        </PageHeadingContainer>
+      </PageSubContainer>
+      <PageSubContainer>
+        <PageHeadingContainer>
           <PageSubHeading name="Goals" />
           <NutritionGoalEditorDialog date={date} goal={ctx.goal} />
-        </div>
+        </PageHeadingContainer>
         <NutritionCharts log={log} goal={ctx.goal} />
       </PageSubContainer>
       <PageSubContainer>
-        <div className="flex flex-row items-center justify-between">
+        <PageHeadingContainer>
           <PageSubHeading name="Foods" />
           <NutritionMeasurementsDialog date={date} foods={foods} />
-        </div>
+        </PageHeadingContainer>
         <NutritionDataTable log={log} />
       </PageSubContainer>
-    </PageContainer>
+    </PageMainContainer>
   )
 })

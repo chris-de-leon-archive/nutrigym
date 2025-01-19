@@ -4,6 +4,7 @@ import { Button } from "@nutrigym/components/ui/button"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@nutrigym/components/ui/input"
 import { useRouter } from "next/navigation"
+import { NutritionLabels } from "./labels"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import {
@@ -53,31 +54,6 @@ export function NutritionMeasurementFromNewFoodForm(
     resolver: zodResolver(formSchema),
   })
 
-  // TODO: this object is duplicated
-  const labels: Record<
-    keyof Omit<z.infer<typeof formSchema>, "servingsConsumed">,
-    string
-  > = {
-    name: "Name",
-    brand: "Brand",
-    servingSize: "Serving Size",
-    servingUnit: "Serving Unit",
-    calories: "Calories",
-    totalProteinInGrams: "Protein (g)",
-    totalCarbsInGrams: "Carbs (g)",
-    totalFatInGrams: "Fat (g)",
-    polyunsaturatedFatInGrams: "Poly. Fat (g)",
-    monounsaturatedFatInGrams: "Mono. Fat (g)",
-    saturatedFatInGrams: "Sat. Fat (g)",
-    potassiumInMilligrams: "Potassium (mg)",
-    sodiumInMilligrams: "Sodium (mg)",
-    dietaryFiberInGrams: "Fiber (g)",
-    sugarsInGrams: "Sugars (g)",
-    cholesterolInMilligrams: "Cholesterol (mg)",
-    calciumInMilligrams: "Calcium (mg)",
-    ironInMilligrams: "Iron (mg)",
-  }
-
   const router = useRouter()
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const { servingsConsumed, ...food } = values
@@ -114,24 +90,26 @@ export function NutritionMeasurementFromNewFoodForm(
             )}
           />
           <div className="grid grid-cols-2 gap-2">
-            {Object.entries(labels).map(([k, label], i) => {
-              return (
-                <FormField
-                  key={i}
-                  control={form.control}
-                  name={k as keyof typeof labels}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{label}</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )
-            })}
+            {NutritionLabels.entries()
+              .toArray()
+              .map(([k, label], i) => {
+                return (
+                  <FormField
+                    key={i}
+                    control={form.control}
+                    name={k}
+                    render={({ field }) => (
+                      <FormItem>
+                        <FormLabel>{label}</FormLabel>
+                        <FormControl>
+                          <Input {...field} />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                )
+              })}
           </div>
         </div>
         <Button type="submit">Submit</Button>

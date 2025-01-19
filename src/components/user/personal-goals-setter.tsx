@@ -26,8 +26,9 @@ import {
   FormMessage,
 } from "@nutrigym/components/ui/form"
 import {
-  PageContainer,
-  PageHeading,
+  PageHeadingContainer,
+  PageMainContainer,
+  PageMainHeading,
   PageSubContainer,
   PageSubHeading,
 } from "@nutrigym/components/page"
@@ -84,8 +85,8 @@ export function PersonalGoalsSetter() {
   }
 
   return (
-    <PageContainer>
-      <PageHeading name="Onboarding" />
+    <PageMainContainer>
+      <PageMainHeading name="Onboarding" />
       <PageSubContainer>
         <PageSubHeading name="Set Your Health Goals" />
         <FractionalPieChart
@@ -117,12 +118,12 @@ export function PersonalGoalsSetter() {
         />
       </PageSubContainer>
       <PageSubContainer>
-        <div className="flex flex-row items-center justify-between">
+        <PageHeadingContainer>
           <PageSubHeading name="Goals" />
           <Button onClick={() => form.reset()}>
             <RefreshCwIcon />
           </Button>
-        </div>
+        </PageHeadingContainer>
         <div className="flex flex-col gap-y-5 rounded-lg border p-4">
           {stat.percentageSum !== 100 && (
             <Alert variant="destructive">
@@ -274,6 +275,6 @@ export function PersonalGoalsSetter() {
           </Form>
         </div>
       </PageSubContainer>
-    </PageContainer>
+    </PageMainContainer>
   )
 }

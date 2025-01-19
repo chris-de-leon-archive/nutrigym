@@ -1,6 +1,6 @@
 import { ProgressLineChart } from "@nutrigym/components/charts/progress.line-chart"
+import { PageMainContainer, PageMainHeading } from "@nutrigym/components/page"
 import { Tabs, TabsList, TabsTrigger } from "@nutrigym/components/ui/tabs"
-import { PageContainer, PageHeading } from "@nutrigym/components/page"
 import { SignedIn, SignedOut, SignIn } from "@clerk/nextjs"
 import { TabsContent } from "@radix-ui/react-tabs"
 
@@ -36,8 +36,8 @@ export default function Home() {
         <SignIn />
       </SignedOut>
       <SignedIn>
-        <PageContainer>
-          <PageHeading name="Home" />
+        <PageMainContainer>
+          <PageMainHeading name="Home" />
           <div className="flex flex-col justify-start gap-y-5">
             <div className="w-full">
               <Tabs defaultValue="nutrition" className="flex flex-col gap-y-5">
@@ -162,7 +162,7 @@ export default function Home() {
               </Tabs>
             </div>
           </div>
-        </PageContainer>
+        </PageMainContainer>
       </SignedIn>
     </div>
   )
