@@ -1,7 +1,7 @@
 "use client"
 
-import { ExistingFoodForm } from "./food-creator.existing-food.form"
-import { NewFoodForm } from "./food-creator.new-food.form"
+import { NutritionMeasurementFromExistingFoodForm } from "./measurements.existing-food.form"
+import { NutritionMeasurementFromNewFoodForm } from "./measurements.new-food.form"
 import { Button } from "@nutrigym/components/ui/button"
 import { FoodsQuery } from "@nutrigym/lib/client"
 import { PlusIcon } from "lucide-react"
@@ -20,12 +20,14 @@ import {
   TabsList,
 } from "@nutrigym/components/ui/tabs"
 
-export type FoodCreatorDialogProps = {
+export type NutritionMeasurementsDialogProps = {
   foods: FoodsQuery["foods"]
   date: Date
 }
 
-export function FoodCreatorDialog(props: FoodCreatorDialogProps) {
+export function NutritionMeasurementsDialog(
+  props: NutritionMeasurementsDialogProps,
+) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -48,15 +50,24 @@ export function FoodCreatorDialog(props: FoodCreatorDialogProps) {
               <TabsTrigger value="existing">Existing Food</TabsTrigger>
               <TabsTrigger value="new">New Food</TabsTrigger>
             </TabsList>
-            <TabsContent value="existing" className="w-full border p-5">
-              <ExistingFoodForm
+            <TabsContent
+              value="existing"
+              className="max-h-[75vh] min-h-[75vh] w-full overflow-y-scroll border p-5"
+            >
+              <NutritionMeasurementFromExistingFoodForm
                 date={props.date}
                 onSubmit={() => setOpen(false)}
                 foods={props.foods}
               />
             </TabsContent>
-            <TabsContent value="new" className="w-full border p-5">
-              <NewFoodForm date={props.date} onSubmit={() => setOpen(false)} />
+            <TabsContent
+              value="new"
+              className="max-h-[75vh] min-h-[75vh] w-full overflow-y-scroll border p-5"
+            >
+              <NutritionMeasurementFromNewFoodForm
+                date={props.date}
+                onSubmit={() => setOpen(false)}
+              />
             </TabsContent>
           </Tabs>
         </div>

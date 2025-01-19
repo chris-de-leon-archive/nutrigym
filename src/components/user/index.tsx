@@ -1,5 +1,5 @@
-import { BodySetter } from "./body-setter"
-import { GoalSetter } from "./goal-setter"
+import { PersonalGoalsSetter } from "./personal-goals-setter"
+import { PersonalInfoSetter } from "./personal-info-setter"
 import {
   BodyDocument,
   BodyQuery,
@@ -13,6 +13,7 @@ type UserContext = Required<{
   body: NonNullable<BodyQuery["body"]>
 }>
 
+// TODO: cache results
 export function withUserInfo(
   cb: (ctx: UserContext) => Promise<React.ReactNode>,
 ) {
@@ -20,7 +21,7 @@ export function withUserInfo(
     const { body: userBody } = await makeRequestOrThrow(BodyDocument, {})
 
     if (userBody == null) {
-      return <BodySetter />
+      return <PersonalInfoSetter />
     }
 
     const { goalByLatest: userGoal } = await makeRequestOrThrow(
@@ -29,7 +30,7 @@ export function withUserInfo(
     )
 
     if (userGoal == null) {
-      return <GoalSetter />
+      return <PersonalGoalsSetter />
     }
 
     return await cb({

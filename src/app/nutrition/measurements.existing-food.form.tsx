@@ -35,13 +35,15 @@ const formSchema = z.object({
   foodId: z.string().uuid(),
 })
 
-export type ExistingFoodFormProps = {
+export type NutritionMeasurementFromExistingFoodFormProps = {
   onSubmit: () => void
   foods: FoodsQuery["foods"]
   date: Date
 }
 
-export function ExistingFoodForm(props: ExistingFoodFormProps) {
+export function NutritionMeasurementFromExistingFoodForm(
+  props: NutritionMeasurementFromExistingFoodFormProps,
+) {
   const [selectedFood, setSelectedFood] = useState<
     (typeof props.foods)[number] | undefined
   >(undefined)
@@ -160,7 +162,7 @@ export function ExistingFoodForm(props: ExistingFoodFormProps) {
         />
         <div className="flex flex-col gap-y-2">
           <span className="text-sm font-medium">Nutrition Facts</span>
-          <div className="max-h-[50vh] overflow-y-scroll rounded border p-2">
+          <div className="rounded border p-2">
             <Table>
               <TableHeader>
                 <TableRow>

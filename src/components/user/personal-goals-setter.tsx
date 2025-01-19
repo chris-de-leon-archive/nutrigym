@@ -4,12 +4,12 @@ import { CreateGoalDocument, makeRequestOrThrow } from "@nutrigym/lib/client"
 import { calculatePortion, caloriesToGrams } from "@nutrigym/lib/conversion"
 import { FractionalPieChart } from "@nutrigym/components/charts"
 import { RefreshCwIcon, TriangleAlertIcon } from "lucide-react"
-import { redirect, usePathname } from "next/navigation"
 import { Button } from "@nutrigym/components/ui/button"
 import { Slider } from "@nutrigym/components/ui/slider"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@nutrigym/components/ui/input"
 import { useForm, useWatch } from "react-hook-form"
+import { useRouter } from "next/navigation"
 import { useMemo } from "react"
 import { z } from "zod"
 import {
@@ -43,7 +43,7 @@ const formSchema = z.object({
   steps: z.coerce.number().int().min(0),
 })
 
-export function GoalSetter() {
+export function PersonalGoalsSetter() {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -74,12 +74,12 @@ export function GoalSetter() {
     }
   }, [data])
 
-  const pathname = usePathname()
+  const router = useRouter()
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     makeRequestOrThrow(CreateGoalDocument, {
       data: values,
     }).then(() => {
-      redirect(pathname)
+      router.refresh()
     })
   }
 
@@ -118,7 +118,7 @@ export function GoalSetter() {
       </PageSubContainer>
       <PageSubContainer>
         <div className="flex flex-row items-center justify-between">
-          <PageSubHeading name="Options" />
+          <PageSubHeading name="Goals" />
           <Button onClick={() => form.reset()}>
             <RefreshCwIcon />
           </Button>

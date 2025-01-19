@@ -1,5 +1,9 @@
 query GoalByLatest {
   goalByLatest {
+    id
+    createdAt
+    latest
+    version
     waterInMilliliters
     weightInPounds
     sleepInHours

@@ -1,6 +1,29 @@
 export const MAX_MONTHS_IN_A_YEAR = 12
 export const MAX_LOOKBACK_YEARS = 200
 
+export const computeAge = (birthday: Date) => {
+  // Gather inputs
+  const [birth, today] = [birthday, new Date()]
+  const age = today.getFullYear() - birth.getFullYear()
+
+  // The birthday month has already passed, so we can return the age as-is
+  if (today.getMonth() > birth.getMonth()) {
+    return age
+  }
+
+  // The birthday month has not happened yet, so we need to subtract 1 from the age
+  if (today.getMonth() < birth.getMonth()) {
+    return age - 1
+  }
+
+  // If it is currently the birthday month, subtract 1 if the birthday hasn't passed yet
+  if (today.getDate() < birth.getDate()) {
+    return age - 1
+  } else {
+    return age
+  }
+}
+
 export const stringToDate = (date: Date | string) => {
   return typeof date === "string" ? new Date(date) : date
 }

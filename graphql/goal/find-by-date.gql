@@ -1,5 +1,9 @@
 query GoalByDate($date: Date!) {
   goalByDate(date: $date) {
+    id
+    createdAt
+    latest
+    version
     waterInMilliliters
     weightInPounds
     sleepInHours

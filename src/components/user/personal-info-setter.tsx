@@ -1,16 +1,11 @@
 "use client"
 
-import {
-  PageContainer,
-  PageHeading,
-  PageSubContainer,
-  PageSubHeading,
-} from "@nutrigym/components/page"
+import { PageContainer, PageHeading } from "@nutrigym/components/page"
 import { setMonth, setYear, setDay } from "@nutrigym/lib/datetime"
 import { DatePicker } from "@nutrigym/components/date-picker"
 import { Button } from "@nutrigym/components/ui/button"
-import { redirect, usePathname } from "next/navigation"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
 import {
@@ -38,7 +33,7 @@ const formSchema = z.object({
   gender: z.nativeEnum(Gender),
 })
 
-export function BodySetter() {
+export function PersonalInfoSetter() {
   const today = new Date()
 
   const form = useForm<z.infer<typeof formSchema>>({
@@ -49,12 +44,12 @@ export function BodySetter() {
     },
   })
 
-  const pathname = usePathname()
+  const router = useRouter()
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     makeRequestOrThrow(CreateBodyDocument, {
       data: values,
     }).then(() => {
-      redirect(pathname)
+      router.refresh()
     })
   }
 

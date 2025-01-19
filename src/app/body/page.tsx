@@ -1,9 +1,8 @@
-import { MeasurementsDialog } from "./measurements.dialog"
+import { BodyMeasurementsDialog } from "./measurements.dialog"
+import { BodyGoalEditorDialog } from "./goal-editor.dialog"
 import { withUserInfo } from "@nutrigym/components/user"
-import { Button } from "@nutrigym/components/ui/button"
-import { BodyDataTable } from "./body.data-table"
-import { BodyCharts } from "./body.charts"
-import { EditIcon } from "lucide-react"
+import { BodyDataTable } from "./page.data-table"
+import { BodyCharts } from "./page.charts"
 import {
   PageContainer,
   PageHeadingWithDatePicker,
@@ -26,20 +25,18 @@ export default withUserInfo(async (ctx) => {
 
   return (
     <PageContainer>
-      <PageHeadingWithDatePicker name="Nutrition" />
+      <PageHeadingWithDatePicker name="Body" />
       <PageSubContainer>
         <div className="flex flex-row items-center justify-between">
           <PageSubHeading name="Goals" />
-          <Button variant="secondary">
-            <EditIcon />
-          </Button>
+          <BodyGoalEditorDialog date={date} goal={ctx.goal} />
         </div>
         <BodyCharts log={log} goal={ctx.goal} />
       </PageSubContainer>
       <PageSubContainer>
         <div className="flex flex-row items-center justify-between">
           <PageSubHeading name="Measurements" />
-          <MeasurementsDialog log={log} date={date} />
+          <BodyMeasurementsDialog log={log} date={date} />
         </div>
         <BodyDataTable log={log} />
       </PageSubContainer>

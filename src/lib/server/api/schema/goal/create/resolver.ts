@@ -73,6 +73,6 @@ export const handler = async (
   if (resp.rowsAffected === 0) {
     throw ERR_CREATE_GOAL
   } else {
-    return { id: uuid }
+    return { count: resp.rowsAffected }
   }
 }

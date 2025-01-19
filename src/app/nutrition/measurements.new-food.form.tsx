@@ -41,12 +41,14 @@ const formSchema = z.object({
   ironInMilligrams: z.coerce.number().min(0).optional(),
 })
 
-export type NewFoodFormProps = {
+export type NutritionMeasurementFromNewFoodFormProps = {
   onSubmit: () => void
   date: Date
 }
 
-export function NewFoodForm(props: NewFoodFormProps) {
+export function NutritionMeasurementFromNewFoodForm(
+  props: NutritionMeasurementFromNewFoodFormProps,
+) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
   })
@@ -97,7 +99,7 @@ export function NewFoodForm(props: NewFoodFormProps) {
         onSubmit={form.handleSubmit(onSubmit)}
         className="flex flex-col gap-y-2"
       >
-        <div className="flex max-h-[50vh] flex-col gap-y-2 overflow-y-scroll">
+        <div className="flex flex-col gap-y-2">
           <FormField
             control={form.control}
             name="servingsConsumed"

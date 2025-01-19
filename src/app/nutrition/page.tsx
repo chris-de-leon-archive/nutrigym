@@ -1,9 +1,8 @@
-import { NutritionDataTable } from "./nutrition.data-table"
-import { FoodCreatorDialog } from "./food-creator.dialog"
+import { NutritionGoalEditorDialog } from "./goal-editor.dialog"
+import { NutritionMeasurementsDialog } from "./measurements.dialog"
 import { withUserInfo } from "@nutrigym/components/user"
-import { Button } from "@nutrigym/components/ui/button"
-import { NutritionCharts } from "./nutrition.charts"
-import { EditIcon } from "lucide-react"
+import { NutritionDataTable } from "./page.data-table"
+import { NutritionCharts } from "./page.charts"
 import {
   PageContainer,
   PageSubContainer,
@@ -33,16 +32,14 @@ export default withUserInfo(async (ctx) => {
       <PageSubContainer>
         <div className="flex flex-row items-center justify-between">
           <PageSubHeading name="Goals" />
-          <Button variant="secondary">
-            <EditIcon />
-          </Button>
+          <NutritionGoalEditorDialog date={date} goal={ctx.goal} />
         </div>
         <NutritionCharts log={log} goal={ctx.goal} />
       </PageSubContainer>
       <PageSubContainer>
         <div className="flex flex-row items-center justify-between">
           <PageSubHeading name="Foods" />
-          <FoodCreatorDialog date={date} foods={foods} />
+          <NutritionMeasurementsDialog date={date} foods={foods} />
         </div>
         <NutritionDataTable log={log} />
       </PageSubContainer>

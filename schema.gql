@@ -1,6 +1,6 @@
 type Body {
   birthday: Date!
-  gender: String!
+  gender: Gender!
   id: String!
   userId: String!
 }
@@ -156,7 +156,7 @@ type Mutation {
   createBody(data: CreateBodyInput!): GenericID!
   createFoodMeasurementFromFoodDetails(data: CreateFoodMeasurementFromFoodDetailsInput!, date: Date!): GenericID!
   createFoodMeasurementFromFoodID(data: CreateFoodMeasurementFromFoodIdInput!, date: Date!): GenericID!
-  createGoal(data: CreateGoalInput!): GenericID!
+  createGoal(data: CreateGoalInput!): Count!
   removeMeasurements(data: RemoveMeasurementsInput!, id: Uuid!): Count!
   updateBody(data: UpdateBodyInput!, id: Uuid!): Count!
   updateFoodMeasurement(data: UpdateFoodMeasurementInput!, date: Date!, id: Uuid!): Count!

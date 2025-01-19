@@ -136,7 +136,6 @@ export function NutritionDataTable(props: NutritionDataTableProps) {
           fat: false,
         }}
         onDelete={(row) => {
-          console.log("log", props.log)
           if (props.log != null) {
             makeRequestOrThrow(RemoveMeasurementsDocument, {
               id: props.log.id,

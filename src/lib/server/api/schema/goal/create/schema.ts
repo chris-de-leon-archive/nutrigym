@@ -5,7 +5,7 @@ import { input } from "./types"
 
 builder.mutationField("createGoal", (t) =>
   t.field({
-    type: objects.id,
+    type: objects.count,
     args: {
       data: t.arg({ type: input, required: true }),
     },
