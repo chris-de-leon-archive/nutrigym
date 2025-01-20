@@ -1,6 +1,6 @@
 "use client"
 
-import { formatTime, stringToDate } from "@nutrigym/lib/datetime"
+import { DateTime } from "@nutrigym/lib/datetime"
 import { ColumnDef } from "@tanstack/react-table"
 import { useRouter } from "next/navigation"
 import { NutritionLabels } from "./labels"
@@ -34,7 +34,7 @@ export function NutritionDataTable(props: NutritionDataTableProps) {
       carbs: elem.servingsConsumed * (elem.food.totalCarbsInGrams ?? 0),
       fat: elem.servingsConsumed * (elem.food.totalProteinInGrams ?? 0),
       calories: elem.servingsConsumed * elem.food.calories,
-      time: formatTime(stringToDate(elem.createdAt)),
+      time: DateTime.formatTime(DateTime.stringToDate(elem.createdAt)),
     }
   })
 

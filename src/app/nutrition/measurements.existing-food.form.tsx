@@ -47,7 +47,7 @@ export function NutritionMeasurementFromExistingFoodForm(
   props: NutritionMeasurementFromExistingFoodFormProps,
 ) {
   const [selectedFood, setSelectedFood] = useState<
-    Record<NutritionLabelsKeys, any> | undefined
+    Record<NutritionLabelsKeys, string | number> | undefined
   >(undefined)
 
   const form = useForm<z.infer<typeof formSchema>>({

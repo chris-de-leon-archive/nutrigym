@@ -1,5 +1,7 @@
 "use client"
 
+// TODO: remove?
+
 import { type TypedDocumentNode } from "@graphql-typed-document-node/core"
 import { ExecutableDefinitionNode } from "graphql"
 import { makeRequestOrThrow } from "./requests"

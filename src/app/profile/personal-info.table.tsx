@@ -1,5 +1,5 @@
 import { Border } from "@nutrigym/components/border"
-import { computeAge } from "@nutrigym/lib/datetime"
+import { DateTime } from "@nutrigym/lib/datetime"
 import { Body } from "@nutrigym/lib/client"
 import {
   Table,
@@ -28,7 +28,7 @@ export function PersonalInfoTable(props: PersonalInfoTableProps) {
           </TableRow>
           <TableRow>
             <TableCell>Age</TableCell>
-            <TableCell>{computeAge(birthday)}</TableCell>
+            <TableCell>{DateTime.computeAge(birthday)}</TableCell>
           </TableRow>
         </TableBody>
       </Table>

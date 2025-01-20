@@ -1,10 +1,10 @@
 "use client"
 
 import { PageMainContainer, PageMainHeading } from "@nutrigym/components/page"
-import { setMonth, setYear, setDay } from "@nutrigym/lib/datetime"
 import { DatePicker } from "@nutrigym/components/date-picker"
 import { Button } from "@nutrigym/components/ui/button"
 import { zodResolver } from "@hookform/resolvers/zod"
+import { DateTime } from "@nutrigym/lib/datetime"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { z } from "zod"
@@ -94,13 +94,22 @@ export function PersonalInfoSetter() {
                   <DatePicker
                     onCalendarChange={(date) => form.setValue("birthday", date)}
                     onMonthChange={(m) =>
-                      form.setValue("birthday", setMonth(field.value, m))
+                      form.setValue(
+                        "birthday",
+                        DateTime.setMonth(field.value, m),
+                      )
                     }
                     onYearChange={(y) =>
-                      form.setValue("birthday", setYear(field.value, y))
+                      form.setValue(
+                        "birthday",
+                        DateTime.setYear(field.value, y),
+                      )
                     }
                     onDayChange={(d) =>
-                      form.setValue("birthday", setDay(field.value, d))
+                      form.setValue(
+                        "birthday",
+                        DateTime.setDate(field.value, d),
+                      )
                     }
                     date={field.value}
                     today={today}

@@ -2,64 +2,55 @@
 
 import { TypedDocumentNode } from "@graphql-typed-document-node/core"
 import { yoga } from "@nutrigym/lib/server/providers/yoga"
-import { GraphQLError, parse, print } from "graphql"
+import { GraphQLClient } from "graphql-request"
+import { GraphQLError, print } from "graphql"
 import { auth } from "@clerk/nextjs/server"
-import {
-  HTTPExecutorOptions,
-  buildHTTPExecutor,
-} from "@graphql-tools/executor-http"
 
-export type RequestOptions = Omit<
-  HTTPExecutorOptions,
-  "fetch" | "endpoint" | "headers"
->
+type PersistedOpFields = Partial<{ __meta__: { hash: string } }>
 
-export const makeRequest = async <
-  TResult,
-  TVariables extends Record<string, unknown>,
->(
-  document: TypedDocumentNode<TResult, TVariables>,
+const makeRequest = async <TResult, TVariables extends Record<string, unknown>>(
+  document: TypedDocumentNode<TResult, TVariables> & PersistedOpFields,
   variables: TVariables,
-  options?: RequestOptions,
 ) => {
   const { getToken } = await auth()
+  const jwtToken = await getToken()
+  const headers = {
+    authorization: `bearer ${jwtToken}`,
+  }
 
-  // NOTE: it's also possible to use yoga.fetch, but you'd need to do some extra
-  // work to parse the GraphQL responses. To avoid this, we use the HTTP executor
-  // package. The only downside with the HTTP executor is that you don't get info
-  // about the response status code or status text (the result is set to undefined)
-  // which can make it harder to debug things.
-  const executor = buildHTTPExecutor({
-    ...(options ?? {}),
-    endpoint: "http://yoga/graphql",
-    fetch: yoga.fetch,
-    headers: {
-      authorization: `bearer ${await getToken()}`,
-      "content-type": "application/json",
+  const client = new GraphQLClient("http://yoga/graphql", {
+    fetch: yoga.fetch as typeof fetch,
+    requestMiddleware: (req) => {
+      const hash = document.__meta__?.hash
+      return hash == null
+        ? req
+        : {
+            ...req,
+            body: JSON.stringify({
+              operationName: req.operationName,
+              variables: req.variables,
+              extensions: {
+                persistedQuery: {
+                  sha256Hash: hash,
+                  version: 1,
+                },
+              },
+            }),
+          }
     },
   })
 
-  const result = await executor<TResult, TVariables>({
-    document: parse(print(document)),
+  const result = await client.rawRequest<TResult, TVariables>(
+    print(document),
     variables,
-  })
-
-  if (Symbol.asyncIterator in result) {
-    throw new Error(
-      "unexpectedly received more than one value from graphql response",
-    )
-  }
+    headers,
+  )
 
   const err = result.errors?.at(0)
   if (err != null) {
     return err
-  }
-
-  const data = result.data
-  if (data == null) {
-    throw new Error(`received no data: ${JSON.stringify(data, null, 2)}`)
   } else {
-    return data
+    return result.data
   }
 }
 
@@ -67,11 +58,10 @@ export const makeRequestOrThrow = async <
   TResult,
   TVariables extends Record<string, unknown>,
 >(
-  document: TypedDocumentNode<TResult, TVariables>,
+  document: TypedDocumentNode<TResult, TVariables> & PersistedOpFields,
   variables: TVariables,
-  options?: RequestOptions,
 ) => {
-  const result = await makeRequest(document, variables, options)
+  const result = await makeRequest(document, variables)
   if (result instanceof GraphQLError) {
     throw result
   } else {

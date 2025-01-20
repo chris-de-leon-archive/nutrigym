@@ -21,6 +21,11 @@ export default {
       generates: {
         [path.join("src", "lib", "client", "generated/")]: {
           preset: "client",
+          presetConfig: {
+            persistedDocuments: {
+              hashAlgorithm: "sha256",
+            },
+          },
           config: {
             scalars: {
               Uuid: {

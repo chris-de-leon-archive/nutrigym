@@ -1,3 +1,6 @@
+import { usePersistedOperations as withPersistedOperations } from "@graphql-yoga/plugin-persisted-operations"
+import { useDisableIntrospection as disableIntrospection } from "@graphql-yoga/plugin-disable-introspection"
+import { blockFieldSuggestionsPlugin } from "@escape.tech/graphql-armor-block-field-suggestions"
 import { maxDirectivesPlugin } from "@escape.tech/graphql-armor-max-directives"
 import { maxAliasesPlugin } from "@escape.tech/graphql-armor-max-aliases"
 import { maxTokensPlugin } from "@escape.tech/graphql-armor-max-tokens"
@@ -10,9 +13,20 @@ import { db } from "@nutrigym/lib/server/providers/db"
 import { initContextCache } from "@pothos/core"
 import { env } from "@nutrigym/lib/server/env"
 import { createYoga } from "graphql-yoga"
+import {
+  useResponseCache as withResponseCache,
+  createInMemoryCache,
+} from "@graphql-yoga/plugin-response-cache"
+
+import PersistedDocuments from "../../../client/generated/persisted-documents.json"
+
+const cache = createInMemoryCache({
+  max: 100,
+})
 
 export const yoga = createYoga({
   fetchAPI: { Response },
+  landingPage: false,
   schema,
   context: async (yoga): Promise<GraphQLBaseContext> => {
     const date = new Date()
@@ -30,11 +44,28 @@ export const yoga = createYoga({
     }
   },
   plugins: [
+    // Persisted documents: https://the-guild.dev/graphql/codegen/plugins/presets/preset-client#persisted-documents
+    withPersistedOperations({
+      skipDocumentValidation: true,
+      getPersistedOperation(key: keyof typeof PersistedDocuments) {
+        return PersistedDocuments[key]
+      },
+    }),
+
     // Security plugins: https://the-guild.dev/graphql/yoga-server/docs/prepare-for-production#public-api
+    blockFieldSuggestionsPlugin(),
+    disableIntrospection(),
     maxDirectivesPlugin(),
     maxAliasesPlugin(),
     maxTokensPlugin(),
     costLimitPlugin(),
     maxDepthPlugin(),
+
+    // Response caching: https://the-guild.dev/graphql/envelop/plugins/use-response-cache#envelopresponse-cache
+    withResponseCache({
+      session: (req) => req.headers.get("authorization"),
+      ttl: 30_000,
+      cache,
+    }),
   ],
 })

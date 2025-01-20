@@ -1,10 +1,11 @@
 "use client"
 
-import { setDay, setMonth, setYear } from "@nutrigym/lib/datetime"
+import { searchParams } from "@nutrigym/lib/search-params"
+import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@nutrigym/components/ui/button"
+import { DateTime } from "@nutrigym/lib/datetime"
 import { CalendarIcon } from "lucide-react"
 import { DatePicker } from "./date-picker"
-import { format } from "date-fns"
 import { useState } from "react"
 import {
   Popover,
@@ -12,10 +13,19 @@ import {
   PopoverTrigger,
 } from "@nutrigym/components/ui/popover"
 
-export function DatePickerPopover() {
-  const today = new Date()
+export type DatePickerPopoverProps = {
+  date: Date
+}
 
-  const [date, setDate] = useState<Date>(today)
+export function DatePickerPopover(props: DatePickerPopoverProps) {
+  const [date, setDate] = useState<Date>(props.date)
+  const pathname = usePathname()
+  const router = useRouter()
+
+  const onDateChange = (date: Date) => {
+    setDate(date)
+    router.push(searchParams.date.href(pathname, date))
+  }
 
   return (
     <Popover>
@@ -25,17 +35,17 @@ export function DatePickerPopover() {
           className="justify-start text-left font-normal"
         >
           <CalendarIcon />
-          {format(date, "PPP")}
+          {DateTime.getMonthName(date)} {date.getDate()}, {date.getFullYear()}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <DatePicker
-          onCalendarChange={(date) => setDate(date)}
-          onMonthChange={(m) => setDate(setMonth(date, m))}
-          onYearChange={(y) => setDate(setYear(date, y))}
-          onDayChange={(d) => setDate(setDay(date, d))}
+          onCalendarChange={(date) => onDateChange(date)}
+          onMonthChange={(m) => onDateChange(DateTime.setMonth(date, m))}
+          onYearChange={(y) => onDateChange(DateTime.setYear(date, y))}
+          onDayChange={(d) => onDateChange(DateTime.setDate(date, d))}
+          today={props.date}
           date={date}
-          today={today}
         />
       </PopoverContent>
     </Popover>

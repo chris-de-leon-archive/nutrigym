@@ -1,6 +1,7 @@
 import { DatePickerPopover } from "@nutrigym/components/date-picker"
 import { NutritionMeasurementsDialog } from "./measurements.dialog"
 import { NutritionGoalEditorDialog } from "./goal-editor.dialog"
+import { searchParams } from "@nutrigym/lib/search-params"
 import { withUserInfo } from "@nutrigym/components/user"
 import { NutritionDataTable } from "./page.data-table"
 import { NutritionCharts } from "./page.charts"
@@ -18,8 +19,7 @@ import {
 } from "@nutrigym/lib/client"
 
 export default withUserInfo(async (ctx) => {
-  // TODO: modify <Title> component to make date updatable
-  const date = new Date()
+  const date = await searchParams.date.parse(ctx.next)
 
   const { foods } = await makeRequestOrThrow(FoodsDocument, {})
 
@@ -33,15 +33,15 @@ export default withUserInfo(async (ctx) => {
       <PageSubContainer>
         <PageHeadingContainer>
           <PageMainHeading name="Nutrition" />
-          <DatePickerPopover />
+          <DatePickerPopover date={date} />
         </PageHeadingContainer>
       </PageSubContainer>
       <PageSubContainer>
         <PageHeadingContainer>
           <PageSubHeading name="Goals" />
-          <NutritionGoalEditorDialog date={date} goal={ctx.goal} />
+          <NutritionGoalEditorDialog date={date} goal={ctx.user.goal} />
         </PageHeadingContainer>
-        <NutritionCharts log={log} goal={ctx.goal} />
+        <NutritionCharts log={log} goal={ctx.user.goal} />
       </PageSubContainer>
       <PageSubContainer>
         <PageHeadingContainer>

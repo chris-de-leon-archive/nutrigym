@@ -1,5 +1,6 @@
 import { PersonalGoalsSetter } from "./personal-goals-setter"
 import { PersonalInfoSetter } from "./personal-info-setter"
+import { NextSearchParams } from "@nutrigym/lib/types"
 import {
   BodyDocument,
   BodyQuery,
@@ -8,16 +9,22 @@ import {
   makeRequestOrThrow,
 } from "@nutrigym/lib/client"
 
+type NextContext = NextSearchParams
+
 type UserContext = Required<{
   goal: NonNullable<GoalByLatestQuery["goalByLatest"]>
   body: NonNullable<BodyQuery["body"]>
 }>
 
+type Context = Required<{
+  user: UserContext
+  next: NextContext
+}>
+
+// TODO: rename?
 // TODO: cache results
-export function withUserInfo(
-  cb: (ctx: UserContext) => Promise<React.ReactNode>,
-) {
-  return async function Component() {
+export function withUserInfo(cb: (ctx: Context) => Promise<React.ReactNode>) {
+  return async function Component({ searchParams }: NextSearchParams) {
     const { body: userBody } = await makeRequestOrThrow(BodyDocument, {})
 
     if (userBody == null) {
@@ -34,8 +41,13 @@ export function withUserInfo(
     }
 
     return await cb({
-      goal: userGoal,
-      body: userBody,
+      next: {
+        searchParams,
+      },
+      user: {
+        goal: userGoal,
+        body: userBody,
+      },
     })
   }
 }

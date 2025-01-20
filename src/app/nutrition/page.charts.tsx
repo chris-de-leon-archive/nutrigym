@@ -15,11 +15,8 @@ export type NutritionChartsProps = {
 
 export function NutritionCharts({ log, goal }: NutritionChartsProps) {
   const curr = useMemo(() => {
+    let [calories, protein, carbs, fat] = [0, 0, 0, 0]
     const measurements = log?.foodMeasurements ?? []
-    let calories = 0
-    let protein = 0
-    let carbs = 0
-    let fat = 0
     measurements.forEach((elem) => {
       calories += elem.servingsConsumed * elem.food.calories
       protein += elem.servingsConsumed * (elem.food.totalProteinInGrams ?? 0)

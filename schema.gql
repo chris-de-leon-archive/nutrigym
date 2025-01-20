@@ -154,22 +154,12 @@ type MeasurementLog {
 
 type Mutation {
   createBody(data: CreateBodyInput!): GenericID!
-  createFoodMeasurementFromFoodDetails(
-    data: CreateFoodMeasurementFromFoodDetailsInput!
-    date: Date!
-  ): GenericID!
-  createFoodMeasurementFromFoodID(
-    data: CreateFoodMeasurementFromFoodIdInput!
-    date: Date!
-  ): GenericID!
+  createFoodMeasurementFromFoodDetails(data: CreateFoodMeasurementFromFoodDetailsInput!, date: Date!): GenericID!
+  createFoodMeasurementFromFoodID(data: CreateFoodMeasurementFromFoodIdInput!, date: Date!): GenericID!
   createGoal(data: CreateGoalInput!): Count!
   removeMeasurements(data: RemoveMeasurementsInput!, id: Uuid!): Count!
   updateBody(data: UpdateBodyInput!, id: Uuid!): Count!
-  updateFoodMeasurement(
-    data: UpdateFoodMeasurementInput!
-    date: Date!
-    id: Uuid!
-  ): Count!
+  updateFoodMeasurement(data: UpdateFoodMeasurementInput!, date: Date!, id: Uuid!): Count!
   upsertBodyMeasurement(data: UpsertBodyMeasurementInput!, date: Date!): Count!
 }
 
