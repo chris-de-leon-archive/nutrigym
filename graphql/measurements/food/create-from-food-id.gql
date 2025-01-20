@@ -4,5 +4,9 @@ mutation CreateFoodMeasurementFromFoodID(
 ) {
   createFoodMeasurementFromFoodID(date: $date, data: $data) {
     id
+    createdAt
+    logId
+    foodId
+    servingsConsumed
   }
 }

@@ -66,13 +66,15 @@ export const handler = async (
       })
       .onConflictDoUpdate({
         target: [schema.userGoal.userId, schema.userGoal.version],
-        set: { latest: true },
+        set: {
+          latest: true,
+        },
       })
   })
 
   if (resp.rowsAffected === 0) {
     throw ERR_CREATE_GOAL
   } else {
-    return { count: resp.rowsAffected }
+    return null
   }
 }

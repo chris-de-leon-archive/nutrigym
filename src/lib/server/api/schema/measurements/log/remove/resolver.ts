@@ -23,7 +23,7 @@ export const handler = async (
       ),
     })
     if (log == null) {
-      return { count: 0 }
+      return null
     }
 
     const { foodIds } = input.data
@@ -50,6 +50,6 @@ export const handler = async (
         )
     }
 
-    return { count: 1 }
+    return null
   })
 }

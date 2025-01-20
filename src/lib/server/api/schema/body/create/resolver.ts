@@ -26,12 +26,18 @@ export const handler = async (
         userId: ctx.auth.user.id,
         id: uuid,
       })
-      .onConflictDoNothing()
+      .onConflictDoUpdate({
+        target: schema.userBody.userId,
+        set: {
+          birthday: input.data.birthday,
+          gender: input.data.gender,
+        },
+      })
   })
 
   if (resp.rowsAffected === 0) {
     throw ERR_CREATE_BODY
   } else {
-    return { id: uuid }
+    return null
   }
 }

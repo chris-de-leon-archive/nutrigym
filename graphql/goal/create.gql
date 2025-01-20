@@ -1,5 +1,16 @@
 mutation CreateGoal($data: CreateGoalInput!) {
   createGoal(data: $data) {
-    count
+    id
+    createdAt
+    latest
+    version
+    waterInMilliliters
+    weightInPounds
+    sleepInHours
+    proteinPercentage
+    carbsPercentage
+    fatPercentage
+    calories
+    steps
   }
 }

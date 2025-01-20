@@ -4,6 +4,10 @@ mutation UpdateFoodMeasurement(
   $data: UpdateFoodMeasurementInput!
 ) {
   updateFoodMeasurement(id: $id, date: $date, data: $data) {
-    count
+    id
+    createdAt
+    logId
+    foodId
+    servingsConsumed
   }
 }

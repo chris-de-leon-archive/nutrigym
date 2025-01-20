@@ -90,6 +90,6 @@ export const handler = async (
   if (resp.rowsAffected === 0) {
     throw ERR_CREATE_FOOD_MEASUREMENT
   } else {
-    return { id: measurementId }
+    return null
   }
 }

@@ -3,6 +3,22 @@ mutation UpsertBodyMeasurement(
   $data: UpsertBodyMeasurementInput!
 ) {
   upsertBodyMeasurement(date: $date, data: $data) {
-    count
+    id
+    createdAt
+    logId
+    weightInPounds
+    heightInInches
+    waterInMilliliters
+    shouldersInInches
+    forearmsInInches
+    calvesInInches
+    thighsInInches
+    waistInInches
+    chestInInches
+    armsInInches
+    neckInInches
+    hipsInInches
+    sleepInHours
+    steps
   }
 }

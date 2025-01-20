@@ -2,6 +2,7 @@
 
 import { TypedDocumentNode } from "@graphql-typed-document-node/core"
 import { yoga } from "@nutrigym/lib/server/providers/yoga"
+import { IS_DEV_MODE } from "@nutrigym/lib/server/env"
 import { GraphQLClient } from "graphql-request"
 import { GraphQLError, print } from "graphql"
 import { auth } from "@clerk/nextjs/server"
@@ -37,6 +38,11 @@ const makeRequest = async <TResult, TVariables extends Record<string, unknown>>(
               },
             }),
           }
+    },
+    responseMiddleware: (res) => {
+      if (IS_DEV_MODE) {
+        console.log("Response:", JSON.stringify(res))
+      }
     },
   })
 

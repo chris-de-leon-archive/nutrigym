@@ -3,9 +3,10 @@ import { schema } from "@nutrigym/lib/schema"
 import { and, eq } from "drizzle-orm"
 import { z } from "zod"
 import {
+  ERR_UPDATE_FOOD_MEASUREMENT,
+  isValidUpdateObject,
   GraphQLAuthContext,
   ERR_LOG_NOT_FOUND,
-  isValidUpdateObject,
 } from "@nutrigym/lib/server/api"
 
 export const zInput = z.object({
@@ -21,7 +22,7 @@ export const handler = async (
   ctx: GraphQLAuthContext,
 ) => {
   if (isValidUpdateObject(input.data)) {
-    return { count: 0 }
+    return null
   }
 
   const resp = await ctx.providers.db.transaction(async (tx) => {
@@ -51,7 +52,9 @@ export const handler = async (
       )
   })
 
-  return {
-    count: resp.rowsAffected,
+  if (resp.rowsAffected === 0) {
+    throw ERR_UPDATE_FOOD_MEASUREMENT
+  } else {
+    return null
   }
 }

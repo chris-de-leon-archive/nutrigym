@@ -8,10 +8,10 @@ import { costLimitPlugin } from "@escape.tech/graphql-armor-cost-limit"
 import { maxDepthPlugin } from "@escape.tech/graphql-armor-max-depth"
 import { GraphQLBaseContext } from "@nutrigym/lib/server/api"
 import { clerk } from "@nutrigym/lib/server/providers/clerk"
+import { env, IS_DEV_MODE } from "@nutrigym/lib/server/env"
 import { schema } from "@nutrigym/lib/server/api/schema"
 import { db } from "@nutrigym/lib/server/providers/db"
 import { initContextCache } from "@pothos/core"
-import { env } from "@nutrigym/lib/server/env"
 import { createYoga } from "graphql-yoga"
 import {
   useResponseCache as withResponseCache,
@@ -64,6 +64,7 @@ export const yoga = createYoga({
     // Response caching: https://the-guild.dev/graphql/envelop/plugins/use-response-cache#envelopresponse-cache
     withResponseCache({
       session: (req) => req.headers.get("authorization"),
+      includeExtensionMetadata: IS_DEV_MODE,
       ttl: 30_000,
       cache,
     }),

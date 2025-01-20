@@ -6,6 +6,7 @@ import { z } from "zod"
 import {
   isValidUpdateObject,
   GraphQLAuthContext,
+  ERR_UPDATE_BODY,
 } from "@nutrigym/lib/server/api"
 
 export const zInput = z.object({
@@ -21,7 +22,7 @@ export const handler = async (
   ctx: GraphQLAuthContext,
 ) => {
   if (isValidUpdateObject(input.data)) {
-    return { count: 0 }
+    return null
   }
 
   const resp = await ctx.providers.db.transaction(async (tx) => {
@@ -40,7 +41,9 @@ export const handler = async (
       )
   })
 
-  return {
-    count: resp.rowsAffected,
+  if (resp.rowsAffected === 0) {
+    throw ERR_UPDATE_BODY
+  } else {
+    return null
   }
 }

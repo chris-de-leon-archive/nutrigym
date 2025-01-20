@@ -1,5 +1,9 @@
 mutation UpdateBody($id: Uuid!, $data: UpdateBodyInput!) {
   updateBody(id: $id, data: $data) {
-    count
+    id
+    createdAt
+    userId
+    birthday
+    gender
   }
 }

@@ -91,6 +91,6 @@ export const handler = async (
   if (resp.rowsAffected === 0) {
     throw ERR_UPSERT_BODY_MEASUREMENT
   } else {
-    return { count: resp.rowsAffected }
+    return null
   }
 }

@@ -58,7 +58,11 @@ export const ERR_MALFORMED_TOKEN = errors.Unauthorized(
 )
 
 export const ERR_CREATE_FOOD_MEASUREMENT = errors.InternalServerError(
-  "failed to record food measurement",
+  "failed to create food measurement",
+)
+
+export const ERR_UPDATE_FOOD_MEASUREMENT = errors.InternalServerError(
+  "failed to update food measurement",
 )
 
 export const ERR_UPSERT_BODY_MEASUREMENT = errors.InternalServerError(
@@ -71,6 +75,10 @@ export const ERR_CREATE_FOOD = errors.InternalServerError(
 
 export const ERR_CREATE_BODY = errors.InternalServerError(
   "failed to create body",
+)
+
+export const ERR_UPDATE_BODY = errors.InternalServerError(
+  "failed to update body",
 )
 
 export const ERR_CREATE_GOAL = errors.InternalServerError(

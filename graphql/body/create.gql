@@ -1,5 +1,9 @@
 mutation CreateBody($data: CreateBodyInput!) {
   createBody(data: $data) {
     id
+    createdAt
+    userId
+    birthday
+    gender
   }
 }

@@ -1,12 +1,14 @@
 import { builder, withAuth } from "@nutrigym/lib/server/api"
 import { handler, zInput } from "./resolver"
-import { objects } from "../../../objects"
 import { scalars } from "../../../scalars"
+import { types } from "../types"
 import { input } from "./types"
 
+// NOTE: the return type should include the entities that should be invalidated in the cache
 builder.mutationField("updateFoodMeasurement", (t) =>
   t.field({
-    type: objects.count,
+    type: types.foodMeasurement,
+    nullable: true,
     args: {
       id: t.arg({ type: scalars.uuid, required: true }),
       date: t.arg({ type: scalars.date, required: true }),
