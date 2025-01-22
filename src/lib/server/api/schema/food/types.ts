@@ -1,6 +1,7 @@
 import { builder } from "@nutrigym/lib/server/api"
 import { Food } from "@nutrigym/lib/schema"
 import { scalars } from "../scalars"
+import { enums } from "../enums"
 
 const food = builder.objectRef<Food>("Food")
 
@@ -11,7 +12,7 @@ builder.objectType(food, {
     brand: t.exposeString("brand"),
     calories: t.exposeFloat("calories"),
     servingSize: t.exposeFloat("servingSize"),
-    servingUnit: t.exposeString("servingUnit"),
+    servingUnit: t.expose("servingUnit", { type: enums.servingUnit }),
     totalProteinInGrams: t.exposeFloat("totalProteinInGrams", {
       nullable: true,
     }),

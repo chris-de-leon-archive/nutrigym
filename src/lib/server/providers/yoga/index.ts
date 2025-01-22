@@ -12,6 +12,7 @@ import { env, IS_DEV_MODE } from "@nutrigym/lib/server/env"
 import { schema } from "@nutrigym/lib/server/api/schema"
 import { db } from "@nutrigym/lib/server/providers/db"
 import { initContextCache } from "@pothos/core"
+import { auth } from "@clerk/nextjs/server"
 import { createYoga } from "graphql-yoga"
 import {
   useResponseCache as withResponseCache,
@@ -20,6 +21,19 @@ import {
 
 import PersistedDocuments from "../../../client/generated/persisted-documents.json"
 
+// NOTE: when a mutation is invoked, the response cache plugin will automatically
+// invalidate the entities returned from the mutation using the __typename and ID
+// fields. To ensure caching behavior works as expected, all mutations should return
+// the affected entities along with their IDs. One edge case to consider includes
+// creation mutations. Suppose that we have a query which lists multiple entities.
+// If a new entity is created, the ID of the newly created entity will be invalidated.
+// However, this newly created entity is not being used by any queries yet, so the
+// invalidation does nothing. As a result, the original results of the list query
+// will still remain cached and the newly created entity will not appear (until the
+// ttl expires). To resolve this, mutations which create new entities should also
+// invalidate all entities that have the same type as the newly created entity.
+//
+// TODO: use redis cache
 const cache = createInMemoryCache({
   max: 100,
 })
@@ -28,7 +42,7 @@ export const yoga = createYoga({
   fetchAPI: { Response },
   landingPage: false,
   schema,
-  context: async (yoga): Promise<GraphQLBaseContext> => {
+  context: (yoga): GraphQLBaseContext => {
     const date = new Date()
     return {
       // Adding this will prevent any issues if you server implementation copies
@@ -39,6 +53,7 @@ export const yoga = createYoga({
       env,
       providers: {
         clerk,
+        cache,
         db,
       },
     }
@@ -62,10 +77,10 @@ export const yoga = createYoga({
     maxDepthPlugin(),
 
     // Response caching: https://the-guild.dev/graphql/envelop/plugins/use-response-cache#envelopresponse-cache
-    withResponseCache({
-      session: (req) => req.headers.get("authorization"),
+    withResponseCache<GraphQLBaseContext>({
+      session: async () => await auth().then(({ userId }) => userId),
       includeExtensionMetadata: IS_DEV_MODE,
-      ttl: 30_000,
+      ttl: IS_DEV_MODE ? undefined : 30_000,
       cache,
     }),
   ],

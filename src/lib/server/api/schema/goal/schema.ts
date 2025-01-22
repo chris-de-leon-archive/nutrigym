@@ -1,4 +1,3 @@
-import "./find-by-latest/schema"
-import "./find-by-date/schema"
-import "./find-by-id/schema"
+import "./find-by-closest-date/schema"
 import "./create/schema"
+import "./update/schema"

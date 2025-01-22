@@ -1,0 +1,8 @@
+mutation CreateBodyMeasurement(
+  $date: Date!
+  $data: CreateBodyMeasurementInput!
+) {
+  createBodyMeasurement(date: $date, data: $data) {
+    id
+  }
+}

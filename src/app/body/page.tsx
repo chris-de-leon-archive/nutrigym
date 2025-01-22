@@ -1,8 +1,10 @@
 import { DatePickerPopover } from "@nutrigym/components/date-picker"
+import { BodyMeasurementByDateDocument } from "@nutrigym/lib/client"
 import { BodyMeasurementsDialog } from "./measurements.dialog"
 import { BodyGoalEditorDialog } from "./goal-editor.dialog"
-import { searchParams } from "@nutrigym/lib/search-params"
+import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { withUserInfo } from "@nutrigym/components/user"
+import { DateTime } from "@nutrigym/lib/datetime"
 import { BodyDataTable } from "./page.data-table"
 import { BodyCharts } from "./page.charts"
 import {
@@ -12,17 +14,11 @@ import {
   PageSubContainer,
   PageSubHeading,
 } from "@nutrigym/components/page"
-import {
-  BodyMeasurementByDateDocument,
-  makeRequestOrThrow,
-} from "@nutrigym/lib/client"
 
 export default withUserInfo(async (ctx) => {
-  const date = await searchParams.date.parse(ctx.next)
-
-  const { measurementsByDate: log } = await makeRequestOrThrow(
+  const { bodyMeasurementByDate: log } = await makeRequestOrThrow(
     BodyMeasurementByDateDocument,
-    { date },
+    { date: DateTime.formatDate(ctx.searchParams.date) },
   )
 
   return (
@@ -30,22 +26,31 @@ export default withUserInfo(async (ctx) => {
       <PageSubContainer>
         <PageHeadingContainer>
           <PageMainHeading name="Body" />
-          <DatePickerPopover date={date} />
+          <DatePickerPopover
+            today={ctx.meta.today}
+            date={ctx.searchParams.date}
+          />
         </PageHeadingContainer>
       </PageSubContainer>
       <PageSubContainer>
         <PageHeadingContainer>
           <PageSubHeading name="Goals" />
-          <BodyGoalEditorDialog date={date} goal={ctx.user.goal} />
+          <BodyGoalEditorDialog
+            date={ctx.searchParams.date}
+            goal={ctx.user.goal}
+          />
         </PageHeadingContainer>
-        <BodyCharts log={log} goal={ctx.user.goal} />
+        <BodyCharts measurement={log} goal={ctx.user.goal} />
       </PageSubContainer>
       <PageSubContainer>
         <PageHeadingContainer>
           <PageSubHeading name="Measurements" />
-          <BodyMeasurementsDialog log={log} date={date} />
+          <BodyMeasurementsDialog
+            measurement={log}
+            date={ctx.searchParams.date}
+          />
         </PageHeadingContainer>
-        <BodyDataTable log={log} />
+        <BodyDataTable measurement={log} />
       </PageSubContainer>
     </PageMainContainer>
   )

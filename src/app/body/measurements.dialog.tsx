@@ -1,8 +1,8 @@
 "use client"
 
-import { BodyMeasurementByDateQuery } from "@nutrigym/lib/client"
 import { BodyMeasurementsForm } from "./measurements.form"
 import { Button } from "@nutrigym/components/ui/button"
+import { BodyMeasurement } from "@nutrigym/lib/client"
 import { PlusIcon } from "lucide-react"
 import { useState } from "react"
 import {
@@ -14,7 +14,7 @@ import {
 } from "@nutrigym/components/ui/dialog"
 
 export type BodyMeasurementsDialogProps = {
-  log: BodyMeasurementByDateQuery["measurementsByDate"]
+  measurement: BodyMeasurement | null | undefined
   date: Date
 }
 
@@ -35,7 +35,7 @@ export function BodyMeasurementsDialog(props: BodyMeasurementsDialogProps) {
         <div className="max-h-[75vh] w-full overflow-y-scroll border p-5">
           <BodyMeasurementsForm
             date={props.date}
-            log={props.log}
+            measurement={props.measurement}
             onSubmit={() => setOpen(false)}
           />
         </div>

@@ -1,16 +1,5 @@
-mutation CreateGoal($data: CreateGoalInput!) {
-  createGoal(data: $data) {
+mutation CreateGoal($date: Date!, $data: CreateGoalInput!) {
+  createGoal(date: $date, data: $data) {
     id
-    createdAt
-    latest
-    version
-    waterInMilliliters
-    weightInPounds
-    sleepInHours
-    proteinPercentage
-    carbsPercentage
-    fatPercentage
-    calories
-    steps
   }
 }

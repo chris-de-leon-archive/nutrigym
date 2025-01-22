@@ -1,7 +1,6 @@
 // These imports will register all the resolvers, objects, inputs, etc. to the builder
 import "./measurements/food/schema"
 import "./measurements/body/schema"
-import "./measurements/log/schema"
 import "./food/schema"
 import "./goal/schema"
 import "./body/schema"

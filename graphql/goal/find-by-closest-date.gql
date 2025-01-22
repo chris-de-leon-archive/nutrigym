@@ -1,0 +1,17 @@
+query GoalByClosestDate($date: Date!) {
+  goalByClosestDate(date: $date) {
+    id
+    createdAt
+    waterInMilliliters
+    weightInPounds
+    sleepInHours
+    proteinPercentage
+    carbsPercentage
+    fatPercentage
+    calories
+    steps
+    month
+    year
+    day
+  }
+}

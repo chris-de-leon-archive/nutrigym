@@ -1,6 +1,6 @@
 "use client"
 
-import { searchParams } from "@nutrigym/lib/search-params"
+import { SearchParams } from "@nutrigym/lib/search-params"
 import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@nutrigym/components/ui/button"
 import { DateTime } from "@nutrigym/lib/datetime"
@@ -14,21 +14,23 @@ import {
 } from "@nutrigym/components/ui/popover"
 
 export type DatePickerPopoverProps = {
+  today: Date
   date: Date
 }
 
 export function DatePickerPopover(props: DatePickerPopoverProps) {
-  const [date, setDate] = useState<Date>(props.date)
+  const [date, setDate] = useState(props.date)
+  const [open, setOpen] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
 
   const onDateChange = (date: Date) => {
     setDate(date)
-    router.push(searchParams.date.href(pathname, date))
+    router.push(SearchParams.date.href(pathname, date))
   }
 
   return (
-    <Popover>
+    <Popover open={open} onOpenChange={setOpen}>
       <PopoverTrigger asChild>
         <Button
           variant="secondary"
@@ -44,7 +46,7 @@ export function DatePickerPopover(props: DatePickerPopoverProps) {
           onMonthChange={(m) => onDateChange(DateTime.setMonth(date, m))}
           onYearChange={(y) => onDateChange(DateTime.setYear(date, y))}
           onDayChange={(d) => onDateChange(DateTime.setDate(date, d))}
-          today={props.date}
+          today={props.today}
           date={date}
         />
       </PopoverContent>

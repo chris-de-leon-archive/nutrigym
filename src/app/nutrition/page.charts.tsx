@@ -1,22 +1,18 @@
 "use client"
 
 import { calculatePortion, caloriesToGrams } from "@nutrigym/lib/conversion"
+import { FoodMeasurement, Goal } from "@nutrigym/lib/client"
 import { GoalChart } from "@nutrigym/components/charts"
 import { useMemo } from "react"
-import {
-  FoodMeasurementsByDateQuery,
-  GoalByDateQuery,
-} from "@nutrigym/lib/client"
 
 export type NutritionChartsProps = {
-  log: FoodMeasurementsByDateQuery["measurementsByDate"]
-  goal: NonNullable<GoalByDateQuery["goalByDate"]>
+  measurements: FoodMeasurement[]
+  goal: Goal
 }
 
-export function NutritionCharts({ log, goal }: NutritionChartsProps) {
+export function NutritionCharts({ measurements, goal }: NutritionChartsProps) {
   const curr = useMemo(() => {
     let [calories, protein, carbs, fat] = [0, 0, 0, 0]
-    const measurements = log?.foodMeasurements ?? []
     measurements.forEach((elem) => {
       calories += elem.servingsConsumed * elem.food.calories
       protein += elem.servingsConsumed * (elem.food.totalProteinInGrams ?? 0)
@@ -29,7 +25,7 @@ export function NutritionCharts({ log, goal }: NutritionChartsProps) {
       carbs,
       fat,
     }
-  }, [log])
+  }, [measurements])
 
   const goals = useMemo(() => {
     const totalGrams = caloriesToGrams(goal?.calories ?? 0)

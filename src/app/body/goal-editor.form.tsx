@@ -1,10 +1,10 @@
 "use client"
 
-import { CreateGoalDocument, Goal } from "@nutrigym/lib/client"
-import { makeRequestOrThrow } from "@nutrigym/lib/client"
+import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { Button } from "@nutrigym/components/ui/button"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@nutrigym/components/ui/input"
+import { DateTime } from "@nutrigym/lib/datetime"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { BodyLabels } from "./labels"
@@ -17,6 +17,11 @@ import {
   FormLabel,
   FormMessage,
 } from "@nutrigym/components/ui/form"
+import {
+  CreateGoalDocument,
+  UpdateGoalDocument,
+  Goal,
+} from "@nutrigym/lib/client"
 
 // TODO: calorie target should offer "shortcuts" which auto-compute the
 // calories based on a specific goal (e.g. lose weight, gain weight, etc.)
@@ -43,21 +48,43 @@ export function BodyGoalEditorForm(props: BodyGoalEditorFormProps) {
 
   const router = useRouter()
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    makeRequestOrThrow(CreateGoalDocument, {
-      data: {
-        waterInMilliliters: values.waterInMilliliters,
-        proteinPercentage: goal.proteinPercentage,
-        carbsPercentage: goal.carbsPercentage,
-        fatPercentage: goal.fatPercentage,
-        weightInPounds: values.weightInPounds,
-        sleepInHours: values.sleepInHours,
-        calories: goal.calories,
-        steps: values.steps,
-      },
-    }).then(() => {
-      router.refresh()
-      props.onSubmit()
-    })
+    const goalDate = new Date(Date.UTC(goal.year, goal.month, goal.day))
+
+    if (!DateTime.eq(goalDate, props.date)) {
+      makeRequestOrThrow(CreateGoalDocument, {
+        date: DateTime.formatDate(props.date),
+        data: {
+          waterInMilliliters: values.waterInMilliliters,
+          proteinPercentage: goal.proteinPercentage,
+          carbsPercentage: goal.carbsPercentage,
+          fatPercentage: goal.fatPercentage,
+          weightInPounds: values.weightInPounds,
+          sleepInHours: values.sleepInHours,
+          calories: goal.calories,
+          steps: values.steps,
+        },
+      }).then(() => {
+        router.refresh()
+        props.onSubmit()
+      })
+    } else {
+      makeRequestOrThrow(UpdateGoalDocument, {
+        id: goal.id,
+        data: {
+          waterInMilliliters: values.waterInMilliliters,
+          proteinPercentage: goal.proteinPercentage,
+          carbsPercentage: goal.carbsPercentage,
+          fatPercentage: goal.fatPercentage,
+          weightInPounds: values.weightInPounds,
+          sleepInHours: values.sleepInHours,
+          calories: goal.calories,
+          steps: values.steps,
+        },
+      }).then(() => {
+        router.refresh()
+        props.onSubmit()
+      })
+    }
   }
 
   return (

@@ -1,48 +1,60 @@
 import { PersonalGoalsSetter } from "./personal-goals-setter"
 import { PersonalInfoSetter } from "./personal-info-setter"
+import { SearchParams } from "@nutrigym/lib/search-params"
+import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { NextSearchParams } from "@nutrigym/lib/types"
+import { DateTime } from "@nutrigym/lib/datetime"
 import {
+  GoalByClosestDateDocument,
   BodyDocument,
-  BodyQuery,
-  GoalByLatestDocument,
-  GoalByLatestQuery,
-  makeRequestOrThrow,
+  Goal,
+  Body,
 } from "@nutrigym/lib/client"
 
-type NextContext = NextSearchParams
+type ParsedSearchParams = {
+  date: Date
+}
 
-type UserContext = Required<{
-  goal: NonNullable<GoalByLatestQuery["goalByLatest"]>
-  body: NonNullable<BodyQuery["body"]>
-}>
+type MetaContext = {
+  today: Date
+}
 
-type Context = Required<{
+type UserContext = {
+  goal: Goal
+  body: Body
+}
+
+type Context = {
+  searchParams: ParsedSearchParams
   user: UserContext
-  next: NextContext
-}>
+  meta: MetaContext
+}
 
 // TODO: rename?
-// TODO: cache results
 export function withUserInfo(cb: (ctx: Context) => Promise<React.ReactNode>) {
   return async function Component({ searchParams }: NextSearchParams) {
-    const { body: userBody } = await makeRequestOrThrow(BodyDocument, {})
+    const date = await SearchParams.date.parse({ searchParams })
+    const today = new Date()
 
+    const { body: userBody } = await makeRequestOrThrow(BodyDocument, {})
     if (userBody == null) {
-      return <PersonalInfoSetter />
+      return <PersonalInfoSetter today={today} />
     }
 
-    const { goalByLatest: userGoal } = await makeRequestOrThrow(
-      GoalByLatestDocument,
-      {},
+    const { goalByClosestDate: userGoal } = await makeRequestOrThrow(
+      GoalByClosestDateDocument,
+      { date: DateTime.formatDate(date) },
     )
-
     if (userGoal == null) {
-      return <PersonalGoalsSetter />
+      return <PersonalGoalsSetter date={date} />
     }
 
     return await cb({
-      next: {
-        searchParams,
+      searchParams: {
+        date,
+      },
+      meta: {
+        today,
       },
       user: {
         goal: userGoal,

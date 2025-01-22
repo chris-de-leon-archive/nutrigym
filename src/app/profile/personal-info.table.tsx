@@ -9,6 +9,7 @@ import {
 } from "@nutrigym/components/ui/table"
 
 export type PersonalInfoTableProps = {
+  today: Date
   body: Body
 }
 
@@ -20,7 +21,7 @@ export function PersonalInfoTable(props: PersonalInfoTableProps) {
         <TableBody>
           <TableRow>
             <TableCell>Birthday</TableCell>
-            <TableCell>{birthday.toLocaleDateString()}</TableCell>
+            <TableCell>{DateTime.formatDate(birthday)}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell>Gender</TableCell>
@@ -28,7 +29,7 @@ export function PersonalInfoTable(props: PersonalInfoTableProps) {
           </TableRow>
           <TableRow>
             <TableCell>Age</TableCell>
-            <TableCell>{DateTime.computeAge(birthday)}</TableCell>
+            <TableCell>{DateTime.computeAge(props.today, birthday)}</TableCell>
           </TableRow>
         </TableBody>
       </Table>

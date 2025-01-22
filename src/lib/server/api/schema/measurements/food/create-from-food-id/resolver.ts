@@ -1,13 +1,13 @@
 import { schema } from "@nutrigym/lib/schema"
 import { randomUUID } from "node:crypto"
 import { and, eq } from "drizzle-orm"
+import { foods } from "../../../food"
+import { types } from "../types"
 import { z } from "zod"
 import {
-  ERR_CREATE_FOOD_MEASUREMENT,
+  ERR_ENTITY_NOT_FOUND,
   GraphQLAuthContext,
-  ERR_FOOD_NOT_FOUND,
   ERR_LOG_NOT_FOUND,
-  ERR_NO_GOALS_SET,
 } from "@nutrigym/lib/server/api"
 
 export const zInput = z.object({
@@ -29,9 +29,13 @@ export const handler = async (
   const userId = ctx.auth.user.id
   const month = input.date.getUTCMonth()
   const year = input.date.getUTCFullYear()
-  const day = input.date.getUTCDay()
+  const day = input.date.getUTCDate()
 
-  const resp = await ctx.providers.db.transaction(async (tx) => {
+  await ctx.providers.cache.invalidate([
+    { typename: types.foodMeasurement.name },
+  ])
+
+  return await ctx.providers.db.transaction(async (tx) => {
     const food = await tx.query.userFood.findFirst({
       where: and(
         eq(schema.userFood.userId, userId),
@@ -39,24 +43,13 @@ export const handler = async (
       ),
     })
     if (food == null) {
-      throw ERR_FOOD_NOT_FOUND(input.data.food.id)
-    }
-
-    const goal = await tx.query.userGoal.findFirst({
-      where: and(
-        eq(schema.userGoal.userId, userId),
-        eq(schema.userGoal.latest, true),
-      ),
-    })
-    if (goal == null) {
-      throw ERR_NO_GOALS_SET
+      throw ERR_ENTITY_NOT_FOUND(foods.types.food.name, input.data.food.id)
     }
 
     await tx
       .insert(schema.userMeasurementLog)
       .values({
         id: measurementLogId,
-        goalId: goal.id,
         userId,
         month,
         year,
@@ -85,11 +78,6 @@ export const handler = async (
         logId: log.id,
       })
       .onConflictDoNothing()
+      .returning()
   })
-
-  if (resp.rowsAffected === 0) {
-    throw ERR_CREATE_FOOD_MEASUREMENT
-  } else {
-    return null
-  }
 }

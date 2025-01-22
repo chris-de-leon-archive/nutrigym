@@ -1,30 +1,21 @@
 query BodyMeasurementByDate($date: Date!) {
-  measurementsByDate(date: $date) {
+  bodyMeasurementByDate(date: $date) {
     id
     createdAt
-    goalId
-    userId
-    month
-    year
-    day
-    bodyMeasurement {
-      id
-      createdAt
-      logId
-      weightInPounds
-      heightInInches
-      waterInMilliliters
-      shouldersInInches
-      forearmsInInches
-      calvesInInches
-      thighsInInches
-      waistInInches
-      chestInInches
-      armsInInches
-      neckInInches
-      hipsInInches
-      sleepInHours
-      steps
-    }
+    logId
+    weightInPounds
+    heightInInches
+    waterInMilliliters
+    shouldersInInches
+    forearmsInInches
+    calvesInInches
+    thighsInInches
+    waistInInches
+    chestInInches
+    armsInInches
+    neckInInches
+    hipsInInches
+    sleepInHours
+    steps
   }
 }

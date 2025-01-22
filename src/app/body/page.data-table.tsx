@@ -1,6 +1,6 @@
 "use client"
 
-import { BodyMeasurementByDateQuery } from "@nutrigym/lib/client"
+import { BodyMeasurement } from "@nutrigym/lib/client"
 import { Border } from "@nutrigym/components/border"
 import { BodyLabels } from "./labels"
 import {
@@ -13,20 +13,17 @@ import {
 } from "@nutrigym/components/ui/table"
 
 export type BodyDataTableProps = {
-  log: BodyMeasurementByDateQuery["measurementsByDate"]
+  measurement: BodyMeasurement | null | undefined
 }
 
 export function BodyDataTable(props: BodyDataTableProps) {
-  const table = BodyLabels.entries()
-    .toArray()
-    .map(([k, v]) => {
-      const bodyMeasurement = props.log?.bodyMeasurement
-      return {
-        id: k,
-        name: v,
-        value: bodyMeasurement?.[k]?.toString(),
-      }
-    })
+  const table = Array.from(BodyLabels.entries()).map(([k, v]) => {
+    return {
+      id: k,
+      name: v,
+      value: props.measurement?.[k]?.toString(),
+    }
+  })
 
   return (
     <Border>

@@ -1,13 +1,14 @@
+import { ServingUnit } from "@nutrigym/lib/enums"
 import { schema } from "@nutrigym/lib/schema"
 import { randomUUID } from "node:crypto"
 import { and, eq } from "drizzle-orm"
+import { foods } from "../../../food"
+import { types } from "../types"
 import { z } from "zod"
 import {
-  ERR_CREATE_FOOD_MEASUREMENT,
   GraphQLAuthContext,
   ERR_LOG_NOT_FOUND,
-  ERR_NO_GOALS_SET,
-  ERR_CREATE_FOOD,
+  ERR_CREATE_ENTITY,
 } from "@nutrigym/lib/server/api"
 
 export const zInput = z.object({
@@ -19,7 +20,7 @@ export const zInput = z.object({
       brand: z.string().min(1),
       calories: z.number().min(0),
       servingSize: z.number().min(0),
-      servingUnit: z.string().min(1),
+      servingUnit: z.nativeEnum(ServingUnit),
       totalProteinInGrams: z.number().min(0).nullish(),
       totalCarbsInGrams: z.number().min(0).nullish(),
       totalFatInGrams: z.number().min(0).nullish(),
@@ -47,9 +48,30 @@ export const handler = async (
   const userId = ctx.auth.user.id
   const month = input.date.getUTCMonth()
   const year = input.date.getUTCFullYear()
-  const day = input.date.getUTCDay()
+  const day = input.date.getUTCDate()
 
-  const resp = await ctx.providers.db.transaction(async (tx) => {
+  // TODO: food creation should be a separate mutation
+  await ctx.providers.cache.invalidate([
+    { typename: types.foodMeasurement.name },
+    { typename: foods.types.food.name },
+  ])
+
+  return await ctx.providers.db.transaction(async (tx) => {
+    // TODO: throw better error message if food name already exists
+    // (e.g. if (err instanceof LibsqlError) {...}) or remove unique
+    // constraint and allow duplicates. A libsql error looks like this:
+    //
+    // [Error [LibsqlError]: SQLITE_CONSTRAINT_UNIQUE: UNIQUE constraint failed: user_food.user_id, user_food.name, user_food.brand] {
+    //   code: 'SQLITE_CONSTRAINT_UNIQUE',
+    //   rawCode: 2067,
+    //   [cause]: [SqliteError: UNIQUE constraint failed: user_food.user_id, user_food.name, user_food.brand] {
+    //     code: 'SQLITE_CONSTRAINT_UNIQUE',
+    //     rawCode: 2067
+    //   }
+    // }
+    //
+    // Docs on errors here: https://www.sqlite.org/rescode.html
+    //
     const food = await tx
       .insert(schema.userFood)
       .values({
@@ -59,24 +81,13 @@ export const handler = async (
       })
       .onConflictDoNothing()
     if (food.rowsAffected === 0) {
-      throw ERR_CREATE_FOOD
-    }
-
-    const goal = await tx.query.userGoal.findFirst({
-      where: and(
-        eq(schema.userGoal.userId, userId),
-        eq(schema.userGoal.latest, true),
-      ),
-    })
-    if (goal == null) {
-      throw ERR_NO_GOALS_SET
+      throw ERR_CREATE_ENTITY(foods.types.food.name)
     }
 
     await tx
       .insert(schema.userMeasurementLog)
       .values({
         id: measurementLogId,
-        goalId: goal.id,
         userId,
         month,
         year,
@@ -105,11 +116,6 @@ export const handler = async (
         foodId,
       })
       .onConflictDoNothing()
+      .returning()
   })
-
-  if (resp.rowsAffected === 0) {
-    throw ERR_CREATE_FOOD_MEASUREMENT
-  } else {
-    return null
-  }
 }

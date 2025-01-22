@@ -28,9 +28,12 @@ export default withUserInfo(async (ctx) => {
       <PageSubContainer>
         <PageHeadingContainer>
           <PageSubHeading name="Personal Info" />
-          <PersonalInfoEditorDialog body={ctx.user.body} />
+          <PersonalInfoEditorDialog
+            today={ctx.meta.today}
+            body={ctx.user.body}
+          />
         </PageHeadingContainer>
-        <PersonalInfoTable body={ctx.user.body} />
+        <PersonalInfoTable today={ctx.meta.today} body={ctx.user.body} />
       </PageSubContainer>
     </PageMainContainer>
   )

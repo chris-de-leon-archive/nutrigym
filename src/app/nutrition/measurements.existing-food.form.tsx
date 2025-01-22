@@ -1,12 +1,14 @@
 "use client"
 
 import { NutritionLabels, NutritionLabelsKeys } from "./labels"
+import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { Combobox } from "@nutrigym/components/combobox"
 import { Button } from "@nutrigym/components/ui/button"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@nutrigym/components/ui/input"
 import { Border } from "@nutrigym/components/border"
 import { useForm, useWatch } from "react-hook-form"
+import { DateTime } from "@nutrigym/lib/datetime"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { z } from "zod"
@@ -28,8 +30,7 @@ import {
 } from "@nutrigym/components/ui/table"
 import {
   CreateFoodMeasurementFromFoodIdDocument,
-  FoodsQuery,
-  makeRequestOrThrow,
+  Food,
 } from "@nutrigym/lib/client"
 
 const formSchema = z.object({
@@ -39,7 +40,7 @@ const formSchema = z.object({
 
 export type NutritionMeasurementFromExistingFoodFormProps = {
   onSubmit: () => void
-  foods: FoodsQuery["foods"]
+  foods: Food[]
   date: Date
 }
 
@@ -54,6 +55,7 @@ export function NutritionMeasurementFromExistingFoodForm(
     resolver: zodResolver(formSchema),
     defaultValues: {
       servingsConsumed: 1,
+      foodId: "",
     },
   })
 
@@ -96,7 +98,7 @@ export function NutritionMeasurementFromExistingFoodForm(
   const router = useRouter()
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     makeRequestOrThrow(CreateFoodMeasurementFromFoodIdDocument, {
-      date: props.date,
+      date: DateTime.formatDate(props.date),
       data: {
         servingsConsumed: values.servingsConsumed,
         food: { id: values.foodId },
@@ -164,16 +166,14 @@ export function NutritionMeasurementFromExistingFoodForm(
                 </TableRow>
               </TableHeader>
               <TableBody>
-                {NutritionLabels.entries()
-                  .toArray()
-                  .map(([k, label]) => (
-                    <TableRow key={k}>
-                      <TableCell className="font-medium">{label}</TableCell>
-                      <TableCell>
-                        {selectedFood == null ? undefined : selectedFood[k]}
-                      </TableCell>
-                    </TableRow>
-                  ))}
+                {Array.from(NutritionLabels.entries()).map(([k, label]) => (
+                  <TableRow key={k}>
+                    <TableCell className="font-medium">{label}</TableCell>
+                    <TableCell>
+                      {selectedFood == null ? undefined : selectedFood[k]}
+                    </TableCell>
+                  </TableRow>
+                ))}
               </TableBody>
             </Table>
           </Border>

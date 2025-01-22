@@ -14,6 +14,7 @@ import {
 } from "@nutrigym/components/ui/dialog"
 
 export type PersonalInfoEditorDialogProps = {
+  today: Date
   body: Body
 }
 
@@ -34,6 +35,7 @@ export function PersonalInfoEditorDialog(props: PersonalInfoEditorDialogProps) {
         <div className="max-h-[75vh] w-full overflow-y-scroll border p-5">
           <PersonalInfoEditorForm
             onSubmit={() => setOpen(false)}
+            today={props.today}
             body={props.body}
           />
         </div>

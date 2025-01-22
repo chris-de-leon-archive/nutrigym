@@ -1,0 +1,9 @@
+mutation UpdateBodyMeasurement(
+  $id: Uuid!
+  $date: Date!
+  $data: UpdateBodyMeasurementInput!
+) {
+  updateBodyMeasurement(id: $id, date: $date, data: $data) {
+    id
+  }
+}

@@ -1,21 +1,13 @@
-import { Goal } from "@nutrigym/lib/schema"
-import { createHash } from "node:crypto"
+import { TOLERANCE } from "../../constants"
 
-export const makeVersionHash = (
-  goal: Goal | Omit<Goal, "id" | "userId" | "createdAt" | "version" | "latest">,
+export const assertPercentagesSumTo100 = (
+  percentages: number[],
+  tolerance = TOLERANCE,
 ) => {
-  const keys: (keyof Goal | string)[] = [
-    "waterInMilliliters",
-    "weightInPounds",
-    "sleepInHours",
-    "proteinPercentage",
-    "carbsPercentage",
-    "fatPercentage",
-    "calories",
-    "steps",
-  ]
-
-  return createHash("md5")
-    .update(JSON.stringify(goal, keys.sort()))
-    .digest("hex")
+  const total = percentages.reduce((agg, val) => agg + val, 0)
+  if (Math.abs(total - 100) >= tolerance) {
+    return new Error(`percentages must sum to 100 (got ${total})`)
+  } else {
+    return undefined
+  }
 }

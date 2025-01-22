@@ -1,9 +1,11 @@
-import { findByDate } from "./find-by-date"
-import { findByID } from "./find-by-id"
+import { findByClosestDate } from "./find-by-closest-date"
+import { update } from "./update"
 import { create } from "./create"
+import { types } from "./types"
 
 export const goal = {
-  findByDate,
-  findByID,
+  findByClosestDate,
   create,
+  update,
+  types,
 }

@@ -1,14 +1,16 @@
 "use client"
 
-import { CreateGoalDocument, makeRequestOrThrow } from "@nutrigym/lib/client"
 import { calculatePortion, caloriesToGrams } from "@nutrigym/lib/conversion"
 import { FractionalPieChart } from "@nutrigym/components/charts"
 import { RefreshCwIcon, TriangleAlertIcon } from "lucide-react"
+import { makeRequestOrThrow } from "@nutrigym/lib/server"
+import { CreateGoalDocument } from "@nutrigym/lib/client"
 import { Button } from "@nutrigym/components/ui/button"
 import { Slider } from "@nutrigym/components/ui/slider"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@nutrigym/components/ui/input"
 import { useForm, useWatch } from "react-hook-form"
+import { DateTime } from "@nutrigym/lib/datetime"
 import { useRouter } from "next/navigation"
 import { useMemo } from "react"
 import { z } from "zod"
@@ -44,7 +46,11 @@ const formSchema = z.object({
   steps: z.coerce.number().int().min(0),
 })
 
-export function PersonalGoalsSetter() {
+export type PersonalGoalsSetterProps = {
+  date: Date
+}
+
+export function PersonalGoalsSetter(props: PersonalGoalsSetterProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -78,6 +84,7 @@ export function PersonalGoalsSetter() {
   const router = useRouter()
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     makeRequestOrThrow(CreateGoalDocument, {
+      date: DateTime.formatDate(props.date),
       data: values,
     }).then(() => {
       router.refresh()

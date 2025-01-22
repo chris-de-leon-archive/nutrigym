@@ -1,4 +1,5 @@
-import { withAuth, builder } from "@nutrigym/lib/server/api"
+import { requireAuth } from "@nutrigym/lib/server/api/auth"
+import { builder } from "@nutrigym/lib/server/api"
 import { handler, zInput } from "./resolver"
 import { types } from "../types"
 
@@ -11,8 +12,8 @@ builder.queryField("body", (t) =>
       schema: zInput,
     },
     resolve: async (_, args, ctx) => {
-      return await withAuth(ctx, async (auth) => {
-        return await handler(args, { ...ctx, ...auth })
+      return await requireAuth(ctx, async (auth) => {
+        return await handler(args, auth)
       })
     },
   }),

@@ -7,7 +7,7 @@ const bodyMeasurement = builder.objectRef<BodyMeasurement>("BodyMeasurement")
 builder.objectType(bodyMeasurement, {
   fields: (t) => ({
     id: t.exposeString("id"),
-    createdAt: t.expose("createdAt", { type: scalars.date }),
+    createdAt: t.expose("createdAt", { type: scalars.datetimeISO }),
     logId: t.exposeString("logId"),
     weightInPounds: t.exposeFloat("weightInPounds"),
     heightInInches: t.exposeFloat("heightInInches"),

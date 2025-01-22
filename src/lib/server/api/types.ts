@@ -1,4 +1,5 @@
 import { clerk } from "@nutrigym/lib/server/providers/clerk"
+import { Cache } from "@graphql-yoga/plugin-response-cache"
 import { db } from "@nutrigym/lib/server/providers/db"
 import { YogaInitialContext } from "graphql-yoga"
 import { env } from "@nutrigym/lib/server/env"
@@ -8,6 +9,7 @@ export type BaseContext = Readonly<{
   env: typeof env
   providers: Readonly<{
     clerk: typeof clerk
+    cache: Cache
     db: typeof db
   }>
 }>

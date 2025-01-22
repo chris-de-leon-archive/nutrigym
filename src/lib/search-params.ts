@@ -1,6 +1,6 @@
 import { NextSearchParams } from "./types"
 
-export const searchParams = {
+export const SearchParams = {
   date: {
     href: (pathname: string, date: Date) => {
       const searchParams = new URLSearchParams({ date: date.toISOString() })

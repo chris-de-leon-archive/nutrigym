@@ -3,7 +3,7 @@
 import { NutritionMeasurementFromExistingFoodForm } from "./measurements.existing-food.form"
 import { NutritionMeasurementFromNewFoodForm } from "./measurements.new-food.form"
 import { Button } from "@nutrigym/components/ui/button"
-import { FoodsQuery } from "@nutrigym/lib/client"
+import { Food } from "@nutrigym/lib/client"
 import { PlusIcon } from "lucide-react"
 import { useState } from "react"
 import {
@@ -21,7 +21,7 @@ import {
 } from "@nutrigym/components/ui/tabs"
 
 export type NutritionMeasurementsDialogProps = {
-  foods: FoodsQuery["foods"]
+  foods: Food[]
   date: Date
 }
 

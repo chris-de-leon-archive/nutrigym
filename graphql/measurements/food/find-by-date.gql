@@ -1,39 +1,30 @@
 query FoodMeasurementsByDate($date: Date!) {
-  measurementsByDate(date: $date) {
+  foodMeasurementsByDate(date: $date) {
     id
     createdAt
-    goalId
-    userId
-    month
-    year
-    day
-    foodMeasurements {
+    logId
+    foodId
+    servingsConsumed
+    food {
       id
-      createdAt
-      logId
-      foodId
-      servingsConsumed
-      food {
-        id
-        name
-        brand
-        calories
-        servingSize
-        servingUnit
-        totalProteinInGrams
-        totalCarbsInGrams
-        totalFatInGrams
-        polyunsaturatedFatInGrams
-        monounsaturatedFatInGrams
-        saturatedFatInGrams
-        potassiumInMilligrams
-        sodiumInMilligrams
-        dietaryFiberInGrams
-        sugarsInGrams
-        cholesterolInMilligrams
-        calciumInMilligrams
-        ironInMilligrams
-      }
+      name
+      brand
+      calories
+      servingSize
+      servingUnit
+      totalProteinInGrams
+      totalCarbsInGrams
+      totalFatInGrams
+      polyunsaturatedFatInGrams
+      monounsaturatedFatInGrams
+      saturatedFatInGrams
+      potassiumInMilligrams
+      sodiumInMilligrams
+      dietaryFiberInGrams
+      sugarsInGrams
+      cholesterolInMilligrams
+      calciumInMilligrams
+      ironInMilligrams
     }
   }
 }

@@ -7,7 +7,7 @@ import { TabsContent } from "@radix-ui/react-tabs"
 // TODO: allow users to export all data
 
 export default function Home() {
-  // TODO: fetch from API using tanstack query
+  // TODO: fetch data using server actions
   const randVals = () =>
     Array.from({ length: 100 })
       .map((_, i) => {

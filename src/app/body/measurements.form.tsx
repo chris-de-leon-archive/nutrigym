@@ -1,9 +1,10 @@
 "use client"
 
+import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { Button } from "@nutrigym/components/ui/button"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@nutrigym/components/ui/input"
-import { stripNull } from "@nutrigym/lib/utils"
+import { DateTime } from "@nutrigym/lib/datetime"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { BodyLabels } from "./labels"
@@ -17,11 +18,12 @@ import {
   FormMessage,
 } from "@nutrigym/components/ui/form"
 import {
-  BodyMeasurementByDateQuery,
-  makeRequestOrThrow,
-  UpsertBodyMeasurementDocument,
+  CreateBodyMeasurementDocument,
+  UpdateBodyMeasurementDocument,
+  BodyMeasurement,
 } from "@nutrigym/lib/client"
 
+// TODO: allow null to be sent as a value to the API
 const formSchema = z.object({
   steps: z.coerce.number().min(0),
   weightInPounds: z.coerce.number().min(0),
@@ -40,43 +42,54 @@ const formSchema = z.object({
 })
 
 export type BodyMeasurementsFormProps = {
-  log: BodyMeasurementByDateQuery["measurementsByDate"]
+  measurement: BodyMeasurement | null | undefined
   onSubmit: () => void
   date: Date
 }
 
 export function BodyMeasurementsForm(props: BodyMeasurementsFormProps) {
-  const bodyMeasurement = props.log?.bodyMeasurement
+  const bodyMeasurement = props.measurement
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      steps: stripNull(bodyMeasurement?.steps),
-      weightInPounds: stripNull(bodyMeasurement?.weightInPounds),
-      heightInInches: stripNull(bodyMeasurement?.heightInInches),
-      waterInMilliliters: stripNull(bodyMeasurement?.waterInMilliliters),
-      sleepInHours: stripNull(bodyMeasurement?.sleepInHours),
-      waistInInches: stripNull(bodyMeasurement?.waistInInches),
-      hipsInInches: stripNull(bodyMeasurement?.hipsInInches),
-      chestInInches: stripNull(bodyMeasurement?.chestInInches),
-      armsInInches: stripNull(bodyMeasurement?.armsInInches),
-      thighsInInches: stripNull(bodyMeasurement?.thighsInInches),
-      shouldersInInches: stripNull(bodyMeasurement?.shouldersInInches),
-      forearmsInInches: stripNull(bodyMeasurement?.forearmsInInches),
-      calvesInInches: stripNull(bodyMeasurement?.calvesInInches),
-      neckInInches: stripNull(bodyMeasurement?.neckInInches),
+      steps: bodyMeasurement?.steps ?? 0,
+      weightInPounds: bodyMeasurement?.weightInPounds ?? 0,
+      heightInInches: bodyMeasurement?.heightInInches ?? 0,
+      waterInMilliliters: bodyMeasurement?.waterInMilliliters ?? 0,
+      sleepInHours: bodyMeasurement?.sleepInHours ?? 0,
+      waistInInches: bodyMeasurement?.waistInInches ?? 0,
+      hipsInInches: bodyMeasurement?.hipsInInches ?? 0,
+      chestInInches: bodyMeasurement?.chestInInches ?? 0,
+      armsInInches: bodyMeasurement?.armsInInches ?? 0,
+      thighsInInches: bodyMeasurement?.thighsInInches ?? 0,
+      shouldersInInches: bodyMeasurement?.shouldersInInches ?? 0,
+      forearmsInInches: bodyMeasurement?.forearmsInInches ?? 0,
+      calvesInInches: bodyMeasurement?.calvesInInches ?? 0,
+      neckInInches: bodyMeasurement?.neckInInches ?? 0,
     },
   })
 
   const router = useRouter()
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    makeRequestOrThrow(UpsertBodyMeasurementDocument, {
-      date: props.date,
-      data: values,
-    }).then(() => {
-      router.refresh()
-      props.onSubmit()
-    })
+    if (props.measurement == null) {
+      makeRequestOrThrow(CreateBodyMeasurementDocument, {
+        date: DateTime.formatDate(props.date),
+        data: values,
+      }).then(() => {
+        router.refresh()
+        props.onSubmit()
+      })
+    } else {
+      makeRequestOrThrow(UpdateBodyMeasurementDocument, {
+        id: props.measurement.id,
+        date: DateTime.formatDate(props.date),
+        data: values,
+      }).then(() => {
+        router.refresh()
+        props.onSubmit()
+      })
+    }
   }
 
   return (
@@ -86,26 +99,24 @@ export function BodyMeasurementsForm(props: BodyMeasurementsFormProps) {
         className="flex flex-col gap-y-2"
       >
         <div className="grid grid-cols-2 gap-2">
-          {BodyLabels.entries()
-            .toArray()
-            .map(([k, label], i) => {
-              return (
-                <FormField
-                  key={i}
-                  control={form.control}
-                  name={k}
-                  render={({ field }) => (
-                    <FormItem>
-                      <FormLabel>{label}</FormLabel>
-                      <FormControl>
-                        <Input {...field} />
-                      </FormControl>
-                      <FormMessage />
-                    </FormItem>
-                  )}
-                />
-              )
-            })}
+          {Array.from(BodyLabels.entries()).map(([k, label], i) => {
+            return (
+              <FormField
+                key={i}
+                control={form.control}
+                name={k}
+                render={({ field }) => (
+                  <FormItem>
+                    <FormLabel>{label}</FormLabel>
+                    <FormControl>
+                      <Input {...field} />
+                    </FormControl>
+                    <FormMessage />
+                  </FormItem>
+                )}
+              />
+            )
+          })}
         </div>
         <Button type="submit">Submit</Button>
       </form>

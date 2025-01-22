@@ -8,6 +8,10 @@ export const builder = new SchemaBuilder<{
   DefaultFieldNullability: false
   Context: GraphQLBaseContext
   Scalars: {
+    DateTimeISO: {
+      Input: Date
+      Output: Date
+    }
     Uuid: {
       Input: string
       Output: string

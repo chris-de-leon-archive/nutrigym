@@ -4,9 +4,9 @@ import { Gender } from "@nutrigym/lib/enums"
 import { and, eq } from "drizzle-orm"
 import { z } from "zod"
 import {
+  ERR_BIRTHDAY_IN_FUTURE,
   isValidUpdateObject,
   GraphQLAuthContext,
-  ERR_UPDATE_BODY,
 } from "@nutrigym/lib/server/api"
 
 export const zInput = z.object({
@@ -22,10 +22,14 @@ export const handler = async (
   ctx: GraphQLAuthContext,
 ) => {
   if (isValidUpdateObject(input.data)) {
-    return null
+    return []
   }
 
-  const resp = await ctx.providers.db.transaction(async (tx) => {
+  if (input.data.birthday != null && input.data.birthday > ctx.date) {
+    throw ERR_BIRTHDAY_IN_FUTURE
+  }
+
+  return await ctx.providers.db.transaction(async (tx) => {
     return await tx
       .update(schema.userBody)
       .set({
@@ -39,11 +43,6 @@ export const handler = async (
           eq(schema.userBody.id, input.id),
         ),
       )
+      .returning()
   })
-
-  if (resp.rowsAffected === 0) {
-    throw ERR_UPDATE_BODY
-  } else {
-    return null
-  }
 }

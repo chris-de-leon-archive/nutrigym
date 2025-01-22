@@ -7,7 +7,7 @@ const goal = builder.objectRef<Goal>("Goal")
 builder.objectType(goal, {
   fields: (t) => ({
     id: t.exposeString("id"),
-    createdAt: t.expose("createdAt", { type: scalars.date }),
+    createdAt: t.expose("createdAt", { type: scalars.datetimeISO }),
     waterInMilliliters: t.exposeFloat("waterInMilliliters"),
     weightInPounds: t.exposeFloat("weightInPounds"),
     sleepInHours: t.exposeFloat("sleepInHours"),
@@ -16,8 +16,9 @@ builder.objectType(goal, {
     fatPercentage: t.exposeFloat("fatPercentage"),
     calories: t.exposeFloat("calories"),
     steps: t.exposeInt("steps"),
-    version: t.exposeString("version"),
-    latest: t.exposeBoolean("latest"),
+    month: t.exposeInt("month"),
+    year: t.exposeInt("year"),
+    day: t.exposeInt("day"),
   }),
 })
 

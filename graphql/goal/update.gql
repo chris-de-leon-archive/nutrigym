@@ -1,0 +1,5 @@
+mutation UpdateGoal($id: Uuid!, $data: UpdateGoalInput!) {
+  updateGoal(id: $id, data: $data) {
+    id
+  }
+}

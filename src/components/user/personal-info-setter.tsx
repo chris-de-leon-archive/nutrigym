@@ -1,7 +1,9 @@
 "use client"
 
 import { PageMainContainer, PageMainHeading } from "@nutrigym/components/page"
+import { CreateBodyDocument, Gender } from "@nutrigym/lib/client"
 import { DatePicker } from "@nutrigym/components/date-picker"
+import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { Button } from "@nutrigym/components/ui/button"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { DateTime } from "@nutrigym/lib/datetime"
@@ -22,24 +24,21 @@ import {
   FormItem,
   FormLabel,
 } from "@nutrigym/components/ui/form"
-import {
-  CreateBodyDocument,
-  makeRequestOrThrow,
-  Gender,
-} from "@nutrigym/lib/client"
 
-const formSchema = z.object({
-  birthday: z.date(),
-  gender: z.nativeEnum(Gender),
-})
+export type PersonalInfoSetterProps = {
+  today: Date
+}
 
-export function PersonalInfoSetter() {
-  const today = new Date()
+export function PersonalInfoSetter(props: PersonalInfoSetterProps) {
+  const formSchema = z.object({
+    birthday: z.date().max(props.today),
+    gender: z.nativeEnum(Gender),
+  })
 
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      birthday: today,
+      birthday: props.today,
       gender: Gender.Male,
     },
   })
@@ -47,7 +46,10 @@ export function PersonalInfoSetter() {
   const router = useRouter()
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     makeRequestOrThrow(CreateBodyDocument, {
-      data: values,
+      data: {
+        birthday: DateTime.formatDate(values.birthday),
+        gender: values.gender,
+      },
     }).then(() => {
       router.refresh()
     })
@@ -111,8 +113,8 @@ export function PersonalInfoSetter() {
                         DateTime.setDate(field.value, d),
                       )
                     }
+                    today={props.today}
                     date={field.value}
-                    today={today}
                   />
                 </FormControl>
               </FormItem>

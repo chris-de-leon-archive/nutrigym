@@ -1,4 +1,5 @@
 import { builder } from "@nutrigym/lib/server/api"
+import { enums } from "../../enums"
 
 export const input = builder.inputType("CreateFoodInput", {
   fields: (t) => ({
@@ -6,7 +7,7 @@ export const input = builder.inputType("CreateFoodInput", {
     brand: t.string({ required: true }),
     calories: t.float({ required: true }),
     servingSize: t.float({ required: true }),
-    servingUnit: t.string({ required: true }),
+    servingUnit: t.field({ type: enums.servingUnit, required: true }),
     totalProteinInGrams: t.float({ required: false }),
     totalCarbsInGrams: t.float({ required: false }),
     totalFatInGrams: t.float({ required: false }),

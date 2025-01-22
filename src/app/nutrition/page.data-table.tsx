@@ -1,5 +1,6 @@
 "use client"
 
+import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { DateTime } from "@nutrigym/lib/datetime"
 import { ColumnDef } from "@tanstack/react-table"
 import { useRouter } from "next/navigation"
@@ -12,19 +13,19 @@ import {
   DataTable,
 } from "@nutrigym/components/data-table"
 import {
-  FoodMeasurementsByDateQuery,
-  makeRequestOrThrow,
-  RemoveMeasurementsDocument,
+  RemoveFoodMeasurementsDocument,
+  FoodMeasurement,
 } from "@nutrigym/lib/client"
 
 export type NutritionDataTableProps = {
-  log: FoodMeasurementsByDateQuery["measurementsByDate"]
+  measurements: FoodMeasurement[]
+  date: Date
 }
 
 export function NutritionDataTable(props: NutritionDataTableProps) {
   const router = useRouter()
 
-  const foods = (props.log?.foodMeasurements ?? []).map((elem) => {
+  const foods = props.measurements.map((elem) => {
     return {
       id: elem.food.id,
       measurementId: elem.id,
@@ -125,17 +126,12 @@ export function NutritionDataTable(props: NutritionDataTableProps) {
           fat: true,
         }}
         onDelete={(row) => {
-          if (props.log != null) {
-            makeRequestOrThrow(RemoveMeasurementsDocument, {
-              id: props.log.id,
-              data: {
-                foodIds: row.map((r) => r.original.measurementId),
-                bodyIds: [],
-              },
-            }).then(() => {
-              router.refresh()
-            })
-          }
+          makeRequestOrThrow(RemoveFoodMeasurementsDocument, {
+            date: DateTime.formatDate(props.date),
+            ids: row.map((r) => r.original.measurementId),
+          }).then(() => {
+            router.refresh()
+          })
         }}
       />
       <DataTable
@@ -152,17 +148,12 @@ export function NutritionDataTable(props: NutritionDataTableProps) {
           fat: false,
         }}
         onDelete={(row) => {
-          if (props.log != null) {
-            makeRequestOrThrow(RemoveMeasurementsDocument, {
-              id: props.log.id,
-              data: {
-                foodIds: row.map((r) => r.original.measurementId),
-                bodyIds: [],
-              },
-            }).then(() => {
-              router.refresh()
-            })
-          }
+          makeRequestOrThrow(RemoveFoodMeasurementsDocument, {
+            date: DateTime.formatDate(props.date),
+            ids: row.map((r) => r.original.measurementId),
+          }).then(() => {
+            router.refresh()
+          })
         }}
       />
     </div>

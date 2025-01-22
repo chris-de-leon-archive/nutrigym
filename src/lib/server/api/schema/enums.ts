@@ -1,8 +1,10 @@
+import { Gender, ServingUnit } from "@nutrigym/lib/enums"
 import { builder } from "@nutrigym/lib/server/api"
-import { Gender } from "@nutrigym/lib/enums"
 
+const servingUnit = builder.enumType(ServingUnit, { name: "ServingUnit" })
 const gender = builder.enumType(Gender, { name: "Gender" })
 
 export const enums = {
+  servingUnit,
   gender,
 }

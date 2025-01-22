@@ -1,39 +1,36 @@
 "use client"
 
+import { BodyMeasurement, Goal } from "@nutrigym/lib/client"
 import { GoalChart } from "@nutrigym/components/charts"
 import { BodyLabels } from "./labels"
-import {
-  BodyMeasurementByDateQuery,
-  GoalByDateQuery,
-} from "@nutrigym/lib/client"
 
 export type BodyChartsProps = {
-  log: BodyMeasurementByDateQuery["measurementsByDate"]
-  goal: GoalByDateQuery["goalByDate"]
+  measurement: BodyMeasurement | null | undefined
+  goal: Goal
 }
 
-export function BodyCharts({ log, goal }: BodyChartsProps) {
+export function BodyCharts({ measurement, goal }: BodyChartsProps) {
   return (
     <div className="grid grid-cols-2 gap-2 rounded-lg border p-2">
       <GoalChart
         title={BodyLabels.get("weightInPounds")}
-        goal={goal?.weightInPounds ?? 0}
-        curr={log?.bodyMeasurement?.weightInPounds ?? 0}
+        goal={goal.weightInPounds ?? 0}
+        curr={measurement?.weightInPounds ?? 0}
       />
       <GoalChart
         title={BodyLabels.get("sleepInHours")}
-        goal={goal?.sleepInHours ?? 0}
-        curr={log?.bodyMeasurement?.sleepInHours ?? 0}
+        goal={goal.sleepInHours ?? 0}
+        curr={measurement?.sleepInHours ?? 0}
       />
       <GoalChart
         title={BodyLabels.get("waterInMilliliters")}
-        goal={goal?.waterInMilliliters ?? 0}
-        curr={log?.bodyMeasurement?.waterInMilliliters ?? 0}
+        goal={goal.waterInMilliliters ?? 0}
+        curr={measurement?.waterInMilliliters ?? 0}
       />
       <GoalChart
         title={BodyLabels.get("steps")}
-        goal={goal?.steps ?? 0}
-        curr={log?.bodyMeasurement?.steps ?? 0}
+        goal={goal.steps ?? 0}
+        curr={measurement?.steps ?? 0}
       />
     </div>
   )

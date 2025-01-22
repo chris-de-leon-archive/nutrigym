@@ -1,16 +1,13 @@
+import { GraphQLAuthContext } from "@nutrigym/lib/server/api"
+import { assertPercentagesSumTo100 } from "../utils"
 import { schema } from "@nutrigym/lib/schema"
-import { makeVersionHash } from "../utils"
 import { randomUUID } from "node:crypto"
-import { eq } from "drizzle-orm"
+import { types } from "../types"
 import { z } from "zod"
-import {
-  GraphQLAuthContext,
-  ERR_CREATE_GOAL,
-  TOLERANCE,
-} from "@nutrigym/lib/server/api"
 
 export const zInput = z
   .object({
+    date: z.date(),
     data: z.object({
       waterInMilliliters: z.number().min(0),
       weightInPounds: z.number().min(0),
@@ -23,13 +20,15 @@ export const zInput = z
     }),
   })
   .superRefine((arg, ctx) => {
-    const { proteinPercentage, carbsPercentage, fatPercentage } = arg.data
-    const percentages = [proteinPercentage, carbsPercentage, fatPercentage]
-    const total = percentages.reduce((agg, val) => agg + val, 0)
-    if (Math.abs(total - 100) >= TOLERANCE) {
+    const err = assertPercentagesSumTo100([
+      arg.data.proteinPercentage,
+      arg.data.carbsPercentage,
+      arg.data.fatPercentage,
+    ])
+    if (err != null) {
       ctx.addIssue({
-        message: `percentages must sum to 100 (got ${total})`,
         code: z.ZodIssueCode.custom,
+        message: err.message,
         fatal: true,
       })
       return z.NEVER
@@ -40,41 +39,20 @@ export const handler = async (
   input: z.infer<typeof zInput>,
   ctx: GraphQLAuthContext,
 ) => {
-  const uuid = randomUUID()
+  await ctx.providers.cache.invalidate([{ typename: types.goal.name }])
 
-  const resp = await ctx.providers.db.transaction(async (tx) => {
-    await tx
-      .update(schema.userGoal)
-      .set({ latest: false })
-      .where(eq(schema.userGoal.userId, ctx.auth.user.id))
-
+  return await ctx.providers.db.transaction(async (tx) => {
     return await tx
       .insert(schema.userGoal)
       .values({
-        waterInMilliliters: input.data.waterInMilliliters,
-        weightInPounds: input.data.weightInPounds,
-        sleepInHours: input.data.sleepInHours,
-        proteinPercentage: input.data.proteinPercentage,
-        carbsPercentage: input.data.carbsPercentage,
-        fatPercentage: input.data.fatPercentage,
-        calories: input.data.calories,
-        version: makeVersionHash(input.data),
-        steps: input.data.steps,
+        ...input.data,
         userId: ctx.auth.user.id,
-        latest: true,
-        id: uuid,
+        month: input.date.getUTCMonth(),
+        year: input.date.getUTCFullYear(),
+        day: input.date.getUTCDate(),
+        id: randomUUID(),
       })
-      .onConflictDoUpdate({
-        target: [schema.userGoal.userId, schema.userGoal.version],
-        set: {
-          latest: true,
-        },
-      })
+      .onConflictDoNothing()
+      .returning()
   })
-
-  if (resp.rowsAffected === 0) {
-    throw ERR_CREATE_GOAL
-  } else {
-    return null
-  }
 }

@@ -1,8 +1,12 @@
-import { ERR_CREATE_BODY, GraphQLAuthContext } from "@nutrigym/lib/server/api"
 import { schema } from "@nutrigym/lib/schema"
 import { Gender } from "@nutrigym/lib/enums"
 import { randomUUID } from "node:crypto"
+import { types } from "../types"
 import { z } from "zod"
+import {
+  ERR_BIRTHDAY_IN_FUTURE,
+  GraphQLAuthContext,
+} from "@nutrigym/lib/server/api"
 
 export const zInput = z.object({
   data: z.object({
@@ -15,16 +19,20 @@ export const handler = async (
   input: z.infer<typeof zInput>,
   ctx: GraphQLAuthContext,
 ) => {
-  const uuid = randomUUID()
+  await ctx.providers.cache.invalidate([{ typename: types.body.name }])
 
-  const resp = await ctx.providers.db.transaction(async (tx) => {
+  if (input.data.birthday > ctx.date) {
+    throw ERR_BIRTHDAY_IN_FUTURE
+  }
+
+  return await ctx.providers.db.transaction(async (tx) => {
     return await tx
       .insert(schema.userBody)
       .values({
         birthday: input.data.birthday,
         gender: input.data.gender,
         userId: ctx.auth.user.id,
-        id: uuid,
+        id: randomUUID(),
       })
       .onConflictDoUpdate({
         target: schema.userBody.userId,
@@ -33,11 +41,6 @@ export const handler = async (
           gender: input.data.gender,
         },
       })
+      .returning()
   })
-
-  if (resp.rowsAffected === 0) {
-    throw ERR_CREATE_BODY
-  } else {
-    return null
-  }
 }

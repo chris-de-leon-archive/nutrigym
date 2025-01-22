@@ -3,10 +3,8 @@ import { schema } from "@nutrigym/lib/schema"
 import { and, eq } from "drizzle-orm"
 import { z } from "zod"
 import {
-  ERR_UPDATE_FOOD_MEASUREMENT,
   isValidUpdateObject,
   GraphQLAuthContext,
-  ERR_LOG_NOT_FOUND,
 } from "@nutrigym/lib/server/api"
 
 export const zInput = z.object({
@@ -22,20 +20,20 @@ export const handler = async (
   ctx: GraphQLAuthContext,
 ) => {
   if (isValidUpdateObject(input.data)) {
-    return null
+    return []
   }
 
-  const resp = await ctx.providers.db.transaction(async (tx) => {
+  return await ctx.providers.db.transaction(async (tx) => {
     const log = await tx.query.userMeasurementLog.findFirst({
       where: and(
         eq(schema.userMeasurementLog.userId, ctx.auth.user.id),
         eq(schema.userMeasurementLog.month, input.date.getUTCMonth()),
         eq(schema.userMeasurementLog.year, input.date.getUTCFullYear()),
-        eq(schema.userMeasurementLog.day, input.date.getUTCDay()),
+        eq(schema.userMeasurementLog.day, input.date.getUTCDate()),
       ),
     })
     if (log == null) {
-      throw ERR_LOG_NOT_FOUND
+      return []
     }
 
     return await tx
@@ -50,11 +48,6 @@ export const handler = async (
           eq(schema.foodMeasurement.id, input.id),
         ),
       )
+      .returning()
   })
-
-  if (resp.rowsAffected === 0) {
-    throw ERR_UPDATE_FOOD_MEASUREMENT
-  } else {
-    return null
-  }
 }

@@ -5,9 +5,5 @@ mutation UpdateFoodMeasurement(
 ) {
   updateFoodMeasurement(id: $id, date: $date, data: $data) {
     id
-    createdAt
-    logId
-    foodId
-    servingsConsumed
   }
 }

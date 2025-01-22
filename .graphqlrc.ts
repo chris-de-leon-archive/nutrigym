@@ -28,12 +28,16 @@ export default {
           },
           config: {
             scalars: {
+              DateTimeISO: {
+                input: "Date",
+                output: "string",
+              },
               Uuid: {
                 input: "string",
                 output: "string",
               },
               Date: {
-                input: "Date",
+                input: "string",
                 output: "string",
               },
             },

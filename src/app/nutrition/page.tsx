@@ -1,9 +1,10 @@
 import { DatePickerPopover } from "@nutrigym/components/date-picker"
 import { NutritionMeasurementsDialog } from "./measurements.dialog"
 import { NutritionGoalEditorDialog } from "./goal-editor.dialog"
-import { searchParams } from "@nutrigym/lib/search-params"
+import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { withUserInfo } from "@nutrigym/components/user"
 import { NutritionDataTable } from "./page.data-table"
+import { DateTime } from "@nutrigym/lib/datetime"
 import { NutritionCharts } from "./page.charts"
 import {
   PageMainContainer,
@@ -14,18 +15,16 @@ import {
 } from "@nutrigym/components/page"
 import {
   FoodMeasurementsByDateDocument,
-  makeRequestOrThrow,
   FoodsDocument,
 } from "@nutrigym/lib/client"
 
 export default withUserInfo(async (ctx) => {
-  const date = await searchParams.date.parse(ctx.next)
-
+  // TODO: paginate or add virtualization
   const { foods } = await makeRequestOrThrow(FoodsDocument, {})
 
-  const { measurementsByDate: log } = await makeRequestOrThrow(
+  const { foodMeasurementsByDate: log } = await makeRequestOrThrow(
     FoodMeasurementsByDateDocument,
-    { date },
+    { date: DateTime.formatDate(ctx.searchParams.date) },
   )
 
   return (
@@ -33,22 +32,31 @@ export default withUserInfo(async (ctx) => {
       <PageSubContainer>
         <PageHeadingContainer>
           <PageMainHeading name="Nutrition" />
-          <DatePickerPopover date={date} />
+          <DatePickerPopover
+            today={ctx.meta.today}
+            date={ctx.searchParams.date}
+          />
         </PageHeadingContainer>
       </PageSubContainer>
       <PageSubContainer>
         <PageHeadingContainer>
           <PageSubHeading name="Goals" />
-          <NutritionGoalEditorDialog date={date} goal={ctx.user.goal} />
+          <NutritionGoalEditorDialog
+            date={ctx.searchParams.date}
+            goal={ctx.user.goal}
+          />
         </PageHeadingContainer>
-        <NutritionCharts log={log} goal={ctx.user.goal} />
+        <NutritionCharts measurements={log} goal={ctx.user.goal} />
       </PageSubContainer>
       <PageSubContainer>
         <PageHeadingContainer>
           <PageSubHeading name="Foods" />
-          <NutritionMeasurementsDialog date={date} foods={foods} />
+          <NutritionMeasurementsDialog
+            date={ctx.searchParams.date}
+            foods={foods}
+          />
         </PageHeadingContainer>
-        <NutritionDataTable log={log} />
+        <NutritionDataTable date={ctx.searchParams.date} measurements={log} />
       </PageSubContainer>
     </PageMainContainer>
   )
