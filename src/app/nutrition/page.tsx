@@ -24,7 +24,7 @@ export default withUserInfo(async (ctx) => {
 
   const { foodMeasurementsByDate: log } = await makeRequestOrThrow(
     FoodMeasurementsByDateDocument,
-    { date: DateTime.formatDate(ctx.searchParams.date) },
+    { date: DateTime.asApiDateString(ctx.searchParams.date) },
   )
 
   return (

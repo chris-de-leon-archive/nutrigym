@@ -4,7 +4,7 @@ import { and, eq } from "drizzle-orm"
 import { z } from "zod"
 
 export const zInput = z.object({
-  date: z.date(),
+  date: z.string().date(),
 })
 
 export const handler = async (
@@ -15,9 +15,7 @@ export const handler = async (
     const log = await tx.query.userMeasurementLog.findFirst({
       where: and(
         eq(schema.userMeasurementLog.userId, ctx.auth.user.id),
-        eq(schema.userMeasurementLog.month, input.date.getUTCMonth()),
-        eq(schema.userMeasurementLog.year, input.date.getUTCFullYear()),
-        eq(schema.userMeasurementLog.day, input.date.getUTCDate()),
+        eq(schema.userMeasurementLog.date, input.date),
       ),
     })
 

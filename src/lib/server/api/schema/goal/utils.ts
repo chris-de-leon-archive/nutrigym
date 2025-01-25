@@ -1,6 +1,6 @@
 import { TOLERANCE } from "../../constants"
 
-export const assertPercentagesSumTo100 = (
+export const doPercentagesSumTo100 = (
   percentages: number[],
   tolerance = TOLERANCE,
 ) => {

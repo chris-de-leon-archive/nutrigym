@@ -1,5 +1,5 @@
 mutation CreateBodyMeasurement(
-  $date: Date!
+  $date: LocalDate!
   $data: CreateBodyMeasurementInput!
 ) {
   createBodyMeasurement(date: $date, data: $data) {

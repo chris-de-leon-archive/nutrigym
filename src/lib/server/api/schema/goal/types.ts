@@ -16,9 +16,7 @@ builder.objectType(goal, {
     fatPercentage: t.exposeFloat("fatPercentage"),
     calories: t.exposeFloat("calories"),
     steps: t.exposeInt("steps"),
-    month: t.exposeInt("month"),
-    year: t.exposeInt("year"),
-    day: t.exposeInt("day"),
+    date: t.expose("date", { type: scalars.localdate }),
   }),
 })
 

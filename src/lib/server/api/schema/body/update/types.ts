@@ -4,7 +4,7 @@ import { enums } from "../../enums"
 
 export const input = builder.inputType("UpdateBodyInput", {
   fields: (t) => ({
-    birthday: t.field({ type: scalars.date, required: false }),
+    birthday: t.field({ type: scalars.localdate, required: false }),
     gender: t.field({ type: enums.gender, required: false }),
   }),
 })

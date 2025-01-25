@@ -98,7 +98,7 @@ export function NutritionMeasurementFromExistingFoodForm(
   const router = useRouter()
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     makeRequestOrThrow(CreateFoodMeasurementFromFoodIdDocument, {
-      date: DateTime.formatDate(props.date),
+      date: DateTime.asApiDateString(props.date),
       data: {
         servingsConsumed: values.servingsConsumed,
         food: { id: values.foodId },

@@ -22,6 +22,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@nutrigym/components/ui/form"
 
 export type PersonalInfoEditorFormProps = {
@@ -39,7 +40,7 @@ export function PersonalInfoEditorForm(props: PersonalInfoEditorFormProps) {
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      birthday: new Date(props.body.birthday),
+      birthday: DateTime.parseApiDateString(props.body.birthday),
       gender: props.body.gender,
     },
   })
@@ -49,7 +50,7 @@ export function PersonalInfoEditorForm(props: PersonalInfoEditorFormProps) {
     makeRequestOrThrow(UpdateBodyDocument, {
       id: props.body.id,
       data: {
-        birthday: DateTime.formatDate(values.birthday),
+        birthday: DateTime.asApiDateString(values.birthday),
         gender: values.gender,
       },
     }).then(() => {
@@ -90,17 +91,27 @@ export function PersonalInfoEditorForm(props: PersonalInfoEditorFormProps) {
           render={({ field }) => (
             <FormItem>
               <FormLabel>Birthday</FormLabel>
+              <FormMessage />
               <FormControl>
                 <DatePicker
                   onCalendarChange={(date) => form.setValue("birthday", date)}
                   onMonthChange={(m) =>
-                    form.setValue("birthday", DateTime.setMonth(field.value, m))
+                    form.setValue(
+                      "birthday",
+                      DateTime.setLocalMonth(field.value, m),
+                    )
                   }
                   onYearChange={(y) =>
-                    form.setValue("birthday", DateTime.setYear(field.value, y))
+                    form.setValue(
+                      "birthday",
+                      DateTime.setLocalYear(field.value, y),
+                    )
                   }
                   onDayChange={(d) =>
-                    form.setValue("birthday", DateTime.setDate(field.value, d))
+                    form.setValue(
+                      "birthday",
+                      DateTime.setLocalDate(field.value, d),
+                    )
                   }
                   today={props.today}
                   date={field.value}

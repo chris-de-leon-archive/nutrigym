@@ -23,6 +23,7 @@ import {
   FormField,
   FormItem,
   FormLabel,
+  FormMessage,
 } from "@nutrigym/components/ui/form"
 
 export type PersonalInfoSetterProps = {
@@ -47,7 +48,7 @@ export function PersonalInfoSetter(props: PersonalInfoSetterProps) {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     makeRequestOrThrow(CreateBodyDocument, {
       data: {
-        birthday: DateTime.formatDate(values.birthday),
+        birthday: DateTime.asApiDateString(values.birthday),
         gender: values.gender,
       },
     }).then(() => {
@@ -92,25 +93,26 @@ export function PersonalInfoSetter(props: PersonalInfoSetterProps) {
             render={({ field }) => (
               <FormItem>
                 <FormLabel>Birthday</FormLabel>
+                <FormMessage />
                 <FormControl>
                   <DatePicker
                     onCalendarChange={(date) => form.setValue("birthday", date)}
                     onMonthChange={(m) =>
                       form.setValue(
                         "birthday",
-                        DateTime.setMonth(field.value, m),
+                        DateTime.setLocalMonth(field.value, m),
                       )
                     }
                     onYearChange={(y) =>
                       form.setValue(
                         "birthday",
-                        DateTime.setYear(field.value, y),
+                        DateTime.setLocalYear(field.value, y),
                       )
                     }
                     onDayChange={(d) =>
                       form.setValue(
                         "birthday",
-                        DateTime.setDate(field.value, d),
+                        DateTime.setLocalDate(field.value, d),
                       )
                     }
                     today={props.today}

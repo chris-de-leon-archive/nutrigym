@@ -22,6 +22,7 @@
             pkgs.nodejs.pkgs.pnpm
             pkgs.nodejs
             pkgs.sqlite
+            pkgs.redis
           ];
         };
       }

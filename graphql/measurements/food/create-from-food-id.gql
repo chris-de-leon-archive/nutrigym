@@ -1,5 +1,5 @@
 mutation CreateFoodMeasurementFromFoodID(
-  $date: Date!
+  $date: LocalDate!
   $data: CreateFoodMeasurementFromFoodIdInput!
 ) {
   createFoodMeasurementFromFoodID(date: $date, data: $data) {

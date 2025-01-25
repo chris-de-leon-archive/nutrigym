@@ -8,7 +8,7 @@ builder.queryField("foodMeasurementsByDate", (t) =>
   t.field({
     type: [types.foodMeasurement],
     args: {
-      date: t.arg({ type: scalars.date, required: true }),
+      date: t.arg({ type: scalars.localdate, required: true }),
     },
     validate: {
       schema: zInput,

@@ -1,4 +1,4 @@
-query GoalByClosestDate($date: Date!) {
+query GoalByClosestDate($date: LocalDate!) {
   goalByClosestDate(date: $date) {
     id
     createdAt
@@ -10,8 +10,6 @@ query GoalByClosestDate($date: Date!) {
     fatPercentage
     calories
     steps
-    month
-    year
-    day
+    date
   }
 }

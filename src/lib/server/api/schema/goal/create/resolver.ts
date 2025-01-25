@@ -1,5 +1,5 @@
-import { GraphQLAuthContext } from "@nutrigym/lib/server/api"
-import { assertPercentagesSumTo100 } from "../utils"
+import { asFatalZodError, GraphQLAuthContext } from "@nutrigym/lib/server/api"
+import { doPercentagesSumTo100 } from "../utils"
 import { schema } from "@nutrigym/lib/schema"
 import { randomUUID } from "node:crypto"
 import { types } from "../types"
@@ -7,7 +7,7 @@ import { z } from "zod"
 
 export const zInput = z
   .object({
-    date: z.date(),
+    date: z.string().date(),
     data: z.object({
       waterInMilliliters: z.number().min(0),
       weightInPounds: z.number().min(0),
@@ -20,18 +20,13 @@ export const zInput = z
     }),
   })
   .superRefine((arg, ctx) => {
-    const err = assertPercentagesSumTo100([
+    const err = doPercentagesSumTo100([
       arg.data.proteinPercentage,
       arg.data.carbsPercentage,
       arg.data.fatPercentage,
     ])
     if (err != null) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: err.message,
-        fatal: true,
-      })
-      return z.NEVER
+      return asFatalZodError(ctx, err)
     }
   })
 
@@ -47,9 +42,7 @@ export const handler = async (
       .values({
         ...input.data,
         userId: ctx.auth.user.id,
-        month: input.date.getUTCMonth(),
-        year: input.date.getUTCFullYear(),
-        day: input.date.getUTCDate(),
+        date: input.date,
         id: randomUUID(),
       })
       .onConflictDoNothing()

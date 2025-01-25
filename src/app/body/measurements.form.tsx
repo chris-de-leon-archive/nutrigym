@@ -74,7 +74,7 @@ export function BodyMeasurementsForm(props: BodyMeasurementsFormProps) {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     if (props.measurement == null) {
       makeRequestOrThrow(CreateBodyMeasurementDocument, {
-        date: DateTime.formatDate(props.date),
+        date: DateTime.asApiDateString(props.date),
         data: values,
       }).then(() => {
         router.refresh()
@@ -83,7 +83,7 @@ export function BodyMeasurementsForm(props: BodyMeasurementsFormProps) {
     } else {
       makeRequestOrThrow(UpdateBodyMeasurementDocument, {
         id: props.measurement.id,
-        date: DateTime.formatDate(props.date),
+        date: DateTime.asApiDateString(props.date),
         data: values,
       }).then(() => {
         router.refresh()

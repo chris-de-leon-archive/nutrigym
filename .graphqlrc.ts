@@ -32,11 +32,11 @@ export default {
                 input: "Date",
                 output: "string",
               },
-              Uuid: {
+              LocalDate: {
                 input: "string",
                 output: "string",
               },
-              Date: {
+              Uuid: {
                 input: "string",
                 output: "string",
               },

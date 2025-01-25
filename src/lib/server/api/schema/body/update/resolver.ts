@@ -1,18 +1,20 @@
 import { stripNull } from "@nutrigym/lib/utils"
+import { isBirthdayInFuture } from "../utils"
 import { schema } from "@nutrigym/lib/schema"
 import { Gender } from "@nutrigym/lib/enums"
 import { and, eq } from "drizzle-orm"
 import { z } from "zod"
 import {
   ERR_BIRTHDAY_IN_FUTURE,
-  isValidUpdateObject,
+  allValuesUndefined,
   GraphQLAuthContext,
+  parseZodDateString,
 } from "@nutrigym/lib/server/api"
 
 export const zInput = z.object({
   id: z.string().uuid(),
   data: z.object({
-    birthday: z.date().nullish(),
+    birthday: z.string().date().nullish(),
     gender: z.nativeEnum(Gender).nullish(),
   }),
 })
@@ -21,12 +23,15 @@ export const handler = async (
   input: z.infer<typeof zInput>,
   ctx: GraphQLAuthContext,
 ) => {
-  if (isValidUpdateObject(input.data)) {
+  if (allValuesUndefined(input.data)) {
     return []
   }
 
-  if (input.data.birthday != null && input.data.birthday > ctx.date) {
-    throw ERR_BIRTHDAY_IN_FUTURE
+  if (input.data.birthday != null) {
+    const bday = parseZodDateString(input.data.birthday)
+    if (isBirthdayInFuture(ctx.date, bday)) {
+      throw ERR_BIRTHDAY_IN_FUTURE
+    }
   }
 
   return await ctx.providers.db.transaction(async (tx) => {

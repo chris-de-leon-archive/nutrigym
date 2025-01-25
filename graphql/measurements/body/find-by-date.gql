@@ -1,4 +1,4 @@
-query BodyMeasurementByDate($date: Date!) {
+query BodyMeasurementByDate($date: LocalDate!) {
   bodyMeasurementByDate(date: $date) {
     id
     createdAt

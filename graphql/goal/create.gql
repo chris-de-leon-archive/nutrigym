@@ -1,4 +1,4 @@
-mutation CreateGoal($date: Date!, $data: CreateGoalInput!) {
+mutation CreateGoal($date: LocalDate!, $data: CreateGoalInput!) {
   createGoal(date: $date, data: $data) {
     id
   }

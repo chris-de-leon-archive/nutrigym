@@ -1,7 +1,7 @@
 import { builder } from "@nutrigym/lib/server/api"
 import {
   DateTimeISOResolver,
-  DateResolver,
+  LocalDateResolver,
   UUIDResolver,
 } from "graphql-scalars"
 
@@ -9,11 +9,11 @@ import {
 // NOTE: make sure the builder's 'Scalars' section is updated appropriately
 
 const datetimeISO = builder.addScalarType("DateTimeISO", DateTimeISOResolver)
-const date = builder.addScalarType("Date", DateResolver)
+const localdate = builder.addScalarType("LocalDate", LocalDateResolver)
 const uuid = builder.addScalarType("Uuid", UUIDResolver)
 
 export const scalars = {
   datetimeISO,
+  localdate,
   uuid,
-  date,
 }

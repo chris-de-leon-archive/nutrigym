@@ -12,13 +12,13 @@ export const builder = new SchemaBuilder<{
       Input: Date
       Output: Date
     }
-    Uuid: {
+    LocalDate: {
       Input: string
       Output: string
     }
-    Date: {
-      Input: Date
-      Output: Date
+    Uuid: {
+      Input: string
+      Output: string
     }
   }
 }>({
@@ -26,7 +26,7 @@ export const builder = new SchemaBuilder<{
   plugins: [ZodPlugin, DataloaderPlugin],
   zod: {
     validationError: (err) => {
-      return errors.BadRequest(err.errors.at(0)?.message ?? err.message)
+      return errors.BadRequest(err.issues.at(0)?.message ?? err.message)
     },
   },
 })

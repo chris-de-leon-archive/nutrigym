@@ -6,6 +6,7 @@ export const env = z
     CLERK_SECRET_KEY: z.string().min(1),
     CLERK_JWT_KEY: z.string().min(1),
     DATABASE_URL: z.string().url(),
+    CACHE_URL: z.string().url().optional(),
     NODE_ENV: z.enum(["development", "production"]),
   })
   .parse(process.env)

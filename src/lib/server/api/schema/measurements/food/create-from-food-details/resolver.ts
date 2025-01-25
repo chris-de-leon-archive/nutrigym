@@ -12,7 +12,7 @@ import {
 } from "@nutrigym/lib/server/api"
 
 export const zInput = z.object({
-  date: z.date(),
+  date: z.string().date(),
   data: z.object({
     servingsConsumed: z.number().min(0),
     food: z.object({
@@ -46,9 +46,7 @@ export const handler = async (
   const measurementId = randomUUID()
   const foodId = randomUUID()
   const userId = ctx.auth.user.id
-  const month = input.date.getUTCMonth()
-  const year = input.date.getUTCFullYear()
-  const day = input.date.getUTCDate()
+  const date = input.date
 
   // TODO: food creation should be a separate mutation
   await ctx.providers.cache.invalidate([
@@ -89,18 +87,14 @@ export const handler = async (
       .values({
         id: measurementLogId,
         userId,
-        month,
-        year,
-        day,
+        date,
       })
       .onConflictDoNothing()
 
     const log = await tx.query.userMeasurementLog.findFirst({
       where: and(
         eq(schema.userMeasurementLog.userId, userId),
-        eq(schema.userMeasurementLog.month, month),
-        eq(schema.userMeasurementLog.year, year),
-        eq(schema.userMeasurementLog.day, day),
+        eq(schema.userMeasurementLog.date, date),
       ),
     })
     if (log == null) {

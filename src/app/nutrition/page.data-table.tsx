@@ -35,7 +35,9 @@ export function NutritionDataTable(props: NutritionDataTableProps) {
       carbs: elem.servingsConsumed * (elem.food.totalCarbsInGrams ?? 0),
       fat: elem.servingsConsumed * (elem.food.totalProteinInGrams ?? 0),
       calories: elem.servingsConsumed * elem.food.calories,
-      time: DateTime.formatTime(DateTime.stringToDate(elem.createdAt)),
+      time: DateTime.formatLocalTime(
+        DateTime.parseApiDateTimeISOString(elem.createdAt),
+      ),
     }
   })
 
@@ -127,7 +129,7 @@ export function NutritionDataTable(props: NutritionDataTableProps) {
         }}
         onDelete={(row) => {
           makeRequestOrThrow(RemoveFoodMeasurementsDocument, {
-            date: DateTime.formatDate(props.date),
+            date: DateTime.asApiDateString(props.date),
             ids: row.map((r) => r.original.measurementId),
           }).then(() => {
             router.refresh()
@@ -149,7 +151,7 @@ export function NutritionDataTable(props: NutritionDataTableProps) {
         }}
         onDelete={(row) => {
           makeRequestOrThrow(RemoveFoodMeasurementsDocument, {
-            date: DateTime.formatDate(props.date),
+            date: DateTime.asApiDateString(props.date),
             ids: row.map((r) => r.original.measurementId),
           }).then(() => {
             router.refresh()

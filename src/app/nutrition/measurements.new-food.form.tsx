@@ -90,7 +90,7 @@ export function NutritionMeasurementFromNewFoodForm(
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     const { servingsConsumed, ...food } = values
     makeRequestOrThrow(CreateFoodMeasurementFromFoodDetailsDocument, {
-      date: DateTime.formatDate(props.date),
+      date: DateTime.asApiDateString(props.date),
       data: {
         servingsConsumed,
         food,

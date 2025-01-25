@@ -4,50 +4,51 @@ export const MAX_LOOKBACK_YEARS = 200
 export class DateTime {
   static computeAge = (today: Date, birthday: Date) => {
     // Gather inputs
-    const age = today.getFullYear() - birthday.getFullYear()
+    const age = today.getUTCFullYear() - birthday.getUTCFullYear()
 
     // The birthday month has already passed, so we can return the age as-is
-    if (today.getMonth() > birthday.getMonth()) {
+    if (today.getUTCMonth() > birthday.getUTCMonth()) {
       return age
     }
 
     // The birthday month has not happened yet, so we need to subtract 1 from the age
-    if (today.getMonth() < birthday.getMonth()) {
+    if (today.getUTCMonth() < birthday.getUTCMonth()) {
       return age - 1
     }
 
     // If it is currently the birthday month, subtract 1 if the birthday hasn't passed yet
-    if (today.getDate() < birthday.getDate()) {
+    if (today.getUTCDate() < birthday.getUTCDate()) {
       return age - 1
     } else {
       return age
     }
   }
 
-  static stringToDate = (date: Date | string) => {
-    return typeof date === "string" ? new Date(date) : date
+  static clearLocalTime = (date: Date) => {
+    return new Date(date.getFullYear(), date.getMonth(), date.getDate())
   }
 
-  static getMonthName = (date: Date) => {
+  static getLocalMonthName = (date: Date) => {
     return date.toLocaleString("default", {
       month: "long",
     })
   }
 
-  static daysInMonth = (date: Date) => {
-    return new Date(
-      Date.UTC(date.getUTCFullYear(), date.getUTCMonth(), 0),
-    ).getUTCDate()
+  static daysInLocalMonth = (date: Date) => {
+    return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
   }
 
-  static formatDate = (date: Date) => {
-    const m = (date.getUTCMonth() + 1).toString().padStart(2, "0")
-    const d = date.getUTCDate().toString().padStart(2, "0")
-    const y = date.getUTCFullYear()
-    return `${y}-${m}-${d}`
+  static formatLocalDate = (date: Date) => {
+    // NOTE: en-CA = YYYY-MM-DD
+    return new Intl.DateTimeFormat("en-CA", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(date)
   }
 
-  static formatTime = (date: Date) => {
+  static formatLocalTime = (date: Date) => {
+    // NOTE: en-US = HH:MM:SS AM/PM
     return new Intl.DateTimeFormat("en-US", {
       hour: "2-digit",
       minute: "2-digit",
@@ -56,34 +57,67 @@ export class DateTime {
     }).format(date)
   }
 
-  static setMonth = (date: Date, month: number) => {
+  static parseApiDateTimeISOString = (date: string) => {
+    // NOTE: API datetime ISO strings can be converted to date objects without issue
+    return new Date(date)
+  }
+
+  static parseApiDateString = (date: string) => {
+    // NOTE: API date strings are timezone agnostic and always follow the YYYY-MM-DD
+    // format, so it is sufficient to parse out the values and pass them to the Date
+    const [year, month, day] = date.split("-")
+    return new Date(
+      parseInt(year, 10),
+      parseInt(month, 10) - 1,
+      parseInt(day, 10),
+    )
+  }
+
+  static asApiDateString = (date: Date) => {
+    // NOTE: the API cache uses the input data to construct a cache key. If the
+    // input variables change, then a new cache key will be created, so we need
+    // to be especially careful with dates. Many API endpoints only care about
+    // the YYYY-MM-DD portion of a date, so if we pass in dates that reference
+    // the same YYYY-MM-DD but have different times attached to them, then this
+    // will cause new cache keys to be created, which will reduce performance.
+    return new Intl.DateTimeFormat("en-CA", {
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(date)
+  }
+
+  static setLocalMonth = (date: Date, month: number) => {
     const d = new Date(date)
     d.setMonth(month)
     return d
   }
 
-  static setYear = (date: Date, year: number) => {
+  static setLocalYear = (date: Date, year: number) => {
     const d = new Date(date)
     d.setFullYear(year)
     return d
   }
 
-  static setDate = (date: Date, day: number) => {
+  static setLocalDate = (date: Date, day: number) => {
     const d = new Date(date)
     d.setDate(day)
     return d
   }
 
-  static lt = (date1: Date, date2: Date) => {
-    return this.compareDates(date1, date2) > 0
+  static isEarlierDay = (date: Date, other: Date) => {
+    // NOTE: `other` comes before `date`
+    return this.compareDates(date, other) < 0
   }
 
-  static gt = (date1: Date, date2: Date) => {
-    return this.compareDates(date1, date2) < 0
+  static isLaterDay = (date: Date, other: Date) => {
+    // NOTE: `other` comes after `date`
+    return this.compareDates(date, other) > 0
   }
 
-  static eq = (date1: Date, date2: Date) => {
-    return this.compareDates(date1, date2) === 0
+  static isSameDay = (date: Date, other: Date) => {
+    // NOTE: `other` and `date` reference the same day
+    return this.compareDates(date, other) === 0
   }
 
   static compareDates(date1: Date, date2: Date) {

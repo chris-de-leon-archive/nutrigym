@@ -8,7 +8,7 @@ const body = builder.objectRef<Body>("Body")
 builder.objectType(body, {
   fields: (t) => ({
     createdAt: t.expose("createdAt", { type: scalars.datetimeISO }),
-    birthday: t.expose("birthday", { type: scalars.date }),
+    birthday: t.expose("birthday", { type: scalars.localdate }),
     gender: t.expose("gender", { type: enums.gender }),
     userId: t.exposeString("userId"),
     id: t.exposeString("id"),

@@ -9,7 +9,7 @@ builder.queryField("goalByClosestDate", (t) =>
     type: types.goal,
     nullable: true,
     args: {
-      date: t.arg({ type: scalars.date, required: true }),
+      date: t.arg({ type: scalars.localdate, required: true }),
     },
     validate: {
       schema: zInput,

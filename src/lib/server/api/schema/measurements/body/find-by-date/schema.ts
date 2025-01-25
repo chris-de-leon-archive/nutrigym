@@ -9,7 +9,7 @@ builder.queryField("bodyMeasurementByDate", (t) =>
     type: types.bodyMeasurement,
     nullable: true,
     args: {
-      date: t.arg({ type: scalars.date, required: true }),
+      date: t.arg({ type: scalars.localdate, required: true }),
     },
     validate: {
       schema: zInput,

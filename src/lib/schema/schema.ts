@@ -18,6 +18,17 @@ export const user = sqliteTable("user", {
     .default(sql`(unixepoch() * 1000)`),
 })
 
+// NOTE: the `birthday` is stored as a timezone agnostic date string of the form YYYY-MM-DD.
+// If we instead stored a timezone-aware UTC date string, then this could lead to off-by-one
+// issues with the date. For example, if the user was born on 1998-12-03 in Tokyo, then this
+// could be stored as 1998-12-02 (UTC) in the DB causing the date to be rendered incorrectly
+// on the frontend. To resolve this, the API layer will carefully avoid any type of timezone
+// adjustments on the input date string (e.g. https://stackoverflow.com/a/52352512). The date
+// string will only be validated then stored it as-is in the DB. When the API returns a date
+// string back to the client, they can parse out the year, month, and day then pass them all
+// as usual to the Date constructor as the local year, month, and day. This will ensure that
+// the date is always the same regardless of the local timezone. This method is also used in
+// other tables as well.
 export const userBody = sqliteTable(
   "user_body",
   {
@@ -29,7 +40,7 @@ export const userBody = sqliteTable(
       .notNull()
       .unique()
       .references(() => user.id),
-    birthday: integer("birthday", { mode: "timestamp_ms" }).notNull(),
+    birthday: text("birthday").notNull(),
     gender: text("gender").$type<Gender>().notNull(),
   },
   (t) => [
@@ -43,7 +54,8 @@ export const userBody = sqliteTable(
   ],
 )
 
-// NOTE: percentage sum will be validated at the application level
+// NOTE: we'll validate that the percentages sum to exactly 100 at the API layer that way we can
+// avoid introducing extra complications with floating point comparison in the check constraint
 export const userGoal = sqliteTable(
   "user_goal",
   {
@@ -62,19 +74,14 @@ export const userGoal = sqliteTable(
     fatPercentage: real("fat_percentage").notNull(),
     calories: real("calories").notNull(),
     steps: integer("steps").notNull(),
-    month: integer("month").notNull(),
-    year: integer("year").notNull(),
-    day: integer("day").notNull(),
+    date: text("date").notNull(),
   },
   (t) => [
-    unique().on(t.userId, t.year, t.month, t.day),
+    unique().on(t.userId, t.date),
     check("nonnegative_water_ml", sql`${t.waterInMilliliters} >= 0`),
     check("nonnegative_calories", sql`${t.calories} >= 0`),
     check("nonnegative_weight", sql`${t.weightInPounds} >= 0`),
     check("nonnegative_steps", sql`${t.steps} >= 0`),
-    check("valid_month", sql`${t.month} >= 0`),
-    check("valid_year", sql`${t.year} >= 0`),
-    check("valid_day", sql`${t.day} > 0`),
     check("valid_sleep_hrs", sql`${t.sleepInHours} BETWEEN 0 AND 24`),
     check(
       "valid_protein_percentage_range",
@@ -163,18 +170,12 @@ export const userMeasurementLog = sqliteTable(
     userId: text("user_id")
       .notNull()
       .references(() => user.id),
-    month: integer("month").notNull(),
-    year: integer("year").notNull(),
-    day: integer("day").notNull(),
+    date: text("date").notNull(),
   },
-  (t) => [
-    unique().on(t.userId, t.year, t.month, t.day),
-    check("valid_month", sql`${t.month} >= 0`),
-    check("valid_year", sql`${t.year} >= 0`),
-    check("valid_day", sql`${t.day} > 0`),
-  ],
+  (t) => [unique().on(t.userId, t.date)],
 )
 
+// TODO: need a separate field to track when the food was eaten
 export const foodMeasurement = sqliteTable(
   "food_measurement",
   {
@@ -195,6 +196,7 @@ export const foodMeasurement = sqliteTable(
   ],
 )
 
+// TODO: need a separate field to track when the measurement was taken?
 export const bodyMeasurement = sqliteTable(
   "body_measurement",
   {

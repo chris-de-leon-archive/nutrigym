@@ -2,9 +2,16 @@
 
 import { TypedDocumentNode } from "@graphql-typed-document-node/core"
 import { yoga } from "@nutrigym/lib/server/providers/yoga"
-import { IS_DEV_MODE } from "@nutrigym/lib/server/env"
-import { GraphQLClient } from "graphql-request"
-import { print } from "graphql"
+import { OperationDefinitionNode } from "graphql"
+import { randomUUID } from "node:crypto"
+import {
+  handleExecutionResult,
+  parseExecutionResult,
+  readResponseBody,
+  logResponse,
+  logRequest,
+  timeit,
+} from "./utils"
 
 type PersistedOpFields = Partial<{ __meta__: { hash: string } }>
 
@@ -15,42 +22,55 @@ export const makeRequestOrThrow = async <
   document: TypedDocumentNode<TResult, TVariables> & PersistedOpFields,
   variables: TVariables,
 ) => {
-  const client = new GraphQLClient("http://yoga/graphql", {
-    fetch: yoga.fetch as typeof fetch,
-    requestMiddleware: (req) => {
-      const hash = document.__meta__?.hash
-      return hash == null
-        ? req
-        : {
-            ...req,
-            body: JSON.stringify({
-              operationName: req.operationName,
-              variables: req.variables,
-              extensions: {
-                persistedQuery: {
-                  sha256Hash: hash,
-                  version: 1,
-                },
-              },
-            }),
-          }
+  const requestID = randomUUID()
+
+  const opDefn = document.definitions.at(0)
+  if (opDefn == null) {
+    throw new Error(
+      "failed to extract operation definition node from typed document node",
+    )
+  }
+
+  const opName = (opDefn as OperationDefinitionNode).name?.value
+  if (opName == null) {
+    throw new Error("failed to extract operation name from typed document node")
+  }
+
+  const opHash = document.__meta__?.hash
+  if (opHash == null) {
+    throw new Error(
+      "failed to extract persisted query hash from typed document node",
+    )
+  }
+
+  const execute = timeit({
+    before: (args: RequestInit) => {
+      logRequest(requestID, args)
+      return args
     },
-    responseMiddleware: (res) => {
-      if (IS_DEV_MODE) {
-        console.log("Response:", JSON.stringify(res))
-      }
+    fn: async (args) => {
+      return await yoga.fetch("http://yoga/graphql", args)
+    },
+    after: async (res, dur) => {
+      const body = await readResponseBody(res)
+      logResponse(requestID, dur, res.status, body)
+      const exec = parseExecutionResult<TResult>(body)
+      return handleExecutionResult<TResult>(exec)
     },
   })
 
-  const result = await client.rawRequest<TResult, TVariables>(
-    print(document),
-    variables,
-  )
-
-  const err = result.errors?.at(0)
-  if (err != null) {
-    throw result
-  } else {
-    return result.data
-  }
+  return await execute({
+    method: "POST",
+    headers: { "content-type": "application/json" },
+    body: JSON.stringify({
+      operationName: opName,
+      variables,
+      extensions: {
+        persistedQuery: {
+          sha256Hash: opHash,
+          version: 1,
+        },
+      },
+    }),
+  })
 }

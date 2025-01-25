@@ -6,7 +6,7 @@ import { types } from "../types"
 import { z } from "zod"
 
 export const zInput = z.object({
-  date: z.date(),
+  date: z.string().date(),
   data: z.object({
     sleepInHours: z.number().min(0).max(24).nullish(),
     waterInMilliliters: z.number().min(0).nullish(),
@@ -32,9 +32,7 @@ export const handler = async (
   const measurementLogId = randomUUID()
   const measurementId = randomUUID()
   const userId = ctx.auth.user.id
-  const month = input.date.getUTCMonth()
-  const year = input.date.getUTCFullYear()
-  const day = input.date.getUTCDate()
+  const date = input.date
 
   await ctx.providers.cache.invalidate([
     { typename: types.bodyMeasurement.name },
@@ -46,18 +44,14 @@ export const handler = async (
       .values({
         id: measurementLogId,
         userId,
-        month,
-        year,
-        day,
+        date,
       })
       .onConflictDoNothing()
 
     const log = await tx.query.userMeasurementLog.findFirst({
       where: and(
         eq(schema.userMeasurementLog.userId, userId),
-        eq(schema.userMeasurementLog.month, month),
-        eq(schema.userMeasurementLog.year, year),
-        eq(schema.userMeasurementLog.day, day),
+        eq(schema.userMeasurementLog.date, date),
       ),
     })
     if (log == null) {

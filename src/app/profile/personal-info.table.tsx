@@ -14,14 +14,14 @@ export type PersonalInfoTableProps = {
 }
 
 export function PersonalInfoTable(props: PersonalInfoTableProps) {
-  const birthday = new Date(props.body.birthday)
+  const birthday = DateTime.parseApiDateString(props.body.birthday)
   return (
     <Border>
       <Table>
         <TableBody>
           <TableRow>
             <TableCell>Birthday</TableCell>
-            <TableCell>{DateTime.formatDate(birthday)}</TableCell>
+            <TableCell>{DateTime.formatLocalDate(birthday)}</TableCell>
           </TableRow>
           <TableRow>
             <TableCell>Gender</TableCell>

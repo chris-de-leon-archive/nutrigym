@@ -19,7 +19,7 @@ export type DatePickerPopoverProps = {
 }
 
 export function DatePickerPopover(props: DatePickerPopoverProps) {
-  const [date, setDate] = useState(props.date)
+  const [date, setDate] = useState(DateTime.clearLocalTime(props.date))
   const [open, setOpen] = useState(false)
   const pathname = usePathname()
   const router = useRouter()
@@ -37,15 +37,16 @@ export function DatePickerPopover(props: DatePickerPopoverProps) {
           className="justify-start text-left font-normal"
         >
           <CalendarIcon />
-          {DateTime.getMonthName(date)} {date.getDate()}, {date.getFullYear()}
+          {DateTime.getLocalMonthName(date)} {date.getDate()},{" "}
+          {date.getFullYear()}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">
         <DatePicker
           onCalendarChange={(date) => onDateChange(date)}
-          onMonthChange={(m) => onDateChange(DateTime.setMonth(date, m))}
-          onYearChange={(y) => onDateChange(DateTime.setYear(date, y))}
-          onDayChange={(d) => onDateChange(DateTime.setDate(date, d))}
+          onMonthChange={(m) => onDateChange(DateTime.setLocalMonth(date, m))}
+          onYearChange={(y) => onDateChange(DateTime.setLocalYear(date, y))}
+          onDayChange={(d) => onDateChange(DateTime.setLocalDate(date, d))}
           today={props.today}
           date={date}
         />

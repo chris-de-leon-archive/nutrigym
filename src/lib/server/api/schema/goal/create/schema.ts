@@ -9,7 +9,7 @@ builder.mutationField("createGoal", (t) =>
   t.field({
     type: [types.goal],
     args: {
-      date: t.arg({ type: scalars.date, required: true }),
+      date: t.arg({ type: scalars.localdate, required: true }),
       data: t.arg({ type: input, required: true }),
     },
     validate: {

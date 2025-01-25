@@ -84,7 +84,7 @@ export function PersonalGoalsSetter(props: PersonalGoalsSetterProps) {
   const router = useRouter()
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     makeRequestOrThrow(CreateGoalDocument, {
-      date: DateTime.formatDate(props.date),
+      date: DateTime.asApiDateString(props.date),
       data: values,
     }).then(() => {
       router.refresh()

@@ -9,7 +9,7 @@ builder.mutationField("createFoodMeasurementFromFoodDetails", (t) =>
   t.field({
     type: [types.foodMeasurement],
     args: {
-      date: t.arg({ type: scalars.date, required: true }),
+      date: t.arg({ type: scalars.localdate, required: true }),
       data: t.arg({ type: input, required: true }),
     },
     validate: {

@@ -69,10 +69,10 @@ export function NutritionGoalEditorForm(props: NutritionGoalEditorFormProps) {
 
   const router = useRouter()
   const onSubmit = (values: z.infer<typeof formSchema>) => {
-    const goalDate = new Date(Date.UTC(goal.year, goal.month, goal.day))
-    if (!DateTime.eq(goalDate, props.date)) {
-      makeRequestOrThrow(CreateGoalDocument, {
-        date: DateTime.formatDate(props.date),
+    const goalDate = DateTime.parseApiDateString(goal.date)
+    if (DateTime.isSameDay(goalDate, props.date)) {
+      makeRequestOrThrow(UpdateGoalDocument, {
+        id: goal.id,
         data: {
           waterInMilliliters: goal.waterInMilliliters,
           proteinPercentage: values.proteinPercentage,
@@ -88,8 +88,8 @@ export function NutritionGoalEditorForm(props: NutritionGoalEditorFormProps) {
         props.onSubmit()
       })
     } else {
-      makeRequestOrThrow(UpdateGoalDocument, {
-        id: goal.id,
+      makeRequestOrThrow(CreateGoalDocument, {
+        date: DateTime.asApiDateString(props.date),
         data: {
           waterInMilliliters: goal.waterInMilliliters,
           proteinPercentage: values.proteinPercentage,

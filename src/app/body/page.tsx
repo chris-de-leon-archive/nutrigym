@@ -18,7 +18,7 @@ import {
 export default withUserInfo(async (ctx) => {
   const { bodyMeasurementByDate: log } = await makeRequestOrThrow(
     BodyMeasurementByDateDocument,
-    { date: DateTime.formatDate(ctx.searchParams.date) },
+    { date: DateTime.asApiDateString(ctx.searchParams.date) },
   )
 
   return (

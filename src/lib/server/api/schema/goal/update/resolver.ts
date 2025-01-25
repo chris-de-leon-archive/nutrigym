@@ -1,11 +1,12 @@
-import { assertPercentagesSumTo100 } from "../utils"
+import { doPercentagesSumTo100 } from "../utils"
 import { stripNull } from "@nutrigym/lib/utils"
 import { schema } from "@nutrigym/lib/schema"
 import { and, eq } from "drizzle-orm"
 import { z } from "zod"
 import {
-  isValidUpdateObject,
+  allValuesUndefined,
   GraphQLAuthContext,
+  asFatalZodError,
 } from "@nutrigym/lib/server/api"
 
 // TODO: should also be able to delete goals
@@ -25,18 +26,13 @@ export const zInput = z
     }),
   })
   .superRefine((arg, ctx) => {
-    const err = assertPercentagesSumTo100([
+    const err = doPercentagesSumTo100([
       arg.data.proteinPercentage,
       arg.data.carbsPercentage,
       arg.data.fatPercentage,
     ])
     if (err != null) {
-      ctx.addIssue({
-        code: z.ZodIssueCode.custom,
-        message: err.message,
-        fatal: true,
-      })
-      return z.NEVER
+      return asFatalZodError(ctx, err)
     }
   })
 
@@ -44,7 +40,7 @@ export const handler = async (
   input: z.infer<typeof zInput>,
   ctx: GraphQLAuthContext,
 ) => {
-  if (isValidUpdateObject(input.data)) {
+  if (allValuesUndefined(input.data)) {
     return []
   }
 

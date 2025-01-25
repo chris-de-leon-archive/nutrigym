@@ -1,6 +1,6 @@
 mutation UpdateFoodMeasurement(
   $id: Uuid!
-  $date: Date!
+  $date: LocalDate!
   $data: UpdateFoodMeasurementInput!
 ) {
   updateFoodMeasurement(id: $id, date: $date, data: $data) {

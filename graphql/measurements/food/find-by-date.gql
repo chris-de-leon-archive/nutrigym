@@ -1,4 +1,4 @@
-query FoodMeasurementsByDate($date: Date!) {
+query FoodMeasurementsByDate($date: LocalDate!) {
   foodMeasurementsByDate(date: $date) {
     id
     createdAt

@@ -22,19 +22,21 @@ export function DatePicker(props: DatePickerProps) {
     <div className="flex flex-col">
       <div className="flex w-full flex-row justify-around">
         <Combobox
-          placeholder={DateTime.getMonthName(props.date)}
+          placeholder={DateTime.getLocalMonthName(props.date)}
           choices={Array.from({
             length: MAX_MONTHS_IN_A_YEAR,
           }).map((_, i) => ({
             value: i.toString(),
-            label: DateTime.getMonthName(DateTime.setMonth(props.date, i)),
+            label: DateTime.getLocalMonthName(
+              DateTime.setLocalMonth(props.date, i),
+            ),
           }))}
           onSelect={(v) => v != null && props.onMonthChange(Number(v))}
         />
         <Combobox
           placeholder={props.date.getDate().toString()}
           choices={Array.from({
-            length: DateTime.daysInMonth(props.date),
+            length: DateTime.daysInLocalMonth(props.date),
           }).map((_, i) => ({
             value: (i + 1).toString(),
             label: (i + 1).toString(),

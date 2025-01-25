@@ -43,7 +43,7 @@ export function withUserInfo(cb: (ctx: Context) => Promise<React.ReactNode>) {
 
     const { goalByClosestDate: userGoal } = await makeRequestOrThrow(
       GoalByClosestDateDocument,
-      { date: DateTime.formatDate(date) },
+      { date: DateTime.asApiDateString(date) },
     )
     if (userGoal == null) {
       return <PersonalGoalsSetter date={date} />

@@ -9,7 +9,7 @@ builder.mutationField("removeFoodMeasurements", (t) =>
     type: [types.foodMeasurement],
     args: {
       ids: t.arg({ type: [scalars.uuid], required: true }),
-      date: t.arg({ type: scalars.date, required: true }),
+      date: t.arg({ type: scalars.localdate, required: true }),
     },
     validate: {
       schema: zInput,
