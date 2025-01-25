@@ -9,8 +9,8 @@ import {
   text,
 } from "drizzle-orm/sqlite-core"
 
-// TODO: add cascading user deletion
-
+// NOTE: foreign key support is not enabled by default in SQLite - it must be explicitly
+// turned on by executing `PRAGMA foreign_keys = ON;` each time a DB connection is made
 export const user = sqliteTable("user", {
   id: text("id").primaryKey(),
   createdAt: integer("created_at", { mode: "timestamp_ms" })
@@ -39,7 +39,7 @@ export const userBody = sqliteTable(
     userId: text("user_id")
       .notNull()
       .unique()
-      .references(() => user.id),
+      .references(() => user.id, { onDelete: "cascade" }),
     birthday: text("birthday").notNull(),
     gender: text("gender").$type<Gender>().notNull(),
   },
@@ -65,7 +65,7 @@ export const userGoal = sqliteTable(
       .default(sql`(unixepoch() * 1000)`),
     userId: text("user_id")
       .notNull()
-      .references(() => user.id),
+      .references(() => user.id, { onDelete: "cascade" }),
     waterInMilliliters: real("water_in_milliliters").notNull(),
     weightInPounds: real("weight_in_pounds").notNull(),
     sleepInHours: real("sleep_in_hours").notNull(),
@@ -107,7 +107,7 @@ export const userFood = sqliteTable(
       .default(sql`(unixepoch() * 1000)`),
     userId: text("user_id")
       .notNull()
-      .references(() => user.id),
+      .references(() => user.id, { onDelete: "cascade" }),
     name: text("name").notNull(),
     brand: text("brand").notNull(),
     calories: real("calories").notNull(),
@@ -169,12 +169,13 @@ export const userMeasurementLog = sqliteTable(
       .default(sql`(unixepoch() * 1000)`),
     userId: text("user_id")
       .notNull()
-      .references(() => user.id),
+      .references(() => user.id, { onDelete: "cascade" }),
     date: text("date").notNull(),
   },
   (t) => [unique().on(t.userId, t.date)],
 )
 
+// TODO: what should happen to a food measurement if a user deletes the food that it is referencing?
 // TODO: need a separate field to track when the food was eaten
 export const foodMeasurement = sqliteTable(
   "food_measurement",
@@ -185,7 +186,7 @@ export const foodMeasurement = sqliteTable(
       .default(sql`(unixepoch() * 1000)`),
     logId: text("log_id")
       .notNull()
-      .references(() => userMeasurementLog.id),
+      .references(() => userMeasurementLog.id, { onDelete: "cascade" }),
     foodId: text("food_id")
       .notNull()
       .references(() => userFood.id),
@@ -207,7 +208,7 @@ export const bodyMeasurement = sqliteTable(
     logId: text("log_id")
       .notNull()
       .unique()
-      .references(() => userMeasurementLog.id),
+      .references(() => userMeasurementLog.id, { onDelete: "cascade" }),
     weightInPounds: real("weight_in_pounds").notNull(),
     heightInInches: real("height_in_inches").notNull(),
     waterInMilliliters: real("water_in_milliliters"),
@@ -248,7 +249,7 @@ export const photoMeasurement = sqliteTable("photo_measurement", {
     .default(sql`(unixepoch() * 1000)`),
   logId: text("log_id")
     .notNull()
-    .references(() => userMeasurementLog.id),
+    .references(() => userMeasurementLog.id, { onDelete: "cascade" }),
   url: text("url"),
 })
 
