@@ -11,7 +11,7 @@ import {
 
 // NOTE: foreign key support is not enabled by default for a local SQLite file - this must
 // be explicitly turned on by executing `PRAGMA foreign_keys = ON;` whenever a new DB sess
-// is created see links below for more info:
+// is created. See links below for more info:
 //   - https://github.com/drizzle-team/drizzle-orm/issues/2565#issuecomment-2299403199
 //   - https://stackoverflow.com/a/5901100
 export const user = sqliteTable("user", {
