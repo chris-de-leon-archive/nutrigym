@@ -2,7 +2,7 @@
 
 import { BodyMeasurement } from "@nutrigym/lib/client"
 import { Border } from "@nutrigym/components/border"
-import { BodyLabels } from "./labels"
+import { BodyLabels } from "../_lib"
 import {
   Table,
   TableBody,
@@ -12,11 +12,11 @@ import {
   TableRow,
 } from "@nutrigym/components/ui/table"
 
-export type BodyDataTableProps = {
+export type BodyTableProps = {
   measurement: BodyMeasurement | null | undefined
 }
 
-export function BodyDataTable(props: BodyDataTableProps) {
+export function BodyTable(props: BodyTableProps) {
   const table = Array.from(BodyLabels.entries()).map(([k, v]) => {
     return {
       id: k,

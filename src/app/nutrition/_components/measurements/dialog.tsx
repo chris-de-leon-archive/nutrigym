@@ -1,7 +1,7 @@
 "use client"
 
-import { NutritionMeasurementFromExistingFoodForm } from "./measurements.existing-food.form"
-import { NutritionMeasurementFromNewFoodForm } from "./measurements.new-food.form"
+import { NutritionMeasurementFromExistingFoodForm } from "./existing-food.form"
+import { NutritionMeasurementFromNewFoodForm } from "./new-food.form"
 import { Button } from "@nutrigym/components/ui/button"
 import { Food } from "@nutrigym/lib/client"
 import { PlusIcon } from "lucide-react"

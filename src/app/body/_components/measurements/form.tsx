@@ -7,7 +7,7 @@ import { Input } from "@nutrigym/components/ui/input"
 import { DateTime } from "@nutrigym/lib/datetime"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
-import { BodyLabels } from "./labels"
+import { BodyLabels } from "../../_lib"
 import { z } from "zod"
 import {
   Form,

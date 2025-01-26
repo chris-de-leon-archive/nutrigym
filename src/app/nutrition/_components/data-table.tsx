@@ -4,7 +4,7 @@ import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { DateTime } from "@nutrigym/lib/datetime"
 import { ColumnDef } from "@tanstack/react-table"
 import { useRouter } from "next/navigation"
-import { NutritionLabels } from "./labels"
+import { NutritionLabels } from "../_lib"
 import {
   DataTableColumnSortableHeader,
   DataTableRowSelectorHeader,

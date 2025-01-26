@@ -1,6 +1,6 @@
 "use client"
 
-import { NutritionLabels, NutritionLabelsKeys } from "./labels"
+import { NutritionLabels, NutritionLabelsKeys } from "../../_lib"
 import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { Combobox } from "@nutrigym/components/combobox"
 import { Button } from "@nutrigym/components/ui/button"

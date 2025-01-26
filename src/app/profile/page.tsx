@@ -1,5 +1,4 @@
-import { PersonalInfoEditorDialog } from "./personal-info-editor.dialog"
-import { PersonalInfoTable } from "./personal-info.table"
+import { PersonalInfoEditorDialog, PersonalInfoTable } from "./_components"
 import { withUserInfo } from "@nutrigym/components/user"
 import { UserButton } from "@clerk/nextjs"
 import {

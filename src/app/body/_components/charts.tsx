@@ -2,7 +2,7 @@
 
 import { BodyMeasurement, Goal } from "@nutrigym/lib/client"
 import { GoalChart } from "@nutrigym/components/charts"
-import { BodyLabels } from "./labels"
+import { BodyLabels } from "../_lib"
 
 export type BodyChartsProps = {
   measurement: BodyMeasurement | null | undefined

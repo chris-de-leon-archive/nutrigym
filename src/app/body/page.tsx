@@ -1,12 +1,8 @@
 import { DatePickerPopover } from "@nutrigym/components/date-picker"
 import { BodyMeasurementByDateDocument } from "@nutrigym/lib/client"
-import { BodyMeasurementsDialog } from "./measurements.dialog"
-import { BodyGoalEditorDialog } from "./goal-editor.dialog"
 import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { withUserInfo } from "@nutrigym/components/user"
 import { DateTime } from "@nutrigym/lib/datetime"
-import { BodyDataTable } from "./page.data-table"
-import { BodyCharts } from "./page.charts"
 import {
   PageHeadingContainer,
   PageMainContainer,
@@ -14,6 +10,12 @@ import {
   PageSubContainer,
   PageSubHeading,
 } from "@nutrigym/components/page"
+import {
+  BodyMeasurementsDialog,
+  BodyGoalEditorDialog,
+  BodyCharts,
+  BodyTable,
+} from "./_components"
 
 export default withUserInfo(async (ctx) => {
   const { bodyMeasurementByDate: log } = await makeRequestOrThrow(
@@ -50,7 +52,7 @@ export default withUserInfo(async (ctx) => {
             date={ctx.searchParams.date}
           />
         </PageHeadingContainer>
-        <BodyDataTable measurement={log} />
+        <BodyTable measurement={log} />
       </PageSubContainer>
     </PageMainContainer>
   )

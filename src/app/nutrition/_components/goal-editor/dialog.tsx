@@ -1,8 +1,8 @@
 "use client"
 
-import { PersonalInfoEditorForm } from "./personal-info-editor.form"
 import { Button } from "@nutrigym/components/ui/button"
-import { Body } from "@nutrigym/lib/client"
+import { NutritionGoalEditorForm } from "./form"
+import { Goal } from "@nutrigym/lib/client"
 import { EditIcon } from "lucide-react"
 import { useState } from "react"
 import {
@@ -13,12 +13,14 @@ import {
   DialogTrigger,
 } from "@nutrigym/components/ui/dialog"
 
-export type PersonalInfoEditorDialogProps = {
-  today: Date
-  body: Body
+export type NutritionGoalEditorDialogProps = {
+  goal: Goal
+  date: Date
 }
 
-export function PersonalInfoEditorDialog(props: PersonalInfoEditorDialogProps) {
+export function NutritionGoalEditorDialog(
+  props: NutritionGoalEditorDialogProps,
+) {
   const [open, setOpen] = useState(false)
 
   return (
@@ -30,13 +32,13 @@ export function PersonalInfoEditorDialog(props: PersonalInfoEditorDialogProps) {
       </DialogTrigger>
       <DialogContent className="w-11/12">
         <DialogHeader>
-          <DialogTitle>Edit Personal Info</DialogTitle>
+          <DialogTitle>Edit Goals</DialogTitle>
         </DialogHeader>
         <div className="max-h-[75vh] w-full overflow-y-scroll border p-5">
-          <PersonalInfoEditorForm
+          <NutritionGoalEditorForm
             onSubmit={() => setOpen(false)}
-            today={props.today}
-            body={props.body}
+            date={props.date}
+            goal={props.goal}
           />
         </div>
       </DialogContent>

@@ -1,9 +1,9 @@
 "use client"
 
-import { BodyGoalEditorForm } from "./goal-editor.form"
+import { BodyMeasurementsForm } from "./form"
 import { Button } from "@nutrigym/components/ui/button"
-import { Goal } from "@nutrigym/lib/client"
-import { EditIcon } from "lucide-react"
+import { BodyMeasurement } from "@nutrigym/lib/client"
+import { PlusIcon } from "lucide-react"
 import { useState } from "react"
 import {
   Dialog,
@@ -13,30 +13,30 @@ import {
   DialogTrigger,
 } from "@nutrigym/components/ui/dialog"
 
-export type BodyGoalEditorDialogProps = {
-  goal: Goal
+export type BodyMeasurementsDialogProps = {
+  measurement: BodyMeasurement | null | undefined
   date: Date
 }
 
-export function BodyGoalEditorDialog(props: BodyGoalEditorDialogProps) {
+export function BodyMeasurementsDialog(props: BodyMeasurementsDialogProps) {
   const [open, setOpen] = useState(false)
 
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
         <Button variant="secondary">
-          <EditIcon />
+          <PlusIcon />
         </Button>
       </DialogTrigger>
       <DialogContent className="w-11/12">
         <DialogHeader>
-          <DialogTitle>Edit Goals</DialogTitle>
+          <DialogTitle>Add Body Measurement</DialogTitle>
         </DialogHeader>
         <div className="max-h-[75vh] w-full overflow-y-scroll border p-5">
-          <BodyGoalEditorForm
-            onSubmit={() => setOpen(false)}
+          <BodyMeasurementsForm
             date={props.date}
-            goal={props.goal}
+            measurement={props.measurement}
+            onSubmit={() => setOpen(false)}
           />
         </div>
       </DialogContent>

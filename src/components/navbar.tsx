@@ -35,7 +35,7 @@ export function Navbar() {
           </DropdownMenuTrigger>
           <DropdownMenuContent>
             <DropdownMenuItem asChild>
-              <Link href={"/"} onClick={() => setOpen(false)}>
+              <Link href={"/home"} onClick={() => setOpen(false)}>
                 Home
               </Link>
             </DropdownMenuItem>
