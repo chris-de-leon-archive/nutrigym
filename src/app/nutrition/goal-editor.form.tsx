@@ -53,16 +53,15 @@ export function NutritionGoalEditorForm(props: NutritionGoalEditorFormProps) {
 
   const data = useWatch({ control: form.control })
   const stat = useMemo(() => {
-    const totGrams = caloriesToGrams(data.calories ?? 0)
-    const proteinPercentage = data.proteinPercentage ?? 0
-    const carbsPercentage = data.carbsPercentage ?? 0
-    const fatPercentage = data.fatPercentage ?? 0
     const calories = data.calories ?? 0
+    const p = data.proteinPercentage ?? 0
+    const c = data.carbsPercentage ?? 0
+    const f = data.fatPercentage ?? 0
     return {
-      percentageSum: proteinPercentage + carbsPercentage + fatPercentage,
-      proteinInGrams: calculatePortion(totGrams, proteinPercentage),
-      carbsInGrams: calculatePortion(totGrams, carbsPercentage),
-      fatInGrams: calculatePortion(totGrams, fatPercentage),
+      macrosPercentageSum: p + c + f,
+      proteinInGrams: caloriesToGrams(calculatePortion(calories, p)),
+      carbsInGrams: caloriesToGrams(calculatePortion(calories, c)),
+      fatInGrams: caloriesToGrams(calculatePortion(calories, f)),
       calories,
     }
   }, [data])
@@ -109,7 +108,7 @@ export function NutritionGoalEditorForm(props: NutritionGoalEditorFormProps) {
 
   return (
     <div className="flex flex-col gap-y-5 rounded-lg border p-4">
-      {stat.percentageSum !== 100 && (
+      {stat.macrosPercentageSum !== 100 && (
         <Alert variant="destructive">
           <TriangleAlertIcon />
           <AlertTitle>Error</AlertTitle>

@@ -28,12 +28,15 @@ export function NutritionCharts({ measurements, goal }: NutritionChartsProps) {
   }, [measurements])
 
   const goals = useMemo(() => {
-    const totalGrams = caloriesToGrams(goal?.calories ?? 0)
+    const calories = goal.calories ?? 0
+    const p = goal.proteinPercentage ?? 0
+    const c = goal.carbsPercentage ?? 0
+    const f = goal.fatPercentage ?? 0
     return {
-      calories: Math.round(goal?.calories ?? 0),
-      protein: calculatePortion(goal?.proteinPercentage ?? 0, totalGrams),
-      carbs: calculatePortion(goal?.carbsPercentage ?? 0, totalGrams),
-      fat: calculatePortion(goal?.fatPercentage ?? 0, totalGrams),
+      calories: Math.round(calories),
+      protein: caloriesToGrams(calculatePortion(calories, p)),
+      carbs: caloriesToGrams(calculatePortion(calories, c)),
+      fat: caloriesToGrams(calculatePortion(calories, f)),
     }
   }, [goal])
 
