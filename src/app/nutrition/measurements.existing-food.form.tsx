@@ -138,8 +138,10 @@ export function NutritionMeasurementFromExistingFoodForm(
                 <Combobox
                   placeholder="Select a food"
                   choices={props.foods.map((f) => ({
+                    // TODO: if the label is too long, then the modal gets messed up:
+                    // label: `${f.name}, ${f.brand} (${f.calories} cals/serving)`,
                     value: f.id,
-                    label: `${f.name}, ${f.brand} (${f.calories} cals/serving)`,
+                    label: f.name,
                   }))}
                   onSelect={(v) => {
                     if (v == null) {
@@ -162,14 +164,14 @@ export function NutritionMeasurementFromExistingFoodForm(
               <TableHeader>
                 <TableRow>
                   <TableHead>Name</TableHead>
-                  <TableHead>Value</TableHead>
+                  <TableHead className="text-center">Value</TableHead>
                 </TableRow>
               </TableHeader>
               <TableBody>
                 {Array.from(NutritionLabels.entries()).map(([k, label]) => (
                   <TableRow key={k}>
                     <TableCell className="font-medium">{label}</TableCell>
-                    <TableCell>
+                    <TableCell className="text-center">
                       {selectedFood == null ? undefined : selectedFood[k]}
                     </TableCell>
                   </TableRow>
