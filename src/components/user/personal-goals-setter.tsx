@@ -1,12 +1,12 @@
 "use client"
 
-import { calculatePortion, caloriesToGrams } from "@nutrigym/lib/conversion"
 import { FractionalPieChart } from "@nutrigym/components/charts"
 import { RefreshCwIcon, TriangleAlertIcon } from "lucide-react"
 import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { CreateGoalDocument } from "@nutrigym/lib/client"
 import { Button } from "@nutrigym/components/ui/button"
 import { Slider } from "@nutrigym/components/ui/slider"
+import { Conversion } from "@nutrigym/lib/conversion"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@nutrigym/components/ui/input"
 import { useForm, useWatch } from "react-hook-form"
@@ -67,16 +67,15 @@ export function PersonalGoalsSetter(props: PersonalGoalsSetterProps) {
 
   const data = useWatch({ control: form.control })
   const stat = useMemo(() => {
-    const totGrams = caloriesToGrams(data.calories ?? 0)
     const proteinPercentage = data.proteinPercentage ?? 0
     const carbsPercentage = data.carbsPercentage ?? 0
     const fatPercentage = data.fatPercentage ?? 0
     const calories = data.calories ?? 0
     return {
       percentageSum: proteinPercentage + carbsPercentage + fatPercentage,
-      proteinInGrams: calculatePortion(totGrams, proteinPercentage),
-      carbsInGrams: calculatePortion(totGrams, carbsPercentage),
-      fatInGrams: calculatePortion(totGrams, fatPercentage),
+      proteinInGrams: Conversion.proteinInGrams(calories, proteinPercentage),
+      carbsInGrams: Conversion.carbsInGrams(calories, carbsPercentage),
+      fatInGrams: Conversion.fatInGrams(calories, fatPercentage),
       calories,
     }
   }, [data])

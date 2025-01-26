@@ -1,11 +1,11 @@
 "use client"
 
-import { calculatePortion, caloriesToGrams } from "@nutrigym/lib/conversion"
 import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { Slider } from "@nutrigym/components/ui/slider"
 import { Button } from "@nutrigym/components/ui/button"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@nutrigym/components/ui/input"
+import { Conversion } from "@nutrigym/lib/conversion"
 import { useForm, useWatch } from "react-hook-form"
 import { DateTime } from "@nutrigym/lib/datetime"
 import { TriangleAlertIcon } from "lucide-react"
@@ -59,10 +59,10 @@ export function NutritionGoalEditorForm(props: NutritionGoalEditorFormProps) {
     const f = data.fatPercentage ?? 0
     return {
       macrosPercentageSum: p + c + f,
-      proteinInGrams: caloriesToGrams(calculatePortion(calories, p)),
-      carbsInGrams: caloriesToGrams(calculatePortion(calories, c)),
-      fatInGrams: caloriesToGrams(calculatePortion(calories, f)),
-      calories,
+      proteinInGrams: Math.round(Conversion.proteinInGrams(calories, p)),
+      carbsInGrams: Math.round(Conversion.carbsInGrams(calories, c)),
+      fatInGrams: Math.round(Conversion.fatInGrams(calories, f)),
+      calories: Math.round(calories),
     }
   }, [data])
 
@@ -108,6 +108,7 @@ export function NutritionGoalEditorForm(props: NutritionGoalEditorFormProps) {
 
   return (
     <div className="flex flex-col gap-y-5 rounded-lg border p-4">
+      {/* TODO: floating point comparison */}
       {stat.macrosPercentageSum !== 100 && (
         <Alert variant="destructive">
           <TriangleAlertIcon />
