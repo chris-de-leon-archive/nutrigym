@@ -6,7 +6,7 @@ import {
   MAX_MONTHS_IN_A_YEAR,
   MAX_LOOKBACK_YEARS,
   DateTime,
-} from "@nutrigym/lib/datetime"
+} from "@nutrigym/lib/client/common"
 
 export type DatePickerProps = {
   onCalendarChange: (d: Date) => void

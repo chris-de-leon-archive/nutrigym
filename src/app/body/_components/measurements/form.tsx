@@ -2,9 +2,9 @@
 
 import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { Button } from "@nutrigym/components/ui/button"
+import { DateTime } from "@nutrigym/lib/client/common"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@nutrigym/components/ui/input"
-import { DateTime } from "@nutrigym/lib/datetime"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { BodyLabels } from "../../_lib"
@@ -21,7 +21,7 @@ import {
   CreateBodyMeasurementDocument,
   UpdateBodyMeasurementDocument,
   BodyMeasurement,
-} from "@nutrigym/lib/client"
+} from "@nutrigym/lib/client/graphql"
 
 // TODO: allow null to be sent as a value to the API
 const formSchema = z.object({

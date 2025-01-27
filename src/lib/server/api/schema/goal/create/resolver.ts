@@ -1,6 +1,6 @@
 import { asFatalZodError, GraphQLAuthContext } from "@nutrigym/lib/server/api"
 import { doPercentagesSumTo100 } from "../utils"
-import { schema } from "@nutrigym/lib/schema"
+import { schema } from "@nutrigym/lib/server/db/schema"
 import { randomUUID } from "node:crypto"
 import { types } from "../types"
 import { z } from "zod"

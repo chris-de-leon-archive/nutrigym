@@ -1,7 +1,11 @@
 import { DatePickerPopover } from "@nutrigym/components/date-picker"
 import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { withUserInfo } from "@nutrigym/components/user"
-import { DateTime } from "@nutrigym/lib/datetime"
+import { DateTime } from "@nutrigym/lib/client/common"
+import {
+  FoodMeasurementsByDateDocument,
+  FoodsDocument,
+} from "@nutrigym/lib/client/graphql"
 import {
   PageMainContainer,
   PageSubContainer,
@@ -9,10 +13,6 @@ import {
   PageHeadingContainer,
   PageMainHeading,
 } from "@nutrigym/components/page"
-import {
-  FoodMeasurementsByDateDocument,
-  FoodsDocument,
-} from "@nutrigym/lib/client"
 import {
   NutritionMeasurementsDialog,
   NutritionGoalEditorDialog,

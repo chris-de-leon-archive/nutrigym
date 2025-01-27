@@ -1,7 +1,6 @@
-export const generateDatesInYear = (year: number) => {
+export const generateDatesToPresent = (start: Date) => {
   const dates = new Array<string>()
-  const start = new Date(year, 0, 1)
-  const final = new Date(year + 1, 0, 1)
+  const final = new Date()
 
   const incr = (datetime: Date) =>
     new Date(

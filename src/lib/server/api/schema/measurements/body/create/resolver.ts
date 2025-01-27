@@ -1,5 +1,5 @@
 import { GraphQLAuthContext, ERR_LOG_NOT_FOUND } from "@nutrigym/lib/server/api"
-import { schema } from "@nutrigym/lib/schema"
+import { schema } from "@nutrigym/lib/server/db/schema"
 import { randomUUID } from "node:crypto"
 import { and, eq } from "drizzle-orm"
 import { types } from "../types"

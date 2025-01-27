@@ -1,8 +1,8 @@
 "use client"
 
-import { BodyMeasurementsForm } from "./form"
+import { BodyMeasurement } from "@nutrigym/lib/client/graphql"
 import { Button } from "@nutrigym/components/ui/button"
-import { BodyMeasurement } from "@nutrigym/lib/client"
+import { BodyMeasurementsForm } from "./form"
 import { PlusIcon } from "lucide-react"
 import { useState } from "react"
 import {

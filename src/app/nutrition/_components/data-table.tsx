@@ -1,7 +1,7 @@
 "use client"
 
 import { makeRequestOrThrow } from "@nutrigym/lib/server"
-import { DateTime } from "@nutrigym/lib/datetime"
+import { DateTime } from "@nutrigym/lib/client/common"
 import { ColumnDef } from "@tanstack/react-table"
 import { useRouter } from "next/navigation"
 import { NutritionLabels } from "../_lib"
@@ -15,7 +15,7 @@ import {
 import {
   RemoveFoodMeasurementsDocument,
   FoodMeasurement,
-} from "@nutrigym/lib/client"
+} from "@nutrigym/lib/client/graphql"
 
 export type NutritionDataTableProps = {
   measurements: FoodMeasurement[]

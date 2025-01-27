@@ -3,7 +3,7 @@
 import { NutritionMeasurementFromExistingFoodForm } from "./existing-food.form"
 import { NutritionMeasurementFromNewFoodForm } from "./new-food.form"
 import { Button } from "@nutrigym/components/ui/button"
-import { Food } from "@nutrigym/lib/client"
+import { Food } from "@nutrigym/lib/client/graphql"
 import { PlusIcon } from "lucide-react"
 import { useState } from "react"
 import {

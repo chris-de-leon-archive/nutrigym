@@ -5,7 +5,7 @@ import { default as measurements } from "./02_measurements"
 export default async function main() {
   await reset()
   await user({ foodCount: 20 })
-  await measurements({ year: 2024 })
+  await measurements({ date: new Date(2024, 0, 1) })
 }
 
 if (require.main === module) {

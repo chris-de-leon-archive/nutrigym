@@ -1,6 +1,6 @@
+import { DateTime } from "@nutrigym/lib/client/common"
 import { Border } from "@nutrigym/components/border"
-import { DateTime } from "@nutrigym/lib/datetime"
-import { Body } from "@nutrigym/lib/client"
+import { Body } from "@nutrigym/lib/client/graphql"
 import {
   Table,
   TableBody,

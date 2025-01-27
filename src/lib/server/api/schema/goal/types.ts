@@ -1,5 +1,5 @@
 import { builder } from "@nutrigym/lib/server/api"
-import { Goal } from "@nutrigym/lib/schema"
+import { Goal } from "@nutrigym/lib/server/db/schema"
 import { scalars } from "../scalars"
 
 const goal = builder.objectRef<Goal>("Goal")

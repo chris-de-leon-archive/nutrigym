@@ -9,6 +9,10 @@ export const env = z
     CACHE_URL: z.string().url().optional(),
     NODE_ENV: z.enum(["development", "production"]),
   })
+  .transform((arg) => {
+    return {
+      ...arg,
+      IS_DEV_MODE: arg.NODE_ENV === "development",
+    }
+  })
   .parse(process.env)
-
-export const IS_DEV_MODE = env.NODE_ENV === "development"

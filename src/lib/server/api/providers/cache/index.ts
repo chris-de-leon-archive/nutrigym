@@ -1,6 +1,6 @@
 import { Cache, createInMemoryCache } from "@graphql-yoga/plugin-response-cache"
 import { createRedisCache } from "@envelop/response-cache-redis"
-import { env } from "../../env"
+import { env } from "@nutrigym/lib/server/env"
 import { Redis } from "ioredis"
 
 // NOTE: when a mutation is invoked, the response cache plugin will automatically

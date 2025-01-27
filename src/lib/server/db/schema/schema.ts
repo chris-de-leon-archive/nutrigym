@@ -1,4 +1,4 @@
-import { Gender, ServingUnit } from "@nutrigym/lib/enums"
+import { Gender, ServingUnit } from "@nutrigym/lib/server/enums"
 import { sql } from "drizzle-orm"
 import {
   sqliteTable,

@@ -1,6 +1,6 @@
-import { schema } from "@nutrigym/lib/schema"
+import { schema } from "@nutrigym/lib/server/db/schema"
+import { Gender } from "@nutrigym/lib/server/enums"
 import { isBirthdayInFuture } from "../utils"
-import { Gender } from "@nutrigym/lib/enums"
 import { randomUUID } from "node:crypto"
 import { types } from "../types"
 import { z } from "zod"

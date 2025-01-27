@@ -33,10 +33,6 @@ export const errors = {
   }),
 }
 
-export const ERR_UNAUTHORIZED = errors.Unauthorized(
-  "user is not authorized to view this resource",
-)
-
 export const ERR_LOG_NOT_FOUND = errors.InternalServerError(
   "failed to find measurement log",
 )

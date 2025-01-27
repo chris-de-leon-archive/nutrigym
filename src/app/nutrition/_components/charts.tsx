@@ -1,8 +1,8 @@
 "use client"
 
-import { FoodMeasurement, Goal } from "@nutrigym/lib/client"
+import { FoodMeasurement, Goal } from "@nutrigym/lib/client/graphql"
+import { Conversion } from "@nutrigym/lib/client/common"
 import { GoalChart } from "@nutrigym/components/charts"
-import { Conversion } from "@nutrigym/lib/conversion"
 import { useMemo } from "react"
 
 export type NutritionChartsProps = {

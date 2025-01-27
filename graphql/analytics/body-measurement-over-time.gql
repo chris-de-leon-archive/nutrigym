@@ -1,0 +1,10 @@
+query BodyMeasurementOverTime(
+  $key: BodyMeasurementKey!
+  $date: InclusiveDateRangeInput!
+  $options: TransformationOptionsInput
+) {
+  bodyMeasurementOverTime(key: $key, date: $date, options: $options) {
+    date
+    value
+  }
+}

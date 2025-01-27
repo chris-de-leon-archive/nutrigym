@@ -1,6 +1,6 @@
 "use client"
 
-import { BodyMeasurement, Goal } from "@nutrigym/lib/client"
+import { BodyMeasurement, Goal } from "@nutrigym/lib/client/graphql"
 import { GoalChart } from "@nutrigym/components/charts"
 import { BodyLabels } from "../_lib"
 

@@ -1,7 +1,7 @@
-import { clerk } from "@nutrigym/lib/server/providers/clerk"
-import { db } from "@nutrigym/lib/server/providers/db"
+import { clerk } from "@nutrigym/lib/server/api/providers/clerk"
+import { db } from "@nutrigym/lib/server/api/providers/db"
+import { schema } from "@nutrigym/lib/server/db/schema"
 import { env } from "@nutrigym/lib/server/env"
-import { schema } from "@nutrigym/lib/schema"
 import { NextResponse } from "next/server"
 
 export async function GET(req: Request) {

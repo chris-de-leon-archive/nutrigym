@@ -1,4 +1,4 @@
-import { BodyMeasurement } from "@nutrigym/lib/schema"
+import { BodyMeasurement } from "@nutrigym/lib/server/db/schema"
 import { builder } from "@nutrigym/lib/server/api"
 import { scalars } from "../../scalars"
 

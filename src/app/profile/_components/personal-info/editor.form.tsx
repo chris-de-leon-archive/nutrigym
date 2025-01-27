@@ -1,11 +1,11 @@
 "use client"
 
-import { UpdateBodyDocument, Gender, Body } from "@nutrigym/lib/client"
+import { UpdateBodyDocument, Gender, Body } from "@nutrigym/lib/client/graphql"
 import { DatePicker } from "@nutrigym/components/date-picker"
 import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { Button } from "@nutrigym/components/ui/button"
+import { DateTime } from "@nutrigym/lib/client/common"
 import { zodResolver } from "@hookform/resolvers/zod"
-import { DateTime } from "@nutrigym/lib/datetime"
 import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { z } from "zod"

@@ -1,6 +1,6 @@
 "use client"
 
-import { BodyMeasurement } from "@nutrigym/lib/client"
+import { BodyMeasurement } from "@nutrigym/lib/client/graphql"
 import { Border } from "@nutrigym/components/border"
 import { BodyLabels } from "../_lib"
 import {

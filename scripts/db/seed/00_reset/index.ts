@@ -1,4 +1,4 @@
-import { schema } from "@nutrigym/lib/schema"
+import { schema } from "@nutrigym/lib/server/db/schema"
 import { reset } from "drizzle-seed"
 import { db } from "../../db"
 

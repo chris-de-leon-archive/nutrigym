@@ -1,7 +1,26 @@
 import { RefinementCtx, z } from "zod"
 
+export type ParsedZodDateString = {
+  month: number
+  year: number
+  day: number
+}
+
 export const allValuesUndefined = <T extends object>(obj: T) => {
   return Object.values(obj).every((v) => v === undefined)
+}
+
+export const stripNull = <T>(val: T | undefined | null) => {
+  return val == null ? undefined : val
+}
+
+export const compareDates = (
+  date: ParsedZodDateString,
+  other: ParsedZodDateString,
+) => {
+  return (
+    date.year - other.year || date.month - other.month || date.day - other.day
+  )
 }
 
 export const asFatalZodError = (ctx: RefinementCtx, err: Error) => {
@@ -13,7 +32,7 @@ export const asFatalZodError = (ctx: RefinementCtx, err: Error) => {
   return z.NEVER
 }
 
-export const parseZodDateString = (date: string) => {
+export const parseZodDateString = (date: string): ParsedZodDateString => {
   // NOTE: https://zod.dev/?id=strings
   const [year, month, day] = date.split("-")
   return {

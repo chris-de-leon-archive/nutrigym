@@ -1,4 +1,4 @@
-import { FoodMeasurement, schema } from "@nutrigym/lib/schema"
+import { FoodMeasurement, schema } from "@nutrigym/lib/server/db/schema"
 import { builder } from "@nutrigym/lib/server/api"
 import { scalars } from "../../scalars"
 import { inArray } from "drizzle-orm"

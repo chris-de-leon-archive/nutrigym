@@ -1,12 +1,12 @@
 import { doPercentagesSumTo100 } from "../utils"
-import { stripNull } from "@nutrigym/lib/utils"
-import { schema } from "@nutrigym/lib/schema"
+import { schema } from "@nutrigym/lib/server/db/schema"
 import { and, eq } from "drizzle-orm"
 import { z } from "zod"
 import {
   allValuesUndefined,
   GraphQLAuthContext,
   asFatalZodError,
+  stripNull,
 } from "@nutrigym/lib/server/api"
 
 // TODO: should also be able to delete goals

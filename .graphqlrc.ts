@@ -19,7 +19,7 @@ export default {
   extensions: {
     codegen: {
       generates: {
-        [path.join("src", "lib", "client", "generated/")]: {
+        [path.join("src", "lib", "client", "graphql", "generated/")]: {
           preset: "client",
           presetConfig: {
             persistedDocuments: {

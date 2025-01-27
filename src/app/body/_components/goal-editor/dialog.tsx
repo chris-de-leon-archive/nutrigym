@@ -1,8 +1,8 @@
 "use client"
 
-import { BodyGoalEditorForm } from "./form"
 import { Button } from "@nutrigym/components/ui/button"
-import { Goal } from "@nutrigym/lib/client"
+import { Goal } from "@nutrigym/lib/client/graphql"
+import { BodyGoalEditorForm } from "./form"
 import { EditIcon } from "lucide-react"
 import { useState } from "react"
 import {

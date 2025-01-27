@@ -1,15 +1,17 @@
 import { PersonalGoalsSetter } from "./personal-goals-setter"
 import { PersonalInfoSetter } from "./personal-info-setter"
-import { SearchParams } from "@nutrigym/lib/search-params"
 import { makeRequestOrThrow } from "@nutrigym/lib/server"
-import { NextSearchParams } from "@nutrigym/lib/types"
-import { DateTime } from "@nutrigym/lib/datetime"
 import {
   GoalByClosestDateDocument,
   BodyDocument,
   Goal,
   Body,
-} from "@nutrigym/lib/client"
+} from "@nutrigym/lib/client/graphql"
+import {
+  NextSearchParams,
+  SearchParams,
+  DateTime,
+} from "@nutrigym/lib/client/common"
 
 type ParsedSearchParams = {
   date: Date
@@ -30,7 +32,6 @@ type Context = {
   meta: MetaContext
 }
 
-// TODO: rename?
 export function withUserInfo(cb: (ctx: Context) => Promise<React.ReactNode>) {
   return async function Component({ searchParams }: NextSearchParams) {
     const date = await SearchParams.date.parse({ searchParams })

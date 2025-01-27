@@ -1,10 +1,10 @@
-import { stripNull } from "@nutrigym/lib/utils"
-import { schema } from "@nutrigym/lib/schema"
+import { schema } from "@nutrigym/lib/server/db/schema"
 import { and, eq } from "drizzle-orm"
 import { z } from "zod"
 import {
   allValuesUndefined,
   GraphQLAuthContext,
+  stripNull,
 } from "@nutrigym/lib/server/api"
 
 export const zInput = z.object({

@@ -4,11 +4,11 @@ import { NutritionLabels, NutritionLabelsKeys } from "../../_lib"
 import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { Combobox } from "@nutrigym/components/combobox"
 import { Button } from "@nutrigym/components/ui/button"
+import { DateTime } from "@nutrigym/lib/client/common"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@nutrigym/components/ui/input"
 import { Border } from "@nutrigym/components/border"
 import { useForm, useWatch } from "react-hook-form"
-import { DateTime } from "@nutrigym/lib/datetime"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
 import { z } from "zod"
@@ -31,7 +31,7 @@ import {
 import {
   CreateFoodMeasurementFromFoodIdDocument,
   Food,
-} from "@nutrigym/lib/client"
+} from "@nutrigym/lib/client/graphql"
 
 const formSchema = z.object({
   servingsConsumed: z.coerce.number().min(0),

@@ -1,17 +1,17 @@
 import { useDisableIntrospection as withDisableIntrospection } from "@graphql-yoga/plugin-disable-introspection"
 import { usePersistedOperations as withPersistedOperations } from "@graphql-yoga/plugin-persisted-operations"
 import { useResponseCache as withResponseCache } from "@graphql-yoga/plugin-response-cache"
+import { clerk } from "@nutrigym/lib/server/api/providers/clerk"
 import { GraphQLBaseContext } from "@nutrigym/lib/server/api"
-import { clerk } from "@nutrigym/lib/server/providers/clerk"
-import { env, IS_DEV_MODE } from "@nutrigym/lib/server/env"
+import { db } from "@nutrigym/lib/server/api/providers/db"
 import { schema } from "@nutrigym/lib/server/api/schema"
-import { db } from "@nutrigym/lib/server/providers/db"
+import { cache } from "./api/providers/cache"
 import { initContextCache } from "@pothos/core"
+import { env } from "@nutrigym/lib/server/env"
 import { auth } from "@clerk/nextjs/server"
 import { createYoga } from "graphql-yoga"
-import { cache } from "../cache"
 
-import PersistedDocuments from "../../../client/generated/persisted-documents.json"
+import PersistedDocuments from "../client/graphql/generated/persisted-documents.json"
 
 export const yoga = createYoga({
   fetchAPI: { Response },
@@ -48,8 +48,8 @@ export const yoga = createYoga({
     // Response caching: https://the-guild.dev/graphql/envelop/plugins/use-response-cache#envelopresponse-cache
     withResponseCache<GraphQLBaseContext>({
       session: async () => await auth().then(({ userId }) => userId),
-      includeExtensionMetadata: IS_DEV_MODE,
-      ttl: IS_DEV_MODE ? undefined : 30_000,
+      includeExtensionMetadata: env.IS_DEV_MODE,
+      ttl: env.IS_DEV_MODE ? undefined : 30_000,
       cache,
     }),
   ],

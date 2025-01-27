@@ -1,8 +1,8 @@
+import { BodyMeasurementByDateDocument } from "@nutrigym/lib/client/graphql"
 import { DatePickerPopover } from "@nutrigym/components/date-picker"
-import { BodyMeasurementByDateDocument } from "@nutrigym/lib/client"
 import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { withUserInfo } from "@nutrigym/components/user"
-import { DateTime } from "@nutrigym/lib/datetime"
+import { DateTime } from "@nutrigym/lib/client/common"
 import {
   PageHeadingContainer,
   PageMainContainer,

@@ -1,5 +1,4 @@
-import { requireAuth } from "@nutrigym/lib/server/api/auth"
-import { builder } from "@nutrigym/lib/server/api"
+import { requireAuth, builder } from "@nutrigym/lib/server/api"
 import { handler, zInput } from "./resolver"
 import { scalars } from "../../scalars"
 import { types } from "../types"

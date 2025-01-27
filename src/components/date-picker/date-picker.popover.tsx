@@ -1,9 +1,8 @@
 "use client"
 
-import { SearchParams } from "@nutrigym/lib/search-params"
+import { DateTime, SearchParams } from "@nutrigym/lib/client/common"
 import { usePathname, useRouter } from "next/navigation"
 import { Button } from "@nutrigym/components/ui/button"
-import { DateTime } from "@nutrigym/lib/datetime"
 import { CalendarIcon } from "lucide-react"
 import { DatePicker } from "./date-picker"
 import { useState } from "react"

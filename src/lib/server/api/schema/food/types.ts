@@ -1,5 +1,5 @@
 import { builder } from "@nutrigym/lib/server/api"
-import { Food } from "@nutrigym/lib/schema"
+import { Food } from "@nutrigym/lib/server/db/schema"
 import { scalars } from "../scalars"
 import { enums } from "../enums"
 

@@ -1,5 +1,5 @@
 import { GraphQLAuthContext } from "@nutrigym/lib/server/api"
-import { schema } from "@nutrigym/lib/schema"
+import { schema } from "@nutrigym/lib/server/db/schema"
 import { eq } from "drizzle-orm"
 import { z } from "zod"
 

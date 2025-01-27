@@ -7,7 +7,7 @@ if (DATABASE_URL == null) {
 }
 
 export default defineConfig({
-  schema: "./src/lib/schema/schema.ts",
+  schema: "./src/lib/server/db/schema/schema.ts",
   dbCredentials: {
     url: DATABASE_URL,
   },

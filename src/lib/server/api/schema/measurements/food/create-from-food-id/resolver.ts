@@ -1,4 +1,4 @@
-import { schema } from "@nutrigym/lib/schema"
+import { schema } from "@nutrigym/lib/server/db/schema"
 import { randomUUID } from "node:crypto"
 import { and, eq } from "drizzle-orm"
 import { foods } from "../../../food"

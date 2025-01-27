@@ -1,10 +1,10 @@
 import { FormattedExecutionResult, GraphQLFormattedError } from "graphql"
 import { performance } from "node:perf_hooks"
-import { IS_DEV_MODE } from "../env"
+import { env } from "./env"
 import { z } from "zod"
 
 export const logRequest = (requestID: string, args: RequestInit) => {
-  if (IS_DEV_MODE) {
+  if (env.IS_DEV_MODE) {
     console.log(
       `\x1b[36m[${requestID}]\x1b[0m => \x1b[32m${JSON.stringify(args)}\x1b[0m`,
     )
@@ -18,7 +18,7 @@ export const logResponse = (
   body: unknown,
 ) => {
   const duration = dur.toString().concat("ms")
-  if (IS_DEV_MODE) {
+  if (env.IS_DEV_MODE) {
     console.log(
       `\x1b[36m[${requestID}]\x1b[0m <= \x1b[35m${JSON.stringify({ duration, status, body })}\x1b[0m`,
     )

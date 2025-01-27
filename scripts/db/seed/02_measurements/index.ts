@@ -1,6 +1,6 @@
-import { schema } from "@nutrigym/lib/schema"
-import { generateDatesInYear } from "../../utils"
-import { pick } from "@nutrigym/lib/utils"
+import { schema } from "@nutrigym/lib/server/db/schema"
+import { generateDatesToPresent } from "../../utils"
+import { pick } from "@nutrigym/lib/objects"
 import { seed } from "drizzle-seed"
 import { randomUUID } from "crypto"
 import { eq } from "drizzle-orm"
@@ -8,7 +8,7 @@ import { env } from "../../env"
 import { db } from "../../db"
 
 type Args = {
-  year: number
+  date: Date
 }
 
 export default async function main(args: Args) {
@@ -24,14 +24,14 @@ export default async function main(args: Args) {
     .from(schema.userFood)
     .where(eq(schema.userFood.userId, userId))
 
-  const datesInYear = generateDatesInYear(args.year)
+  const allDates = generateDatesToPresent(args.date)
   const foodIds = foods.map(({ id }) => id)
-  const logIds = datesInYear.map(() => randomUUID())
+  const logIds = allDates.map(() => randomUUID())
 
   await seed(db, tables).refine((f) => {
     return {
       userMeasurementLog: {
-        count: datesInYear.length,
+        count: allDates.length,
         columns: {
           id: f.valuesFromArray({
             values: logIds,
@@ -40,13 +40,13 @@ export default async function main(args: Args) {
           createdAt: f.datetime(),
           userId: f.default({ defaultValue: userId }),
           date: f.valuesFromArray({
-            values: datesInYear,
+            values: allDates,
             isUnique: true,
           }),
         },
       },
       bodyMeasurement: {
-        count: datesInYear.length,
+        count: allDates.length,
         columns: {
           id: f.uuid(),
           createdAt: f.datetime(),
@@ -127,7 +127,7 @@ export default async function main(args: Args) {
       },
       foodMeasurement: {
         // e.g. 3 meals a day, 5 foods per meal
-        count: datesInYear.length * 3 * 5,
+        count: allDates.length * 3 * 5,
         columns: {
           id: f.uuid(),
           createdAt: f.datetime(),

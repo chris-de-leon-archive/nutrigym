@@ -1,13 +1,12 @@
 "use client"
 
+import { DateTime, Conversion } from "@nutrigym/lib/client/common"
 import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { Slider } from "@nutrigym/components/ui/slider"
 import { Button } from "@nutrigym/components/ui/button"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@nutrigym/components/ui/input"
-import { Conversion } from "@nutrigym/lib/conversion"
 import { useForm, useWatch } from "react-hook-form"
-import { DateTime } from "@nutrigym/lib/datetime"
 import { TriangleAlertIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useMemo } from "react"
@@ -29,7 +28,7 @@ import {
   CreateGoalDocument,
   UpdateGoalDocument,
   Goal,
-} from "@nutrigym/lib/client"
+} from "@nutrigym/lib/client/graphql"
 
 const formSchema = z.object({
   proteinPercentage: z.coerce.number().min(0).max(100),

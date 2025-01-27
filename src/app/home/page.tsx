@@ -6,7 +6,7 @@ import { TabsContent } from "@radix-ui/react-tabs"
 
 // TODO: allow users to export data to CSV / JSON file
 
-export default withUserInfo(async () => {
+export default withUserInfo(async (ctx) => {
   return (
     <PageMainContainer>
       <PageMainHeading name="Home" />
@@ -25,7 +25,7 @@ export default withUserInfo(async () => {
               <TrainingContent />
             </TabsContent>
             <TabsContent value="body">
-              <BodyContent />
+              <BodyContent today={ctx.meta.today} />
             </TabsContent>
           </Tabs>
         </div>
