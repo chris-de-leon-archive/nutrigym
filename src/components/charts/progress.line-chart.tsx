@@ -42,6 +42,7 @@ export type ProgressLineChartProps = {
   }[]
 }
 
+// TODO: remove?
 export function ProgressLineChart(props: ProgressLineChartProps) {
   const [datasetId, setDatasetId] = useState<string>(props.defaults.datasetId)
   const [timeRange, setTimeRange] = useState<string>(props.defaults.timeRange)
@@ -91,7 +92,6 @@ export function ProgressLineChart(props: ProgressLineChartProps) {
     <Card>
       <CardHeader className="border-b">
         <CardTitle>{props.title}</CardTitle>
-        {/* TODO: */}
         <CardDescription>Up 25% from last week/month/year</CardDescription>
       </CardHeader>
       <CardContent className="px-2 sm:p-6">

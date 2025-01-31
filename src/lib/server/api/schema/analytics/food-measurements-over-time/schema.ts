@@ -3,12 +3,12 @@ import { handler, zInput } from "./resolver"
 import { enums } from "../../enums"
 import { types } from "../types"
 
-builder.queryField("bodyMeasurementOverTime", (t) =>
+builder.queryField("foodMeasurementsOverTime", (t) =>
   t.field({
     type: [types.statistic],
     args: {
       key: t.arg({
-        type: enums.bodyMeasurementKey,
+        type: enums.foodMeasurementKey,
         required: true,
       }),
       date: t.arg({

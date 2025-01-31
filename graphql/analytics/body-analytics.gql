@@ -1,10 +1,14 @@
-query BodyMeasurementOverTime(
+query BodyAnalytics(
   $key: BodyMeasurementKey!
   $date: InclusiveDateRangeInput!
   $options: TransformationOptionsInput
 ) {
   bodyMeasurementOverTime(key: $key, date: $date, options: $options) {
-    date
+    key
+    value
+  }
+  bodyStats(date: $date) {
+    key
     value
   }
 }

@@ -1,6 +1,6 @@
-import { BodyMeasurementKey } from "@nutrigym/lib/server/enums"
+import { FoodMeasurementKey } from "@nutrigym/lib/server/enums"
 import { schema } from "@nutrigym/lib/server/db/schema"
-import { bodyMeasurementKeyToColumn } from "../utils"
+import { foodMeasurementKeyToColumn } from "../utils"
 import { eq, sql } from "drizzle-orm"
 import { z } from "zod"
 import {
@@ -12,7 +12,7 @@ import {
 
 export const zInput = z
   .object({
-    key: z.nativeEnum(BodyMeasurementKey),
+    key: z.nativeEnum(FoodMeasurementKey),
     date: z.object({
       start: z.string().date(),
       final: z.string().date(),
@@ -41,22 +41,29 @@ export const handler = async (
   ctx: GraphQLAuthContext,
 ) => {
   const window = input.options?.rollingAverage?.window
-  const column = bodyMeasurementKeyToColumn(input.key)
+  const column = foodMeasurementKeyToColumn(input.key)
 
-  // NOTE: there may be some days where the user does not record a body
-  // measurement. This query will include all these days in the result.
+  // NOTE: there may be some days where the user does not record food
+  // measurements. This query will include all these days in the result.
   // If we want to exclude all the days where the user did not record a
-  // body measurement, then inner join can be used instead.
+  // food measurement, then inner join can be used instead.
   const measurementByDate = ctx.providers.db.$with("sq1").as(
     ctx.providers.db
       .select({
         date: schema.userMeasurementLog.date,
-        value: column,
+        value:
+          sql<number>`SUM(${column} * ${schema.foodMeasurement.servingsConsumed})`.as(
+            "value",
+          ),
       })
       .from(schema.userMeasurementLog)
       .leftJoin(
-        schema.bodyMeasurement,
-        eq(schema.userMeasurementLog.id, schema.bodyMeasurement.logId),
+        schema.foodMeasurement,
+        eq(schema.userMeasurementLog.id, schema.foodMeasurement.logId),
+      )
+      .leftJoin(
+        schema.userFood,
+        eq(schema.foodMeasurement.foodId, schema.userFood.id),
       )
       .where(eq(schema.userMeasurementLog.userId, ctx.auth.user.id))
       .groupBy(schema.userMeasurementLog.date),

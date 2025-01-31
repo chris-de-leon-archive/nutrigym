@@ -15,17 +15,17 @@ export default withUserInfo(async (ctx) => {
           <Tabs defaultValue="nutrition" className="flex flex-col gap-y-5">
             <TabsList className="flex flex-row items-center justify-around">
               <TabsTrigger value="nutrition">Nutrition</TabsTrigger>
-              <TabsTrigger value="training">Training</TabsTrigger>
               <TabsTrigger value="body">Body</TabsTrigger>
+              <TabsTrigger value="training">Training</TabsTrigger>
             </TabsList>
             <TabsContent value="nutrition">
-              <NutritionContent />
-            </TabsContent>
-            <TabsContent value="training">
-              <TrainingContent />
+              <NutritionContent today={ctx.meta.today} />
             </TabsContent>
             <TabsContent value="body">
               <BodyContent today={ctx.meta.today} />
+            </TabsContent>
+            <TabsContent value="training">
+              <TrainingContent />
             </TabsContent>
           </Tabs>
         </div>

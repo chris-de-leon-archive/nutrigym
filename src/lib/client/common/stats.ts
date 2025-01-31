@@ -1,37 +1,31 @@
 import { Trend } from "./enums"
 
 export class Stats {
-  static calculateOverallTrend = (values: number[]) => {
-    if (values.length < 2) {
+  static percentChange = (
+    start: number | undefined,
+    final: number | undefined,
+  ) => {
+    if (start == null || final == null) {
       return {
-        averagePercentChange: Number.NaN,
+        percentChange: Number.NaN,
         trend: Trend.None,
       }
     }
 
-    let [totalPercentChange, count] = [0, 0]
-    for (let i = 1; i < values.length; i++) {
-      const [prev, curr] = [values[i - 1], values[i]]
-      if (prev !== 0) {
-        totalPercentChange += ((curr - prev) / prev) * 100
-        count++
-      }
-    }
-
-    if (count === 0) {
+    if (final === 0) {
       return {
-        averagePercentChange: Number.NaN,
+        percentChange: Number.NaN,
         trend: Trend.None,
       }
     }
 
-    const averagePercentChange = totalPercentChange / count
+    const percentChange = ((final - start) / final) * 100
     return {
-      averagePercentChange,
+      percentChange,
       trend:
-        averagePercentChange > 0
+        percentChange > 0
           ? Trend.Up
-          : averagePercentChange < 0
+          : percentChange < 0
             ? Trend.Down
             : Trend.Flat,
     }

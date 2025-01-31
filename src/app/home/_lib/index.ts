@@ -1,4 +1,6 @@
+export * from "./nutrition"
 export * from "./utils"
 export * from "./enums"
+export * from "./types"
 export * from "./time"
 export * from "./body"

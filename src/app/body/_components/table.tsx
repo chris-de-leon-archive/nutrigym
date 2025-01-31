@@ -1,7 +1,7 @@
 "use client"
 
+import { Card, CardContent } from "@nutrigym/components/ui/card"
 import { BodyMeasurement } from "@nutrigym/lib/client/graphql"
-import { Border } from "@nutrigym/components/border"
 import { BodyLabels } from "../_lib"
 import {
   Table,
@@ -26,23 +26,25 @@ export function BodyTable(props: BodyTableProps) {
   })
 
   return (
-    <Border>
-      <Table>
-        <TableHeader>
-          <TableRow>
-            <TableHead>Name</TableHead>
-            <TableHead>Value</TableHead>
-          </TableRow>
-        </TableHeader>
-        <TableBody>
-          {table.map((row) => (
-            <TableRow key={row.id}>
-              <TableCell className="font-medium">{row.name}</TableCell>
-              <TableCell>{row.value}</TableCell>
+    <Card>
+      <CardContent className="p-2">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              <TableHead>Name</TableHead>
+              <TableHead>Value</TableHead>
             </TableRow>
-          ))}
-        </TableBody>
-      </Table>
-    </Border>
+          </TableHeader>
+          <TableBody>
+            {table.map((row) => (
+              <TableRow key={row.id}>
+                <TableCell className="font-medium">{row.name}</TableCell>
+                <TableCell>{row.value}</TableCell>
+              </TableRow>
+            ))}
+          </TableBody>
+        </Table>
+      </CardContent>
+    </Card>
   )
 }

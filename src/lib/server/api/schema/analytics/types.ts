@@ -1,14 +1,14 @@
 import { builder } from "@nutrigym/lib/server/api"
 import { scalars } from "../scalars"
 
-const dateDataPoint = builder.objectRef<{
-  date: string
+const statistic = builder.objectRef<{
+  key: string
   value: number | null
-}>("DateDataPoint")
+}>("Statistic")
 
-builder.objectType(dateDataPoint, {
+builder.objectType(statistic, {
   fields: (t) => ({
-    date: t.expose("date", { type: scalars.localdate }),
+    key: t.exposeString("key", { nullable: false }),
     value: t.exposeFloat("value", { nullable: true }),
   }),
 })
@@ -50,5 +50,5 @@ export const types = {
   transformationOptionsInput,
   inclusiveDateRangeInput,
   rollingAverageInput,
-  dateDataPoint,
+  statistic,
 }

@@ -1,23 +1,14 @@
 import { requireAuth, builder } from "@nutrigym/lib/server/api"
 import { handler, zInput } from "./resolver"
-import { enums } from "../../enums"
 import { types } from "../types"
 
-builder.queryField("bodyMeasurementOverTime", (t) =>
+builder.queryField("bodyStats", (t) =>
   t.field({
     type: [types.statistic],
     args: {
-      key: t.arg({
-        type: enums.bodyMeasurementKey,
-        required: true,
-      }),
       date: t.arg({
         type: types.inclusiveDateRangeInput,
         required: true,
-      }),
-      options: t.arg({
-        type: types.transformationOptionsInput,
-        required: false,
       }),
     },
     validate: {

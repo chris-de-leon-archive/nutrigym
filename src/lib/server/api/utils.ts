@@ -23,6 +23,15 @@ export const compareDates = (
   )
 }
 
+export const countDays = (
+  startInc: ParsedZodDateString,
+  finalInc: ParsedZodDateString,
+) => {
+  const startDate = Date.UTC(startInc.year, startInc.month, startInc.day)
+  const finalDate = Date.UTC(finalInc.year, finalInc.month, finalInc.day)
+  return 1 + (finalDate - startDate) / 1000 / 60 / 60 / 24
+}
+
 export const asFatalZodError = (ctx: RefinementCtx, err: Error) => {
   ctx.addIssue({
     code: z.ZodIssueCode.custom,

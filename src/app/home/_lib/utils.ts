@@ -1,12 +1,12 @@
-import { DateDataPoint } from "@nutrigym/lib/client/graphql"
+import { Statistic } from "@nutrigym/lib/client/graphql"
 import { DateTime } from "@nutrigym/lib/client/common"
 
-export const formatMeasurements = (dataset: DateDataPoint[]) => {
+export const formatMeasurements = (dataset: Statistic[]) => {
   const points = new Array<Required<{ date: Date; value: number }>>()
   dataset.forEach((datapoint) => {
     if (datapoint.value != null) {
       points.push({
-        date: DateTime.parseApiDateString(datapoint.date),
+        date: DateTime.parseApiDateString(datapoint.key),
         value: datapoint.value,
       })
     }
