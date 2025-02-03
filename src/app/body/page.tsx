@@ -9,16 +9,19 @@ import {
   PageMainHeading,
   PageSubContainer,
   PageSubHeading,
+  PageSubHeadingActions,
 } from "@nutrigym/components/page"
 import {
+  BodyMeasurementsDeleteButton,
   BodyMeasurementsDialog,
   BodyGoalEditorDialog,
+  BodyGoalDeleteButton,
   BodyCharts,
   BodyTable,
 } from "./_components"
 
 export default withUserInfo(async (ctx) => {
-  const { bodyMeasurementByDate: log } = await makeRequestOrThrow(
+  const { bodyMeasurementByDate } = await makeRequestOrThrow(
     BodyMeasurementByDateDocument,
     { date: DateTime.asApiDateString(ctx.searchParams.date) },
   )
@@ -37,22 +40,33 @@ export default withUserInfo(async (ctx) => {
       <PageSubContainer>
         <PageHeadingContainer>
           <PageSubHeading name="Goals" />
-          <BodyGoalEditorDialog
-            date={ctx.searchParams.date}
-            goal={ctx.user.goal}
-          />
+          <PageSubHeadingActions>
+            <BodyGoalEditorDialog
+              date={ctx.searchParams.date}
+              goal={ctx.user.goal}
+            />
+            <BodyGoalDeleteButton goal={ctx.user.goal} />
+          </PageSubHeadingActions>
         </PageHeadingContainer>
-        <BodyCharts measurement={log} goal={ctx.user.goal} />
+        <BodyCharts measurement={bodyMeasurementByDate} goal={ctx.user.goal} />
       </PageSubContainer>
       <PageSubContainer>
         <PageHeadingContainer>
           <PageSubHeading name="Measurements" />
-          <BodyMeasurementsDialog
-            measurement={log}
-            date={ctx.searchParams.date}
-          />
+          <PageSubHeadingActions>
+            <BodyMeasurementsDialog
+              measurement={bodyMeasurementByDate}
+              date={ctx.searchParams.date}
+            />
+            <BodyMeasurementsDeleteButton
+              measurements={
+                bodyMeasurementByDate != null ? [bodyMeasurementByDate] : []
+              }
+              date={ctx.searchParams.date}
+            />
+          </PageSubHeadingActions>
         </PageHeadingContainer>
-        <BodyTable measurement={log} />
+        <BodyTable measurement={bodyMeasurementByDate} />
       </PageSubContainer>
     </PageMainContainer>
   )

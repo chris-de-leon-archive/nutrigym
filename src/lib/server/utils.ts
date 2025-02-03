@@ -1,51 +1,5 @@
 import { FormattedExecutionResult, GraphQLFormattedError } from "graphql"
-import { performance } from "node:perf_hooks"
-import { env } from "./env"
 import { z } from "zod"
-
-export const logRequest = (requestID: string, args: RequestInit) => {
-  if (env.IS_DEV_MODE) {
-    console.log(
-      `\x1b[36m[${requestID}]\x1b[0m => \x1b[32m${JSON.stringify(args)}\x1b[0m`,
-    )
-  }
-}
-
-export const logResponse = (
-  requestID: string,
-  dur: number,
-  status: number,
-  body: unknown,
-) => {
-  const duration = dur.toString().concat("ms")
-  if (env.IS_DEV_MODE) {
-    console.log(
-      `\x1b[36m[${requestID}]\x1b[0m <= \x1b[35m${JSON.stringify({ duration, status, body })}\x1b[0m`,
-    )
-  }
-}
-
-export const timeit = <
-  TArgs,
-  TTransformedArgs,
-  TResult,
-  TTransformedResult,
->(opts: {
-  before: (args: TArgs) => Promise<TTransformedArgs> | TTransformedArgs
-  fn: (args: TTransformedArgs) => Promise<TResult> | TResult
-  after: (
-    res: TResult,
-    dur: number,
-  ) => Promise<TTransformedResult> | TTransformedResult
-}) => {
-  return async (args: TArgs) => {
-    const a = await opts.before(args)
-    const s = performance.now()
-    const r = await opts.fn(a)
-    const f = performance.now()
-    return await opts.after(r, f - s)
-  }
-}
 
 export const readResponseBody = async (res: Response) => {
   if (!res.ok) {

@@ -31,6 +31,7 @@ export type PersonalInfoSetterProps = {
 }
 
 // TODO: also record the user's height and weight
+// TODO: also record user's activity level
 export function PersonalInfoSetter(props: PersonalInfoSetterProps) {
   const formSchema = z.object({
     birthday: z.date().max(props.today),

@@ -2,14 +2,16 @@ import { schema } from "@nutrigym/lib/server/db/schema"
 import { and, eq, sql } from "drizzle-orm"
 import { z } from "zod"
 import {
+  defineOperationResolver,
   GraphQLAuthContext,
   parseZodDateString,
   asFatalZodError,
+  hashGqlParams,
   compareDates,
   countDays,
 } from "@nutrigym/lib/server/api"
 
-export const zInput = z
+const zInput = z
   .object({
     date: z.object({
       start: z.string().date(),
@@ -27,17 +29,19 @@ export const zInput = z
     }
   })
 
-// TODO: caching - results should be invalidated if
-// the log or body measurement tables are modified
-export const handler = async (
+const handler = async (
   input: z.infer<typeof zInput>,
   ctx: GraphQLAuthContext,
 ) => {
+  const opStatsID = hashGqlParams(ctx.yoga.params)
   const startDate = parseZodDateString(input.date.start)
   const finalDate = parseZodDateString(input.date.final)
   const totalDays = countDays(startDate, finalDate)
   if (totalDays === 0) {
-    return []
+    return {
+      id: opStatsID,
+      data: [],
+    }
   }
 
   const totalsByDay = ctx.providers.db.$with("sq").as(
@@ -75,30 +79,38 @@ export const handler = async (
     .from(totalsByDay)
     .limit(1)
 
-  return [
-    {
-      key: "Total Number of Measurements",
-      value: result.mCount,
-    },
-    {
-      key: "Consistency %",
-      value: (result.mCount / totalDays) * 100,
-    },
-    {
-      key: "Avg. Weight (lbs)",
-      value: result.avgWeight,
-    },
-    {
-      key: "Avg. Water (ml) Intake",
-      value: result.avgWater,
-    },
-    {
-      key: "Avg. Sleep (hrs)",
-      value: result.avgSleep,
-    },
-    {
-      key: "Avg. Number of Steps",
-      value: result.avgSteps,
-    },
-  ]
+  return {
+    id: opStatsID,
+    data: [
+      {
+        key: "Total Number of Measurements",
+        value: result.mCount,
+      },
+      {
+        key: "Consistency %",
+        value: (result.mCount / totalDays) * 100,
+      },
+      {
+        key: "Avg. Weight (lbs)",
+        value: result.avgWeight,
+      },
+      {
+        key: "Avg. Water (ml) Intake",
+        value: result.avgWater,
+      },
+      {
+        key: "Avg. Sleep (hrs)",
+        value: result.avgSleep,
+      },
+      {
+        key: "Avg. Number of Steps",
+        value: result.avgSteps,
+      },
+    ],
+  }
 }
+
+export const resolver = defineOperationResolver({
+  input: zInput,
+  handler,
+})

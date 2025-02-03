@@ -1,7 +1,8 @@
-import * as resolver from "./resolver"
-import * as types from "./types"
+import { defineOperation } from "@nutrigym/lib/server/api"
+import { resolver } from "./resolver"
+import { schema } from "./schema"
 
-export const create = {
+export const create = defineOperation({
   resolver,
-  types,
-}
+  schema,
+})

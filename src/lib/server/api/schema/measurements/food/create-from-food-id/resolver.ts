@@ -5,12 +5,13 @@ import { foods } from "../../../food"
 import { types } from "../types"
 import { z } from "zod"
 import {
+  defineOperationResolver,
   ERR_ENTITY_NOT_FOUND,
   GraphQLAuthContext,
   ERR_LOG_NOT_FOUND,
 } from "@nutrigym/lib/server/api"
 
-export const zInput = z.object({
+const zInput = z.object({
   date: z.string().date(),
   data: z.object({
     servingsConsumed: z.number().min(0),
@@ -20,7 +21,7 @@ export const zInput = z.object({
   }),
 })
 
-export const handler = async (
+const handler = async (
   input: z.infer<typeof zInput>,
   ctx: GraphQLAuthContext,
 ) => {
@@ -29,9 +30,10 @@ export const handler = async (
   const userId = ctx.auth.user.id
   const date = input.date
 
-  await ctx.providers.cache.invalidate([
-    { typename: types.foodMeasurement.name },
-  ])
+  ctx.providers.invalidator.registerInvalidation({
+    request: ctx.yoga.request,
+    invalidations: [{ typename: types.objects.foodMeasurement.name }],
+  })
 
   return await ctx.providers.db.transaction(async (tx) => {
     const food = await tx.query.userFood.findFirst({
@@ -41,7 +43,10 @@ export const handler = async (
       ),
     })
     if (food == null) {
-      throw ERR_ENTITY_NOT_FOUND(foods.types.food.name, input.data.food.id)
+      throw ERR_ENTITY_NOT_FOUND(
+        foods.types.objects.food.name,
+        input.data.food.id,
+      )
     }
 
     await tx
@@ -75,3 +80,8 @@ export const handler = async (
       .returning()
   })
 }
+
+export const resolver = defineOperationResolver({
+  input: zInput,
+  handler,
+})

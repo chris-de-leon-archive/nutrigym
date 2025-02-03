@@ -1,5 +1,5 @@
 import { FoodMeasurement, schema } from "@nutrigym/lib/server/db/schema"
-import { builder } from "@nutrigym/lib/server/api"
+import { builder, defineTypes } from "@nutrigym/lib/server/api"
 import { scalars } from "../../scalars"
 import { inArray } from "drizzle-orm"
 import { foods } from "../../food"
@@ -16,10 +16,14 @@ builder.objectType(foodMeasurement, {
   }),
 })
 
-// TODO: if a food gets created/updated/removed, then all food measurements should be invalidated
+// NOTE: if a food gets updated/removed, then all food measurements that reference
+// the modified food will automatically be invalidated by the response cache plugin
+//
+// NOTE: if a new food is created, then we only need to invalidate all foods. It is
+// not necessary to invalidate food measurements
 builder.objectField(foodMeasurement, "food", (t) =>
   t.loadable({
-    type: foods.types.food,
+    type: foods.types.objects.food,
     sort: (elem) => elem.id,
     load: async (ids: string[], ctx) => {
       return await ctx.providers.db.query.userFood.findMany({
@@ -32,6 +36,9 @@ builder.objectField(foodMeasurement, "food", (t) =>
   }),
 )
 
-export const types = {
-  foodMeasurement,
-}
+export const types = defineTypes({
+  inputs: {},
+  objects: {
+    foodMeasurement,
+  },
+})

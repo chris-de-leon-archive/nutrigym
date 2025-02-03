@@ -1,17 +1,33 @@
-import { GraphQLAuthContext } from "@nutrigym/lib/server/api"
-import { and, eq, inArray } from "drizzle-orm"
 import { schema } from "@nutrigym/lib/server/db/schema"
+import { and, eq, inArray } from "drizzle-orm"
+import { types } from "../types"
 import { z } from "zod"
+import {
+  defineOperationResolver,
+  GraphQLAuthContext,
+} from "@nutrigym/lib/server/api"
 
-export const zInput = z.object({
+const zInput = z.object({
   ids: z.string().uuid().array(),
   date: z.string().date(),
 })
 
-export const handler = async (
+const handler = async (
   input: z.infer<typeof zInput>,
   ctx: GraphQLAuthContext,
 ) => {
+  if (input.ids.length === 0) {
+    return []
+  } else {
+    ctx.providers.invalidator.registerInvalidation({
+      request: ctx.yoga.request,
+      invalidations: input.ids.map((id) => ({
+        typename: types.objects.foodMeasurement.name,
+        id,
+      })),
+    })
+  }
+
   return await ctx.providers.db.transaction(async (tx) => {
     const log = await tx.query.userMeasurementLog.findFirst({
       where: and(
@@ -19,22 +35,24 @@ export const handler = async (
         eq(schema.userMeasurementLog.date, input.date),
       ),
     })
+
     if (log == null) {
       return []
     }
 
-    if (input.ids.length > 0) {
-      return await tx
-        .delete(schema.foodMeasurement)
-        .where(
-          and(
-            eq(schema.foodMeasurement.logId, log.id),
-            inArray(schema.foodMeasurement.id, input.ids),
-          ),
-        )
-        .returning()
-    } else {
-      return []
-    }
+    return await tx
+      .delete(schema.foodMeasurement)
+      .where(
+        and(
+          eq(schema.foodMeasurement.logId, log.id),
+          inArray(schema.foodMeasurement.id, input.ids),
+        ),
+      )
+      .returning()
   })
 }
+
+export const resolver = defineOperationResolver({
+  input: zInput,
+  handler,
+})

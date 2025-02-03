@@ -1,7 +1,9 @@
 import { makeRequestOrThrow } from "@nutrigym/lib/server"
+import { Loading } from "@nutrigym/components/loading"
 import { DateTime } from "@nutrigym/lib/client/common"
 import { ContentContainer } from "../shared"
 import { refetch } from "./actions"
+import { Suspense } from "react"
 import {
   FoodAnalyticsDocument,
   FoodMeasurementKey,
@@ -11,7 +13,6 @@ import {
   FoodMeasurementChartTitle,
   getDatesFromTimeRange,
   formatMeasurements,
-  timeRangeToValue,
   LineStyle,
 } from "../../_lib"
 
@@ -19,48 +20,43 @@ export type NutritionContentProps = {
   today: Date
 }
 
-export async function NutritionContent(props: NutritionContentProps) {
+export function NutritionContent(props: NutritionContentProps) {
   const defaults = {
     key: FoodMeasurementKey.Calories,
-    window: "30d",
-    range: "90d",
+    window: "None",
+    range: "7d",
   } as const
 
   const { start, final } = getDatesFromTimeRange(props.today, defaults.range)
-  const window = timeRangeToValue(defaults.window)
-  const { foodMeasurementsOverTime, foodStats } = await makeRequestOrThrow(
-    FoodAnalyticsDocument,
-    {
-      key: defaults.key,
-      date: {
-        start: DateTime.asApiDateString(start),
-        final: DateTime.asApiDateString(final),
-      },
-      options: {
-        rollingAverage: {
-          window,
-        },
-      },
+  const dataset = makeRequestOrThrow(FoodAnalyticsDocument, {
+    key: defaults.key,
+    date: {
+      start: DateTime.asApiDateString(start),
+      final: DateTime.asApiDateString(final),
     },
-  )
+  }).then(({ foodMeasurementsOverTime, foodStats }) => {
+    return {
+      ...getNutritionDatasetDetails(defaults.key),
+      points: formatMeasurements(foodMeasurementsOverTime),
+      window: defaults.window,
+      range: defaults.range,
+      stats: foodStats,
+      style: {
+        legend: true,
+        line: LineStyle.Natural,
+        dots: true,
+      },
+    }
+  })
 
   return (
-    <ContentContainer
-      titles={FoodMeasurementChartTitle}
-      today={props.today}
-      refetch={refetch}
-      dataset={{
-        ...getNutritionDatasetDetails(defaults.key),
-        points: formatMeasurements(foodMeasurementsOverTime),
-        window: defaults.window,
-        range: defaults.range,
-        stats: foodStats,
-        style: {
-          legend: true,
-          line: LineStyle.Natural,
-          dots: false,
-        },
-      }}
-    />
+    <Suspense fallback=<Loading />>
+      <ContentContainer
+        titles={FoodMeasurementChartTitle}
+        today={props.today}
+        refetch={refetch}
+        dataset={dataset}
+      />
+    </Suspense>
   )
 }

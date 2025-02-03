@@ -82,8 +82,8 @@ export function NutritionGoalEditorForm(props: NutritionGoalEditorFormProps) {
           steps: goal.steps,
         },
       }).then(() => {
-        router.refresh()
         props.onSubmit()
+        router.refresh()
       })
     } else {
       makeRequestOrThrow(CreateGoalDocument, {
@@ -99,8 +99,8 @@ export function NutritionGoalEditorForm(props: NutritionGoalEditorFormProps) {
           steps: goal.steps,
         },
       }).then(() => {
-        router.refresh()
         props.onSubmit()
+        router.refresh()
       })
     }
   }

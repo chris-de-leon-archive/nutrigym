@@ -1,11 +1,15 @@
-import { GraphQLAuthContext, ERR_LOG_NOT_FOUND } from "@nutrigym/lib/server/api"
 import { schema } from "@nutrigym/lib/server/db/schema"
 import { randomUUID } from "node:crypto"
 import { and, eq } from "drizzle-orm"
 import { types } from "../types"
 import { z } from "zod"
+import {
+  defineOperationResolver,
+  GraphQLAuthContext,
+  ERR_LOG_NOT_FOUND,
+} from "@nutrigym/lib/server/api"
 
-export const zInput = z.object({
+const zInput = z.object({
   date: z.string().date(),
   data: z.object({
     sleepInHours: z.number().min(0).max(24).nullish(),
@@ -25,7 +29,7 @@ export const zInput = z.object({
   }),
 })
 
-export const handler = async (
+const handler = async (
   input: z.infer<typeof zInput>,
   ctx: GraphQLAuthContext,
 ) => {
@@ -34,9 +38,10 @@ export const handler = async (
   const userId = ctx.auth.user.id
   const date = input.date
 
-  await ctx.providers.cache.invalidate([
-    { typename: types.bodyMeasurement.name },
-  ])
+  ctx.providers.invalidator.registerInvalidation({
+    request: ctx.yoga.request,
+    invalidations: [{ typename: types.objects.bodyMeasurement.name }],
+  })
 
   return await ctx.providers.db.transaction(async (tx) => {
     await tx
@@ -69,3 +74,8 @@ export const handler = async (
       .returning()
   })
 }
+
+export const resolver = defineOperationResolver({
+  input: zInput,
+  handler,
+})

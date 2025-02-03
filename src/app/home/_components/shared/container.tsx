@@ -1,9 +1,9 @@
 "use client"
 
 import { SettingsPopover } from "./settings.popover"
+import { use, useState } from "react"
 import { Dataset } from "../../_lib"
 import { RefetchFn } from "./types"
-import { useState } from "react"
 import { Chart } from "./chart"
 import { Stats } from "./stats"
 import {
@@ -19,7 +19,7 @@ export type ContentContainerProps<
   K extends keyof T,
 > = {
   refetch: RefetchFn<T, K>
-  dataset: Dataset<T[K]>
+  dataset: Promise<Dataset<T[K]>>
   titles: T
   today: Date
 }
@@ -28,7 +28,7 @@ export function ContentContainer<
   T extends Record<string, string>,
   K extends keyof T,
 >(props: ContentContainerProps<T, K>) {
-  const [dataset, setDataset] = useState(props.dataset)
+  const [dataset, setDataset] = useState(use(props.dataset))
 
   return (
     <div className="flex flex-col gap-y-4">

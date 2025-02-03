@@ -1,13 +1,16 @@
-import { GraphQLAuthContext } from "@nutrigym/lib/server/api"
 import { schema } from "@nutrigym/lib/server/db/schema"
 import { and, eq, sql } from "drizzle-orm"
 import { z } from "zod"
+import {
+  defineOperationResolver,
+  GraphQLAuthContext,
+} from "@nutrigym/lib/server/api"
 
-export const zInput = z.object({
+const zInput = z.object({
   date: z.string().date(),
 })
 
-export const handler = async (
+const handler = async (
   input: z.infer<typeof zInput>,
   ctx: GraphQLAuthContext,
 ) => {
@@ -40,3 +43,8 @@ export const handler = async (
     ],
   })
 }
+
+export const resolver = defineOperationResolver({
+  input: zInput,
+  handler,
+})

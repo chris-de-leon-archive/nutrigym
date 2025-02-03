@@ -48,14 +48,13 @@ export function PersonalInfoEditorForm(props: PersonalInfoEditorFormProps) {
   const router = useRouter()
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     makeRequestOrThrow(UpdateBodyDocument, {
-      id: props.body.id,
       data: {
         birthday: DateTime.asApiDateString(values.birthday),
         gender: values.gender,
       },
     }).then(() => {
-      router.refresh()
       props.onSubmit()
+      router.refresh()
     })
   }
 

@@ -104,8 +104,8 @@ export function NutritionMeasurementFromExistingFoodForm(
         food: { id: values.foodId },
       },
     }).then(() => {
-      router.refresh()
       props.onSubmit()
+      router.refresh()
     })
   }
 

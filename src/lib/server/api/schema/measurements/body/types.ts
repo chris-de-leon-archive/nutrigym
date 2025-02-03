@@ -1,5 +1,5 @@
 import { BodyMeasurement } from "@nutrigym/lib/server/db/schema"
-import { builder } from "@nutrigym/lib/server/api"
+import { builder, defineTypes } from "@nutrigym/lib/server/api"
 import { scalars } from "../../scalars"
 
 const bodyMeasurement = builder.objectRef<BodyMeasurement>("BodyMeasurement")
@@ -26,6 +26,9 @@ builder.objectType(bodyMeasurement, {
   }),
 })
 
-export const types = {
-  bodyMeasurement,
-}
+export const types = defineTypes({
+  inputs: {},
+  objects: {
+    bodyMeasurement,
+  },
+})

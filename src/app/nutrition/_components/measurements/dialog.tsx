@@ -39,38 +39,36 @@ export function NutritionMeasurementsDialog(
       </DialogTrigger>
       <DialogContent className="w-11/12">
         <DialogHeader>
-          <DialogTitle>Add Food</DialogTitle>
+          <DialogTitle>Add Food Measurement</DialogTitle>
         </DialogHeader>
-        <div>
-          <Tabs
-            defaultValue="existing"
-            className="flex flex-col items-center justify-center"
+        <Tabs
+          defaultValue="existing"
+          className="flex flex-col items-center justify-center"
+        >
+          <TabsList className="flex w-full flex-row justify-around">
+            <TabsTrigger value="existing">Existing Food</TabsTrigger>
+            <TabsTrigger value="new">New Food</TabsTrigger>
+          </TabsList>
+          <TabsContent
+            value="existing"
+            className="max-h-[75vh] min-h-[75vh] w-full overflow-y-scroll border p-5"
           >
-            <TabsList className="flex w-full flex-row justify-around">
-              <TabsTrigger value="existing">Existing Food</TabsTrigger>
-              <TabsTrigger value="new">New Food</TabsTrigger>
-            </TabsList>
-            <TabsContent
-              value="existing"
-              className="max-h-[75vh] min-h-[75vh] w-full overflow-y-scroll border p-5"
-            >
-              <NutritionMeasurementFromExistingFoodForm
-                date={props.date}
-                onSubmit={() => setOpen(false)}
-                foods={props.foods}
-              />
-            </TabsContent>
-            <TabsContent
-              value="new"
-              className="max-h-[75vh] min-h-[75vh] w-full overflow-y-scroll border p-5"
-            >
-              <NutritionMeasurementFromNewFoodForm
-                date={props.date}
-                onSubmit={() => setOpen(false)}
-              />
-            </TabsContent>
-          </Tabs>
-        </div>
+            <NutritionMeasurementFromExistingFoodForm
+              date={props.date}
+              onSubmit={() => setOpen(false)}
+              foods={props.foods}
+            />
+          </TabsContent>
+          <TabsContent
+            value="new"
+            className="max-h-[75vh] min-h-[75vh] w-full overflow-y-scroll border p-5"
+          >
+            <NutritionMeasurementFromNewFoodForm
+              date={props.date}
+              onSubmit={() => setOpen(false)}
+            />
+          </TabsContent>
+        </Tabs>
       </DialogContent>
     </Dialog>
   )

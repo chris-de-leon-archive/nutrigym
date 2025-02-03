@@ -38,6 +38,10 @@ export class DateTime {
     return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate()
   }
 
+  static prettyLocalDate = (date: Date) => {
+    return `${DateTime.getLocalMonthName(date)} ${date.getDate()}, ${date.getFullYear()}`
+  }
+
   static formatLocalDate = (date: Date) => {
     // NOTE: en-CA = YYYY-MM-DD
     return new Intl.DateTimeFormat("en-CA", {

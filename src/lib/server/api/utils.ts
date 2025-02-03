@@ -1,9 +1,46 @@
+import { GraphQLParams } from "graphql-yoga"
 import { RefinementCtx, z } from "zod"
+import * as crypto from "node:crypto"
 
 export type ParsedZodDateString = {
   month: number
   year: number
   day: number
+}
+
+export const defineOperationResolver = <TInput, THandler>(info: {
+  input: TInput
+  handler: THandler
+}) => {
+  return info
+}
+
+export const defineOperationSchema = <TInputs>(info: {
+  name: string
+  input: TInputs
+}) => {
+  return info
+}
+
+export const defineOperation = <TTypes, TResolver>(info: {
+  resolver: TResolver
+  schema: TTypes
+}) => {
+  return info
+}
+
+export const defineTypes = <TObjects, TInputs>(info: {
+  objects: TObjects
+  inputs: TInputs
+}) => {
+  return info
+}
+
+export const defineModule = <TOperations, TTypes>(info: {
+  operations: TOperations
+  types: TTypes
+}) => {
+  return info
 }
 
 export const allValuesUndefined = <T extends object>(obj: T) => {
@@ -12,6 +49,22 @@ export const allValuesUndefined = <T extends object>(obj: T) => {
 
 export const stripNull = <T>(val: T | undefined | null) => {
   return val == null ? undefined : val
+}
+
+export const hashGqlParams = (params: GraphQLParams, alg = "md5") => {
+  const { query, variables } = params
+  if (query == null) {
+    throw new Error(
+      "failed to hash graphql params - query string cannot be null or undefined",
+    )
+  }
+
+  return crypto
+    .createHash(alg)
+    .update(query)
+    .update(JSON.stringify(variables))
+    .digest()
+    .toString("hex")
 }
 
 export const compareDates = (

@@ -1,18 +1,29 @@
-import { requireAuth, builder } from "@nutrigym/lib/server/api"
-import { handler, zInput } from "./resolver"
+import { resolver } from "./resolver"
 import { types } from "../types"
+import {
+  defineOperationSchema,
+  requireAuth,
+  builder,
+} from "@nutrigym/lib/server/api"
 
-builder.queryField("foods", (t) =>
+const name = "foods"
+
+builder.queryField(name, (t) =>
   t.field({
-    type: [types.food],
+    type: [types.objects.food],
     args: {},
     validate: {
-      schema: zInput,
+      schema: resolver.input,
     },
     resolve: async (_, args, ctx) => {
       return await requireAuth(ctx, async (auth) => {
-        return await handler(args, auth)
+        return await resolver.handler(args, auth)
       })
     },
   }),
 )
+
+export const schema = defineOperationSchema({
+  name,
+  input: undefined,
+})

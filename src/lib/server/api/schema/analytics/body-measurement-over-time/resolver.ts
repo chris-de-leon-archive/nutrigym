@@ -4,13 +4,15 @@ import { bodyMeasurementKeyToColumn } from "../utils"
 import { eq, sql } from "drizzle-orm"
 import { z } from "zod"
 import {
+  defineOperationResolver,
   GraphQLAuthContext,
   parseZodDateString,
   asFatalZodError,
+  hashGqlParams,
   compareDates,
 } from "@nutrigym/lib/server/api"
 
-export const zInput = z
+const zInput = z
   .object({
     key: z.nativeEnum(BodyMeasurementKey),
     date: z.object({
@@ -34,9 +36,7 @@ export const zInput = z
     }
   })
 
-// TODO: caching - results should be invalidated if
-// the log or body measurement tables are modified
-export const handler = async (
+const handler = async (
   input: z.infer<typeof zInput>,
   ctx: GraphQLAuthContext,
 ) => {
@@ -76,12 +76,22 @@ export const handler = async (
       .from(measurementByDate),
   )
 
-  return await ctx.providers.db
+  const data = await ctx.providers.db
     .with(measurementByDate, rollingAvg)
     .select({ key: rollingAvg.date, value: rollingAvg.value })
     .from(rollingAvg)
     .where(
       sql`strftime('%s', ${rollingAvg.date}) BETWEEN strftime('%s', ${input.date.start}) AND strftime('%s', ${input.date.final})`,
     )
-    .orderBy(sql`strftime('%s', ${rollingAvg.date}) DESC`)
+    .orderBy(sql`strftime('%s', ${rollingAvg.date}) ASC`)
+
+  return {
+    id: hashGqlParams(ctx.yoga.params),
+    data,
+  }
 }
+
+export const resolver = defineOperationResolver({
+  input: zInput,
+  handler,
+})

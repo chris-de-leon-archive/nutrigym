@@ -5,7 +5,7 @@ import { LineStyle } from "./enums"
 export type Dataset<T extends string> = {
   window: OptionalTimeRangeType
   range: RequiredTimeRangeType
-  stats: Statistic[]
+  stats: Statistic
   label: string
   color: string
   units: string

@@ -1,5 +1,7 @@
-import * as types from "./types"
+import { defineOperation } from "@nutrigym/lib/server/api"
+import { schema } from "./schema"
 
-export const create = {
-  types,
-}
+export const create = defineOperation({
+  resolver: undefined,
+  schema,
+})

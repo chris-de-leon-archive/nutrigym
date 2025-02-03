@@ -1,4 +1,3 @@
-import { PersonalInfoEditorDialog, PersonalInfoTable } from "./_components"
 import { withUserInfo } from "@nutrigym/components/user"
 import { UserButton } from "@clerk/nextjs"
 import {
@@ -7,7 +6,13 @@ import {
   PageMainHeading,
   PageSubContainer,
   PageSubHeading,
+  PageSubHeadingActions,
 } from "@nutrigym/components/page"
+import {
+  PersonalInfoDeleteButton,
+  PersonalInfoEditorDialog,
+  PersonalInfoTable,
+} from "./_components"
 
 export default withUserInfo(async (ctx) => {
   // TODO: number of calories your body consumes to sustain itself
@@ -90,10 +95,13 @@ export default withUserInfo(async (ctx) => {
       <PageSubContainer>
         <PageHeadingContainer>
           <PageSubHeading name="Personal Info" />
-          <PersonalInfoEditorDialog
-            today={ctx.meta.today}
-            body={ctx.user.body}
-          />
+          <PageSubHeadingActions>
+            <PersonalInfoEditorDialog
+              today={ctx.meta.today}
+              body={ctx.user.body}
+            />
+            <PersonalInfoDeleteButton />
+          </PageSubHeadingActions>
         </PageHeadingContainer>
         <PersonalInfoTable today={ctx.meta.today} body={ctx.user.body} />
       </PageSubContainer>

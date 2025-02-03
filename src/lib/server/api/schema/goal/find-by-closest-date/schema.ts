@@ -1,22 +1,33 @@
-import { requireAuth, builder } from "@nutrigym/lib/server/api"
-import { handler, zInput } from "./resolver"
 import { scalars } from "../../scalars"
+import { resolver } from "./resolver"
 import { types } from "../types"
+import {
+  defineOperationSchema,
+  requireAuth,
+  builder,
+} from "@nutrigym/lib/server/api"
 
-builder.queryField("goalByClosestDate", (t) =>
+const name = "goalByClosestDate"
+
+builder.queryField(name, (t) =>
   t.field({
-    type: types.goal,
+    type: types.objects.goal,
     nullable: true,
     args: {
       date: t.arg({ type: scalars.localdate, required: true }),
     },
     validate: {
-      schema: zInput,
+      schema: resolver.input,
     },
     resolve: async (_, args, ctx) => {
       return await requireAuth(ctx, async (auth) => {
-        return await handler(args, auth)
+        return await resolver.handler(args, auth)
       })
     },
   }),
 )
+
+export const schema = defineOperationSchema({
+  name,
+  input: undefined,
+})

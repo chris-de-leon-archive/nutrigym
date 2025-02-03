@@ -1,13 +1,15 @@
 import { schema } from "@nutrigym/lib/server/db/schema"
 import { and, eq } from "drizzle-orm"
+import { types } from "../types"
 import { z } from "zod"
 import {
+  defineOperationResolver,
   allValuesUndefined,
   GraphQLAuthContext,
   stripNull,
 } from "@nutrigym/lib/server/api"
 
-export const zInput = z.object({
+const zInput = z.object({
   id: z.string().uuid(),
   date: z.string().date(),
   data: z.object({
@@ -28,12 +30,19 @@ export const zInput = z.object({
   }),
 })
 
-export const handler = async (
+const handler = async (
   input: z.infer<typeof zInput>,
   ctx: GraphQLAuthContext,
 ) => {
   if (allValuesUndefined(input.data)) {
     return []
+  } else {
+    ctx.providers.invalidator.registerInvalidation({
+      request: ctx.yoga.request,
+      invalidations: [
+        { typename: types.objects.bodyMeasurement.name, id: input.id },
+      ],
+    })
   }
 
   return await ctx.providers.db.transaction(async (tx) => {
@@ -43,6 +52,7 @@ export const handler = async (
         eq(schema.userMeasurementLog.date, input.date),
       ),
     })
+
     if (log == null) {
       return []
     }
@@ -63,3 +73,8 @@ export const handler = async (
       .returning()
   })
 }
+
+export const resolver = defineOperationResolver({
+  input: zInput,
+  handler,
+})

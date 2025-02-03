@@ -1,32 +1,43 @@
-import { requireAuth, builder } from "@nutrigym/lib/server/api"
-import { handler, zInput } from "./resolver"
+import { resolver } from "./resolver"
 import { enums } from "../../enums"
 import { types } from "../types"
+import {
+  defineOperationSchema,
+  requireAuth,
+  builder,
+} from "@nutrigym/lib/server/api"
 
-builder.queryField("bodyMeasurementOverTime", (t) =>
+const name = "bodyMeasurementOverTime"
+
+builder.queryField(name, (t) =>
   t.field({
-    type: [types.statistic],
+    type: types.objects.statistic,
     args: {
       key: t.arg({
         type: enums.bodyMeasurementKey,
         required: true,
       }),
       date: t.arg({
-        type: types.inclusiveDateRangeInput,
+        type: types.inputs.inclusiveDateRangeInput,
         required: true,
       }),
       options: t.arg({
-        type: types.transformationOptionsInput,
+        type: types.inputs.transformationOptionsInput,
         required: false,
       }),
     },
     validate: {
-      schema: zInput,
+      schema: resolver.input,
     },
     resolve: async (_, args, ctx) => {
       return await requireAuth(ctx, async (auth) => {
-        return await handler(args, auth)
+        return await resolver.handler(args, auth)
       })
     },
   }),
 )
+
+export const schema = defineOperationSchema({
+  name,
+  input: undefined,
+})

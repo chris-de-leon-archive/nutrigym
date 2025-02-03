@@ -1,7 +1,9 @@
-import { builder } from "@nutrigym/lib/server/api"
+import { builder, defineOperationSchema } from "@nutrigym/lib/server/api"
 import { enums } from "../../enums"
 
-export const input = builder.inputType("CreateFoodInput", {
+const name = "createFood"
+
+const input = builder.inputType("CreateFoodInput", {
   fields: (t) => ({
     name: t.string({ required: true }),
     brand: t.string({ required: true }),
@@ -22,4 +24,9 @@ export const input = builder.inputType("CreateFoodInput", {
     calciumInMilligrams: t.float({ required: false }),
     ironInMilligrams: t.float({ required: false }),
   }),
+})
+
+export const schema = defineOperationSchema({
+  name,
+  input,
 })

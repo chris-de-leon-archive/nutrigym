@@ -1,15 +1,30 @@
-import { builder } from "@nutrigym/lib/server/api"
+import { builder, defineTypes } from "@nutrigym/lib/server/api"
 import { scalars } from "../scalars"
 
-const statistic = builder.objectRef<{
+type DataPoint = {
   key: string
-  value: number | null
-}>("Statistic")
+  value: number
+}
 
-builder.objectType(statistic, {
+type Statistic = {
+  id: string
+  data: DataPoint[]
+}
+
+// TODO: this does not have an ID field - will it still be cached? If so, how?
+const datapoint = builder.objectRef<DataPoint>("DataPoint")
+builder.objectType(datapoint, {
   fields: (t) => ({
     key: t.exposeString("key", { nullable: false }),
     value: t.exposeFloat("value", { nullable: true }),
+  }),
+})
+
+const statistic = builder.objectRef<Statistic>("Statistic")
+builder.objectType(statistic, {
+  fields: (t) => ({
+    id: t.exposeString("id", { nullable: false }),
+    data: t.expose("data", { type: [datapoint], nullable: false }),
   }),
 })
 
@@ -46,9 +61,14 @@ const transformationOptionsInput = builder.inputType(
   },
 )
 
-export const types = {
-  transformationOptionsInput,
-  inclusiveDateRangeInput,
-  rollingAverageInput,
-  statistic,
-}
+export const types = defineTypes({
+  inputs: {
+    transformationOptionsInput,
+    inclusiveDateRangeInput,
+    rollingAverageInput,
+  },
+  objects: {
+    statistic,
+    datapoint,
+  },
+})

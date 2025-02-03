@@ -1,22 +1,11 @@
 "use client"
 
-import { Button } from "@nutrigym/components/ui/button"
+import { DeleteButton } from "@nutrigym/components/button"
 import { DataTableNavigation } from "./navigation"
 import { DataTableOptions } from "./options"
-import { TrashIcon } from "lucide-react"
 import { cn } from "@nutrigym/lib/utils"
 import { type ClassValue } from "clsx"
 import { useState } from "react"
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@nutrigym/components/ui/alert-dialog"
 import {
   Table,
   TableBody,
@@ -57,7 +46,6 @@ export function DataTable<TData, TValue, TColumn extends keyof TData>({
 }: DataTableProps<TData, TValue, TColumn>) {
   const [colVisibility, setColVisibility] = useState<VisibilityState>(visible)
   const [rowSelection, setRowSelection] = useState<RowSelectionState>({})
-  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
   const [sorting, setSorting] = useState<SortingState>([])
 
   const table = useReactTable({
@@ -86,7 +74,6 @@ export function DataTable<TData, TValue, TColumn extends keyof TData>({
     if (onDelete != null) {
       onDelete(selectedRows)
     }
-    setShowDeleteDialog(false)
     setRowSelection({})
   }
 
@@ -96,13 +83,7 @@ export function DataTable<TData, TValue, TColumn extends keyof TData>({
       <div className="flex w-full flex-row items-center justify-between p-3">
         <div className="flex w-3/4 flex-row items-center justify-start gap-x-2">
           <DataTableOptions table={table} />
-          <Button
-            disabled={!canDelete}
-            onClick={() => setShowDeleteDialog(true)}
-            variant="destructive"
-          >
-            <TrashIcon />
-          </Button>
+          <DeleteButton disabled={!canDelete} onDelete={handleDelete} />
         </div>
         <div className="flex w-1/4 justify-end text-center text-sm text-muted-foreground">
           {table.getFilteredSelectedRowModel().rows.length} of{" "}
@@ -166,23 +147,6 @@ export function DataTable<TData, TValue, TColumn extends keyof TData>({
       <div className="flex justify-center p-2">
         <DataTableNavigation table={table} />
       </div>
-
-      {/* Alert Dialogs */}
-      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
-        <AlertDialogContent className="w-11/12">
-          <AlertDialogHeader>
-            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
-            <AlertDialogDescription>
-              This action cannot be undone. This will permanently delete the
-              selected items.
-            </AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel>Cancel</AlertDialogCancel>
-            <AlertDialogAction onClick={handleDelete}>Delete</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
     </div>
   )
 }

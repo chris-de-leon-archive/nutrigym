@@ -1,17 +1,17 @@
-import { doPercentagesSumTo100 } from "../utils"
 import { schema } from "@nutrigym/lib/server/db/schema"
+import { doPercentagesSumTo100 } from "../utils"
 import { and, eq } from "drizzle-orm"
+import { types } from "../types"
 import { z } from "zod"
 import {
+  defineOperationResolver,
   allValuesUndefined,
   GraphQLAuthContext,
   asFatalZodError,
   stripNull,
 } from "@nutrigym/lib/server/api"
 
-// TODO: should also be able to delete goals
-// (as long as there is at least 1 remaining)
-export const zInput = z
+const zInput = z
   .object({
     id: z.string().uuid(),
     data: z.object({
@@ -36,12 +36,17 @@ export const zInput = z
     }
   })
 
-export const handler = async (
+const handler = async (
   input: z.infer<typeof zInput>,
   ctx: GraphQLAuthContext,
 ) => {
   if (allValuesUndefined(input.data)) {
     return []
+  } else {
+    ctx.providers.invalidator.registerInvalidation({
+      request: ctx.yoga.request,
+      invalidations: [{ typename: types.objects.goal.name, id: input.id }],
+    })
   }
 
   return await ctx.providers.db.transaction(async (tx) => {
@@ -66,3 +71,8 @@ export const handler = async (
       .returning()
   })
 }
+
+export const resolver = defineOperationResolver({
+  input: zInput,
+  handler,
+})

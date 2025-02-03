@@ -1,5 +1,8 @@
-import * as resolver from "./resolver"
+import { defineOperation } from "@nutrigym/lib/server/api/utils"
+import { resolver } from "./resolver"
+import { schema } from "./schema"
 
-export const findByDate = {
+export const findByDate = defineOperation({
   resolver,
-}
+  schema,
+})

@@ -1,0 +1,5 @@
+mutation RemoveGoals($ids: [Uuid!]!) {
+  removeGoals(ids: $ids) {
+    id
+  }
+}

@@ -1,11 +1,15 @@
-import { asFatalZodError, GraphQLAuthContext } from "@nutrigym/lib/server/api"
-import { doPercentagesSumTo100 } from "../utils"
 import { schema } from "@nutrigym/lib/server/db/schema"
+import { doPercentagesSumTo100 } from "../utils"
 import { randomUUID } from "node:crypto"
 import { types } from "../types"
 import { z } from "zod"
+import {
+  defineOperationResolver,
+  GraphQLAuthContext,
+  asFatalZodError,
+} from "@nutrigym/lib/server/api"
 
-export const zInput = z
+const zInput = z
   .object({
     date: z.string().date(),
     data: z.object({
@@ -30,11 +34,14 @@ export const zInput = z
     }
   })
 
-export const handler = async (
+const handler = async (
   input: z.infer<typeof zInput>,
   ctx: GraphQLAuthContext,
 ) => {
-  await ctx.providers.cache.invalidate([{ typename: types.goal.name }])
+  ctx.providers.invalidator.registerInvalidation({
+    request: ctx.yoga.request,
+    invalidations: [{ typename: types.objects.goal.name }],
+  })
 
   return await ctx.providers.db.transaction(async (tx) => {
     return await tx
@@ -49,3 +56,8 @@ export const handler = async (
       .returning()
   })
 }
+
+export const resolver = defineOperationResolver({
+  input: zInput,
+  handler,
+})

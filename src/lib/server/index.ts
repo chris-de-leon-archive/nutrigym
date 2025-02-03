@@ -3,14 +3,10 @@
 import { TypedDocumentNode } from "@graphql-typed-document-node/core"
 import { OperationDefinitionNode } from "graphql"
 import { yoga } from "@nutrigym/lib/server/yoga"
-import { randomUUID } from "node:crypto"
 import {
   handleExecutionResult,
   parseExecutionResult,
   readResponseBody,
-  logResponse,
-  logRequest,
-  timeit,
 } from "./utils"
 
 type PersistedOpFields = Partial<{ __meta__: { hash: string } }>
@@ -22,8 +18,6 @@ export const makeRequestOrThrow = async <
   document: TypedDocumentNode<TResult, TVariables> & PersistedOpFields,
   variables: TVariables,
 ) => {
-  const requestID = randomUUID()
-
   const opDefn = document.definitions.at(0)
   if (opDefn == null) {
     throw new Error(
@@ -43,23 +37,7 @@ export const makeRequestOrThrow = async <
     )
   }
 
-  const execute = timeit({
-    before: (args: RequestInit) => {
-      logRequest(requestID, args)
-      return args
-    },
-    fn: async (args) => {
-      return await yoga.fetch("http://yoga/graphql", args)
-    },
-    after: async (res, dur) => {
-      const body = await readResponseBody(res)
-      logResponse(requestID, dur, res.status, body)
-      const exec = parseExecutionResult<TResult>(body)
-      return handleExecutionResult<TResult>(exec)
-    },
-  })
-
-  return await execute({
+  const res = await yoga.fetch("http://yoga/graphql", {
     method: "POST",
     headers: { "content-type": "application/json" },
     body: JSON.stringify({
@@ -73,4 +51,8 @@ export const makeRequestOrThrow = async <
       },
     }),
   })
+
+  const body = await readResponseBody(res)
+  const exec = parseExecutionResult<TResult>(body)
+  return handleExecutionResult<TResult>(exec)
 }

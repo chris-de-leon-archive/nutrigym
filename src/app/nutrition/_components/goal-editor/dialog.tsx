@@ -1,6 +1,7 @@
 "use client"
 
 import { Button } from "@nutrigym/components/ui/button"
+import { DateTime } from "@nutrigym/lib/client/common"
 import { Goal } from "@nutrigym/lib/client/graphql"
 import { NutritionGoalEditorForm } from "./form"
 import { EditIcon } from "lucide-react"
@@ -11,6 +12,7 @@ import {
   DialogContent,
   DialogTitle,
   DialogTrigger,
+  DialogFooter,
 } from "@nutrigym/components/ui/dialog"
 
 export type NutritionGoalEditorDialogProps = {
@@ -41,6 +43,14 @@ export function NutritionGoalEditorDialog(
             goal={props.goal}
           />
         </div>
+        <DialogFooter>
+          <p className="text-center">
+            This goal was set on{" "}
+            {DateTime.prettyLocalDate(
+              DateTime.parseApiDateString(props.goal.date),
+            )}
+          </p>
+        </DialogFooter>
       </DialogContent>
     </Dialog>
   )

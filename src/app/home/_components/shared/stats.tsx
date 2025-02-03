@@ -8,7 +8,7 @@ export type StatsProps<T extends string> = {
 export function Stats<T extends string>(props: StatsProps<T>) {
   return (
     <div className="grid grid-cols-2 gap-4">
-      {props.dataset.stats.map(({ key, value }, i) => {
+      {props.dataset.stats.data.map(({ key, value }, i) => {
         return (
           <Card key={i}>
             <CardHeader className="border-b text-center text-3xl font-bold">

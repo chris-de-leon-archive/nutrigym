@@ -63,8 +63,8 @@ export function BodyGoalEditorForm(props: BodyGoalEditorFormProps) {
           steps: values.steps,
         },
       }).then(() => {
-        router.refresh()
         props.onSubmit()
+        router.refresh()
       })
     } else {
       makeRequestOrThrow(CreateGoalDocument, {
@@ -80,8 +80,8 @@ export function BodyGoalEditorForm(props: BodyGoalEditorFormProps) {
           steps: values.steps,
         },
       }).then(() => {
-        router.refresh()
         props.onSubmit()
+        router.refresh()
       })
     }
   }

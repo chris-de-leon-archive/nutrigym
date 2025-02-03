@@ -4,11 +4,17 @@ query BodyAnalytics(
   $options: TransformationOptionsInput
 ) {
   bodyMeasurementOverTime(key: $key, date: $date, options: $options) {
-    key
-    value
+    id
+    data {
+      key
+      value
+    }
   }
   bodyStats(date: $date) {
-    key
-    value
+    id
+    data {
+      key
+      value
+    }
   }
 }

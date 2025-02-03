@@ -1,4 +1,4 @@
-import { builder } from "@nutrigym/lib/server/api"
+import { builder, defineTypes } from "@nutrigym/lib/server/api"
 import { Body } from "@nutrigym/lib/server/db/schema"
 import { scalars } from "../scalars"
 import { enums } from "../enums"
@@ -15,6 +15,9 @@ builder.objectType(body, {
   }),
 })
 
-export const types = {
-  body,
-}
+export const types = defineTypes({
+  inputs: {},
+  objects: {
+    body,
+  },
+})

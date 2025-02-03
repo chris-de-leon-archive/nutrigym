@@ -12,9 +12,12 @@ import {
   PageSubHeading,
   PageHeadingContainer,
   PageMainHeading,
+  PageSubHeadingActions,
 } from "@nutrigym/components/page"
 import {
+  NutritionMeasurementsDeleteButton,
   NutritionMeasurementsDialog,
+  NutritionGoalDeleteButton,
   NutritionGoalEditorDialog,
   NutritionDataTable,
   NutritionCharts,
@@ -24,7 +27,7 @@ export default withUserInfo(async (ctx) => {
   // TODO: paginate or add virtualization
   const { foods } = await makeRequestOrThrow(FoodsDocument, {})
 
-  const { foodMeasurementsByDate: log } = await makeRequestOrThrow(
+  const { foodMeasurementsByDate } = await makeRequestOrThrow(
     FoodMeasurementsByDateDocument,
     { date: DateTime.asApiDateString(ctx.searchParams.date) },
   )
@@ -43,22 +46,37 @@ export default withUserInfo(async (ctx) => {
       <PageSubContainer>
         <PageHeadingContainer>
           <PageSubHeading name="Goals" />
-          <NutritionGoalEditorDialog
-            date={ctx.searchParams.date}
-            goal={ctx.user.goal}
-          />
+          <PageSubHeadingActions>
+            <NutritionGoalEditorDialog
+              date={ctx.searchParams.date}
+              goal={ctx.user.goal}
+            />
+            <NutritionGoalDeleteButton goal={ctx.user.goal} />
+          </PageSubHeadingActions>
         </PageHeadingContainer>
-        <NutritionCharts measurements={log} goal={ctx.user.goal} />
+        <NutritionCharts
+          measurements={foodMeasurementsByDate}
+          goal={ctx.user.goal}
+        />
       </PageSubContainer>
       <PageSubContainer>
         <PageHeadingContainer>
-          <PageSubHeading name="Foods" />
-          <NutritionMeasurementsDialog
-            date={ctx.searchParams.date}
-            foods={foods}
-          />
+          <PageSubHeading name="Measurements" />
+          <PageSubHeadingActions>
+            <NutritionMeasurementsDialog
+              date={ctx.searchParams.date}
+              foods={foods}
+            />
+            <NutritionMeasurementsDeleteButton
+              measurements={foodMeasurementsByDate}
+              date={ctx.searchParams.date}
+            />
+          </PageSubHeadingActions>
         </PageHeadingContainer>
-        <NutritionDataTable date={ctx.searchParams.date} measurements={log} />
+        <NutritionDataTable
+          date={ctx.searchParams.date}
+          measurements={foodMeasurementsByDate}
+        />
       </PageSubContainer>
     </PageMainContainer>
   )

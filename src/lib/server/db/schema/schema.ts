@@ -32,6 +32,8 @@ export const user = sqliteTable("user", {
 // as usual to the Date constructor as the local year, month, and day. This will ensure that
 // the date is always the same regardless of the local timezone. This method is also used in
 // other tables as well.
+//
+// TODO: need an enum-field to track user activity level
 export const userBody = sqliteTable(
   "user_body",
   {
@@ -257,7 +259,6 @@ export const photoMeasurement = sqliteTable("photo_measurement", {
 })
 
 // TODO:
-
 // export const loggedWorkout = sqliteTable("logged_workout", {
 //   id: text("id").primaryKey(),
 //   createdAt: integer("created_at").notNull().default(sql`(current_timestamp)`),

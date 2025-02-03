@@ -4,11 +4,17 @@ query FoodAnalytics(
   $options: TransformationOptionsInput
 ) {
   foodMeasurementsOverTime(key: $key, date: $date, options: $options) {
-    key
-    value
+    id
+    data {
+      key
+      value
+    }
   }
   foodStats(date: $date) {
-    key
-    value
+    id
+    data {
+      key
+      value
+    }
   }
 }

@@ -1,3 +1,4 @@
+export * from "./sub.heading.actions"
 export * from "./heading.container"
 export * from "./main.container"
 export * from "./sub.container"

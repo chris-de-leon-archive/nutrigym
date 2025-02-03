@@ -1,32 +1,36 @@
+import TracingPlugin, { isRootField, runFunction } from "@pothos/plugin-tracing"
+import { tracer } from "@nutrigym/lib/server/api/providers/tracer"
 import DataloaderPlugin from "@pothos/plugin-dataloader"
-import { GraphQLBaseContext } from "./types"
 import ZodPlugin from "@pothos/plugin-zod"
 import SchemaBuilder from "@pothos/core"
+import { BuilderContext } from "./types"
 import { errors } from "./errors"
 
-export const builder = new SchemaBuilder<{
-  DefaultFieldNullability: false
-  Context: GraphQLBaseContext
-  Scalars: {
-    DateTimeISO: {
-      Input: Date
-      Output: Date
-    }
-    LocalDate: {
-      Input: string
-      Output: string
-    }
-    Uuid: {
-      Input: string
-      Output: string
-    }
-  }
-}>({
+export const builder = new SchemaBuilder<BuilderContext>({
   defaultFieldNullability: false,
-  plugins: [ZodPlugin, DataloaderPlugin],
+  plugins: [TracingPlugin, ZodPlugin, DataloaderPlugin],
   zod: {
     validationError: (err) => {
       return errors.BadRequest(err.issues.at(0)?.message ?? err.message)
+    },
+  },
+  tracing: {
+    default: (c) => isRootField(c),
+    wrap: (resolver, opts, field) => {
+      return (source, args, ctx, info) => {
+        return runFunction(
+          () => resolver(source, args, ctx, info),
+          (err, dur) => {
+            tracer.record(ctx.yoga.request, {
+              field,
+              opts,
+              info,
+              err,
+              dur,
+            })
+          },
+        )
+      }
     },
   },
 })

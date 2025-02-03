@@ -1,5 +1,5 @@
-import { env } from "@nutrigym/lib/server/env"
 import { schema } from "@nutrigym/lib/server/db/schema"
+import { env } from "@nutrigym/lib/server/env"
 import { createClient } from "@libsql/client"
 import { drizzle } from "drizzle-orm/libsql"
 

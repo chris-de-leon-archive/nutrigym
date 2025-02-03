@@ -77,8 +77,8 @@ export function BodyMeasurementsForm(props: BodyMeasurementsFormProps) {
         date: DateTime.asApiDateString(props.date),
         data: values,
       }).then(() => {
-        router.refresh()
         props.onSubmit()
+        router.refresh()
       })
     } else {
       makeRequestOrThrow(UpdateBodyMeasurementDocument, {
@@ -86,8 +86,8 @@ export function BodyMeasurementsForm(props: BodyMeasurementsFormProps) {
         date: DateTime.asApiDateString(props.date),
         data: values,
       }).then(() => {
-        router.refresh()
         props.onSubmit()
+        router.refresh()
       })
     }
   }

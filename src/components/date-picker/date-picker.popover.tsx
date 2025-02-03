@@ -36,8 +36,7 @@ export function DatePickerPopover(props: DatePickerPopoverProps) {
           className="justify-start text-left font-normal"
         >
           <CalendarIcon />
-          {DateTime.getLocalMonthName(date)} {date.getDate()},{" "}
-          {date.getFullYear()}
+          {DateTime.prettyLocalDate(date)}
         </Button>
       </PopoverTrigger>
       <PopoverContent className="w-auto p-0">

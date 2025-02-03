@@ -6,12 +6,13 @@ import { foods } from "../../../food"
 import { types } from "../types"
 import { z } from "zod"
 import {
+  defineOperationResolver,
   GraphQLAuthContext,
   ERR_LOG_NOT_FOUND,
   ERR_CREATE_ENTITY,
 } from "@nutrigym/lib/server/api"
 
-export const zInput = z.object({
+const zInput = z.object({
   date: z.string().date(),
   data: z.object({
     servingsConsumed: z.number().min(0),
@@ -38,7 +39,7 @@ export const zInput = z.object({
   }),
 })
 
-export const handler = async (
+const handler = async (
   input: z.infer<typeof zInput>,
   ctx: GraphQLAuthContext,
 ) => {
@@ -49,10 +50,13 @@ export const handler = async (
   const date = input.date
 
   // TODO: food creation should be a separate mutation
-  await ctx.providers.cache.invalidate([
-    { typename: types.foodMeasurement.name },
-    { typename: foods.types.food.name },
-  ])
+  ctx.providers.invalidator.registerInvalidation({
+    request: ctx.yoga.request,
+    invalidations: [
+      { typename: types.objects.foodMeasurement.name },
+      { typename: foods.types.objects.food.name },
+    ],
+  })
 
   return await ctx.providers.db.transaction(async (tx) => {
     // TODO: throw better error message if food name already exists
@@ -79,7 +83,7 @@ export const handler = async (
       })
       .onConflictDoNothing()
     if (food.rowsAffected === 0) {
-      throw ERR_CREATE_ENTITY(foods.types.food.name)
+      throw ERR_CREATE_ENTITY(foods.types.objects.food.name)
     }
 
     await tx
@@ -113,3 +117,8 @@ export const handler = async (
       .returning()
   })
 }
+
+export const resolver = defineOperationResolver({
+  input: zInput,
+  handler,
+})
