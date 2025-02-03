@@ -70,11 +70,17 @@ const handler = async (
   const [result] = await ctx.providers.db
     .with(totalsByDay)
     .select({
+      // NOTE: if the user did not log their measurements on a particular
+      // day, then all fields for that day will be null. In this case, we
+      // arbitrarily chose the weight column to count the total number of
+      // non-null measurements. Keep in mind that it is not correct to use
+      // COUNT(*) since it will include all days even those where the user
+      // did not record a measurement.
+      measurementCount: sql<number>`COUNT(${totalsByDay.weight})`,
       avgWeight: sql<number>`AVG(${totalsByDay.weight})`,
       avgWater: sql<number>`AVG(${totalsByDay.water})`,
       avgSleep: sql<number>`AVG(${totalsByDay.sleep})`,
       avgSteps: sql<number>`AVG(${totalsByDay.steps})`,
-      mCount: sql<number>`COUNT(*)`,
     })
     .from(totalsByDay)
     .limit(1)
@@ -84,11 +90,11 @@ const handler = async (
     data: [
       {
         key: "Total Number of Measurements",
-        value: result.mCount,
+        value: result.measurementCount,
       },
       {
         key: "Consistency %",
-        value: (result.mCount / totalDays) * 100,
+        value: (result.measurementCount / totalDays) * 100,
       },
       {
         key: "Avg. Weight (lbs)",

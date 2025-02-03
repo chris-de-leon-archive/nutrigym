@@ -7,7 +7,7 @@ import {
   builder,
 } from "@nutrigym/lib/server/api"
 
-const name = 'bodyMeasurementByDate'
+const name = "bodyMeasurementByDate"
 
 builder.queryField(name, (t) =>
   t.field({
