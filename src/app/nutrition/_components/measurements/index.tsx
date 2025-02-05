@@ -1,2 +1,2 @@
-export * from "./dialog"
-export * from "./button"
+export * from "./dropdown"
+export * from "./table"

@@ -1,4 +1,5 @@
 import { Card, CardContent, CardHeader } from "@nutrigym/components/ui/card"
+import { Fmt } from "@nutrigym/lib/client/common"
 import { Dataset } from "../../_lib"
 
 export type StatsProps<T extends string> = {
@@ -12,12 +13,7 @@ export function Stats<T extends string>(props: StatsProps<T>) {
         return (
           <Card key={i}>
             <CardHeader className="border-b text-center text-3xl font-bold">
-              {value == null
-                ? Number.NaN
-                : new Intl.NumberFormat("en", {
-                    notation: "compact",
-                    maximumFractionDigits: 1,
-                  }).format(value)}
+              {value == null ? Number.NaN : Fmt.formatNumber(value)}
             </CardHeader>
             <CardContent className="p-2 text-center text-sm">{key}</CardContent>
           </Card>

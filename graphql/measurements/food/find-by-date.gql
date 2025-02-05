@@ -5,6 +5,7 @@ query FoodMeasurementsByDate($date: LocalDate!) {
     logId
     foodId
     servingsConsumed
+    mealType
     food {
       id
       name

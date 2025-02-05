@@ -1,0 +1,118 @@
+"use client"
+
+import { makeRequestOrThrow } from "@nutrigym/lib/server"
+import { Button } from "@nutrigym/components/ui/button"
+import { DateTime } from "@nutrigym/lib/client/common"
+import { MoreHorizontalIcon } from "lucide-react"
+import { BodyMeasurementForm } from "./form"
+import { useRouter } from "next/navigation"
+import { useState } from "react"
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuTrigger,
+} from "@nutrigym/components/ui/dropdown-menu"
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+} from "@nutrigym/components/ui/alert-dialog"
+import {
+  Dialog,
+  DialogHeader,
+  DialogContent,
+  DialogTitle,
+} from "@nutrigym/components/ui/dialog"
+import {
+  RemoveBodyMeasurementsDocument,
+  BodyMeasurement,
+} from "@nutrigym/lib/client/graphql"
+
+export type BodyMeasurementsDropdownMenuProps = {
+  measurement: BodyMeasurement | null | undefined
+  date: Date
+}
+
+export function BodyMeasurementsDropdownMenu(
+  props: BodyMeasurementsDropdownMenuProps,
+) {
+  const [showDeleteDialog, setShowDeleteDialog] = useState(false)
+  const [showEditDialog, setShowEditDialog] = useState(false)
+  const router = useRouter()
+
+  const onDelete = () => {
+    if (props.measurement != null) {
+      makeRequestOrThrow(RemoveBodyMeasurementsDocument, {
+        ids: [props.measurement.id],
+        date: DateTime.asApiDateString(props.date),
+      }).then(() => {
+        router.refresh()
+      })
+    }
+  }
+
+  return (
+    <>
+      <AlertDialog open={showDeleteDialog} onOpenChange={setShowDeleteDialog}>
+        <AlertDialogContent className="w-11/12">
+          <AlertDialogHeader>
+            <AlertDialogTitle>Are you sure?</AlertDialogTitle>
+            <AlertDialogDescription>
+              This will delete all body measurements for{" "}
+              {DateTime.prettyLocalDate(props.date)}. This action cannot be
+              undone.
+            </AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel>Cancel</AlertDialogCancel>
+            <AlertDialogAction
+              onClick={() => {
+                setShowDeleteDialog(false)
+                onDelete()
+              }}
+            >
+              Delete
+            </AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+      <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
+        <DialogContent className="w-11/12">
+          <DialogHeader>
+            <DialogTitle>New Measurement</DialogTitle>
+          </DialogHeader>
+          <div className="max-h-[75vh] w-full overflow-y-scroll border p-5">
+            <BodyMeasurementForm
+              onSubmit={() => setShowEditDialog(false)}
+              measurement={props.measurement}
+              date={props.date}
+            />
+          </div>
+        </DialogContent>
+      </Dialog>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="outline">
+            <MoreHorizontalIcon />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuLabel>Actions</DropdownMenuLabel>
+          <DropdownMenuItem onClick={() => setShowDeleteDialog(true)}>
+            Delete
+          </DropdownMenuItem>
+          <DropdownMenuItem onClick={() => setShowEditDialog(true)}>
+            Create
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
+    </>
+  )
+}

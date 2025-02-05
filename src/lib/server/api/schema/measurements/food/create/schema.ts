@@ -9,13 +9,13 @@ import {
   builder,
 } from "@nutrigym/lib/server/api"
 
-const name = "updateFoodMeasurement"
+const name = "createFoodMeasurement"
 
-const input = builder.inputType("UpdateFoodMeasurementInput", {
+const input = builder.inputType("CreateFoodMeasurementInput", {
   fields: (t) => ({
-    servingsConsumed: t.float({ required: false }),
-    mealType: t.field({ type: enums.mealType, required: false }),
-    food: t.field({ type: inputs.uuid, required: false }),
+    servingsConsumed: t.float({ required: true }),
+    mealType: t.field({ type: enums.mealType, required: true }),
+    food: t.field({ type: inputs.uuid, required: true }),
   }),
 })
 
@@ -23,7 +23,6 @@ builder.mutationField(name, (t) =>
   t.field({
     type: [types.objects.foodMeasurement],
     args: {
-      id: t.arg({ type: scalars.uuid, required: true }),
       date: t.arg({ type: scalars.localdate, required: true }),
       data: t.arg({ type: input, required: true }),
     },

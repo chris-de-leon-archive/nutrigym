@@ -12,12 +12,10 @@ import {
   PageSubHeadingActions,
 } from "@nutrigym/components/page"
 import {
-  BodyMeasurementsDeleteButton,
-  BodyMeasurementsDialog,
-  BodyGoalEditorDialog,
-  BodyGoalDeleteButton,
+  BodyMeasurementsDropdownMenu,
+  BodyGoalDropdownMenu,
+  BodyMeasurements,
   BodyCharts,
-  BodyTable,
 } from "./_components"
 
 export default withUserInfo(async (ctx) => {
@@ -41,11 +39,10 @@ export default withUserInfo(async (ctx) => {
         <PageHeadingContainer>
           <PageSubHeading name="Goals" />
           <PageSubHeadingActions>
-            <BodyGoalEditorDialog
+            <BodyGoalDropdownMenu
               date={ctx.searchParams.date}
               goal={ctx.user.goal}
             />
-            <BodyGoalDeleteButton goal={ctx.user.goal} />
           </PageSubHeadingActions>
         </PageHeadingContainer>
         <BodyCharts measurement={bodyMeasurementByDate} goal={ctx.user.goal} />
@@ -54,19 +51,13 @@ export default withUserInfo(async (ctx) => {
         <PageHeadingContainer>
           <PageSubHeading name="Measurements" />
           <PageSubHeadingActions>
-            <BodyMeasurementsDialog
+            <BodyMeasurementsDropdownMenu
               measurement={bodyMeasurementByDate}
-              date={ctx.searchParams.date}
-            />
-            <BodyMeasurementsDeleteButton
-              measurements={
-                bodyMeasurementByDate != null ? [bodyMeasurementByDate] : []
-              }
               date={ctx.searchParams.date}
             />
           </PageSubHeadingActions>
         </PageHeadingContainer>
-        <BodyTable measurement={bodyMeasurementByDate} />
+        <BodyMeasurements measurement={bodyMeasurementByDate} />
       </PageSubContainer>
     </PageMainContainer>
   )

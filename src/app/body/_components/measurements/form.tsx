@@ -41,13 +41,13 @@ const formSchema = z.object({
   neckInInches: z.coerce.number().min(0).optional(),
 })
 
-export type BodyMeasurementsFormProps = {
+export type BodyMeasurementFormProps = {
   measurement: BodyMeasurement | null | undefined
   onSubmit: () => void
   date: Date
 }
 
-export function BodyMeasurementsForm(props: BodyMeasurementsFormProps) {
+export function BodyMeasurementForm(props: BodyMeasurementFormProps) {
   const bodyMeasurement = props.measurement
 
   const form = useForm<z.infer<typeof formSchema>>({

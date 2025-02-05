@@ -2,6 +2,7 @@ import { FoodMeasurement, schema } from "@nutrigym/lib/server/db/schema"
 import { builder, defineTypes } from "@nutrigym/lib/server/api"
 import { scalars } from "../../scalars"
 import { inArray } from "drizzle-orm"
+import { enums } from "../../enums"
 import { foods } from "../../food"
 
 const foodMeasurement = builder.objectRef<FoodMeasurement>("FoodMeasurement")
@@ -13,6 +14,7 @@ builder.objectType(foodMeasurement, {
     logId: t.exposeString("logId"),
     foodId: t.exposeString("foodId"),
     servingsConsumed: t.exposeFloat("servingsConsumed"),
+    mealType: t.expose("mealType", { type: enums.mealType }),
   }),
 })
 

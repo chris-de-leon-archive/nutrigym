@@ -15,11 +15,9 @@ import {
   PageSubHeadingActions,
 } from "@nutrigym/components/page"
 import {
-  NutritionMeasurementsDeleteButton,
-  NutritionMeasurementsDialog,
-  NutritionGoalDeleteButton,
-  NutritionGoalEditorDialog,
-  NutritionDataTable,
+  NutritionMeasurementsDropdownMenu,
+  NutritionGoalDropdownMenu,
+  NutritionMeasurements,
   NutritionCharts,
 } from "./_components"
 
@@ -47,11 +45,10 @@ export default withUserInfo(async (ctx) => {
         <PageHeadingContainer>
           <PageSubHeading name="Goals" />
           <PageSubHeadingActions>
-            <NutritionGoalEditorDialog
+            <NutritionGoalDropdownMenu
               date={ctx.searchParams.date}
               goal={ctx.user.goal}
             />
-            <NutritionGoalDeleteButton goal={ctx.user.goal} />
           </PageSubHeadingActions>
         </PageHeadingContainer>
         <NutritionCharts
@@ -63,19 +60,17 @@ export default withUserInfo(async (ctx) => {
         <PageHeadingContainer>
           <PageSubHeading name="Measurements" />
           <PageSubHeadingActions>
-            <NutritionMeasurementsDialog
-              date={ctx.searchParams.date}
-              foods={foods}
-            />
-            <NutritionMeasurementsDeleteButton
+            <NutritionMeasurementsDropdownMenu
               measurements={foodMeasurementsByDate}
+              foods={foods}
               date={ctx.searchParams.date}
             />
           </PageSubHeadingActions>
         </PageHeadingContainer>
-        <NutritionDataTable
-          date={ctx.searchParams.date}
+        <NutritionMeasurements
           measurements={foodMeasurementsByDate}
+          foods={foods}
+          date={ctx.searchParams.date}
         />
       </PageSubContainer>
     </PageMainContainer>

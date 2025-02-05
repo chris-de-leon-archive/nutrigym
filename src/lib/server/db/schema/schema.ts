@@ -1,4 +1,4 @@
-import { Gender, ServingUnit } from "@nutrigym/lib/server/enums"
+import { Gender, MealType, ServingUnit } from "@nutrigym/lib/server/enums"
 import { sql } from "drizzle-orm"
 import {
   sqliteTable,
@@ -8,6 +8,16 @@ import {
   real,
   text,
 } from "drizzle-orm/sqlite-core"
+
+const withEnumCheck = <T>(n: string, c: T, e: Record<string, string>) => {
+  return check(
+    n,
+    sql`${c} IN (${sql.join(
+      Object.values(e).map((v) => sql.raw("'" + v + "'")),
+      sql`,`,
+    )})`,
+  )
+}
 
 // NOTE: foreign key support is not enabled by default for a local SQLite file - this must
 // be explicitly turned on by executing `PRAGMA foreign_keys = ON;` whenever a new DB sess
@@ -48,15 +58,7 @@ export const userBody = sqliteTable(
     birthday: text("birthday").notNull(),
     gender: text("gender").$type<Gender>().notNull(),
   },
-  (t) => [
-    check(
-      "valid_gender",
-      sql`${t.gender} IN (${sql.join(
-        Object.values(Gender).map((g) => sql.raw("'" + g + "'")),
-        sql`,`,
-      )})`,
-    ),
-  ],
+  (t) => [withEnumCheck("valid_gender", t.gender, Gender)],
 )
 
 // NOTE: we'll validate that the percentages sum to exactly 100 at the API layer that way we can
@@ -155,13 +157,7 @@ export const userFood = sqliteTable(
     check("nonnegative_cholesterol", sql`${t.cholesterolInMilligrams} >= 0`),
     check("nonnegative_calcium", sql`${t.calciumInMilligrams} >= 0`),
     check("nonnegative_iron", sql`${t.ironInMilligrams} >= 0`),
-    check(
-      "valid_serving_unit",
-      sql`${t.servingUnit} IN (${sql.join(
-        Object.values(ServingUnit).map((g) => sql.raw("'" + g + "'")),
-        sql`,`,
-      )})`,
-    ),
+    withEnumCheck("valid_serving_unit", t.servingUnit, ServingUnit),
   ],
 )
 
@@ -181,7 +177,6 @@ export const userMeasurementLog = sqliteTable(
 )
 
 // TODO: what should happen to a food measurement if a user deletes the food that it is referencing?
-// TODO: need a separate field to track when the food was eaten
 export const foodMeasurement = sqliteTable(
   "food_measurement",
   {
@@ -196,13 +191,14 @@ export const foodMeasurement = sqliteTable(
       .notNull()
       .references(() => userFood.id),
     servingsConsumed: real("servings_consumed").notNull(),
+    mealType: text("meal_type").$type<MealType>().notNull(),
   },
   (t) => [
     check("nonnegative_servings_consumed", sql`${t.servingsConsumed} >= 0`),
+    withEnumCheck("valid_meal_type", t.mealType, MealType),
   ],
 )
 
-// TODO: need a separate field to track when the measurement was taken?
 export const bodyMeasurement = sqliteTable(
   "body_measurement",
   {

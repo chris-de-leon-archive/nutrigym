@@ -36,8 +36,7 @@ const handler = async (
     return await tx
       .insert(schema.userBody)
       .values({
-        birthday: input.data.birthday,
-        gender: input.data.gender,
+        ...input.data,
         userId: ctx.auth.user.id,
         id: randomUUID(),
       })

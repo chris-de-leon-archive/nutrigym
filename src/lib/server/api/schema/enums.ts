@@ -3,6 +3,7 @@ import {
   BodyMeasurementKey,
   FoodMeasurementKey,
   ServingUnit,
+  MealType,
   Gender,
 } from "@nutrigym/lib/server/enums"
 
@@ -18,6 +19,10 @@ const servingUnit = builder.enumType(ServingUnit, {
   name: "ServingUnit",
 })
 
+const mealType = builder.enumType(MealType, {
+  name: "MealType",
+})
+
 const gender = builder.enumType(Gender, {
   name: "Gender",
 })
@@ -26,5 +31,6 @@ export const enums = {
   foodMeasurementKey,
   bodyMeasurementKey,
   servingUnit,
+  mealType,
   gender,
 }

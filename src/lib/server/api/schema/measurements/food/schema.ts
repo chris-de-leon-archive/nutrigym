@@ -1,5 +1,4 @@
-import "./create-from-food-details/schema"
-import "./create-from-food-id/schema"
 import "./find-by-date/schema"
+import "./create/schema"
 import "./update/schema"
 import "./remove/schema"

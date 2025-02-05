@@ -1,8 +1,12 @@
 import { PageMainContainer, PageMainHeading } from "@nutrigym/components/page"
 import { BodyContent, NutritionContent, TrainingContent } from "./_components"
-import { Tabs, TabsList, TabsTrigger } from "@nutrigym/components/ui/tabs"
 import { withUserInfo } from "@nutrigym/components/user"
-import { TabsContent } from "@radix-ui/react-tabs"
+import {
+  Tabs,
+  TabsList,
+  TabsTrigger,
+  TabsContent,
+} from "@nutrigym/components/ui/tabs"
 
 // TODO: allow users to export data to CSV / JSON file
 

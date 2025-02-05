@@ -17,6 +17,13 @@ export enum BodyMeasurementKey {
   Steps = "Steps",
 }
 
+export enum MealType {
+  Breakfast = "Breakfast",
+  Lunch = "Lunch",
+  Dinner = "Dinner",
+  Snacks = "Snacks",
+}
+
 export enum ServingUnit {
   Milliliters = "ml",
   Milligrams = "mg",

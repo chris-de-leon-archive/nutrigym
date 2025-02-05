@@ -1,8 +1,0 @@
-mutation CreateFoodMeasurementFromFoodDetails(
-  $date: LocalDate!
-  $data: CreateFoodMeasurementFromFoodDetailsInput!
-) {
-  createFoodMeasurementFromFoodDetails(date: $date, data: $data) {
-    id
-  }
-}

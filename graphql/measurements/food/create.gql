@@ -1,0 +1,8 @@
+mutation CreateFoodMeasurement(
+  $date: LocalDate!
+  $data: CreateFoodMeasurementInput!
+) {
+  createFoodMeasurement(date: $date, data: $data) {
+    id
+  }
+}

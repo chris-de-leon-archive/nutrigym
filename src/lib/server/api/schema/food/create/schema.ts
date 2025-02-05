@@ -1,5 +1,11 @@
-import { builder, defineOperationSchema } from "@nutrigym/lib/server/api"
+import { resolver } from "./resolver"
 import { enums } from "../../enums"
+import { types } from "../types"
+import {
+  defineOperationSchema,
+  requireAuth,
+  builder,
+} from "@nutrigym/lib/server/api"
 
 const name = "createFood"
 
@@ -25,6 +31,23 @@ const input = builder.inputType("CreateFoodInput", {
     ironInMilligrams: t.float({ required: false }),
   }),
 })
+
+builder.mutationField(name, (t) =>
+  t.field({
+    type: [types.objects.food],
+    args: {
+      data: t.arg({ type: input, required: true }),
+    },
+    validate: {
+      schema: resolver.input,
+    },
+    resolve: async (_, args, ctx) => {
+      return await requireAuth(ctx, async (auth) => {
+        return await resolver.handler(args, auth)
+      })
+    },
+  }),
+)
 
 export const schema = defineOperationSchema({
   name,

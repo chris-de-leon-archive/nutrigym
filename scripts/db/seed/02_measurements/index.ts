@@ -1,4 +1,5 @@
 import { schema } from "@nutrigym/lib/server/db/schema"
+import { MealType } from "@nutrigym/lib/server/enums"
 import { generateDatesToPresent } from "../../utils"
 import { pick } from "@nutrigym/lib/objects"
 import { seed } from "drizzle-seed"
@@ -144,6 +145,7 @@ export default async function main(args: Args) {
             maxValue: 2,
             precision: 2,
           }),
+          mealType: f.valuesFromArray({ values: Object.values(MealType) }),
         },
       },
     }

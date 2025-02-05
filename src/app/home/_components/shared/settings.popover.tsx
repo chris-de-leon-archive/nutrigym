@@ -1,11 +1,14 @@
 "use client"
 
-import { Popover, PopoverContent } from "@nutrigym/components/ui/popover"
 import { SettingsFormProps, createSettingsForm } from "./settings.form"
-import { PopoverTrigger } from "@radix-ui/react-popover"
 import { Button } from "@nutrigym/components/ui/button"
 import { SlidersHorizontalIcon } from "lucide-react"
 import { useState } from "react"
+import {
+  PopoverContent,
+  PopoverTrigger,
+  Popover,
+} from "@nutrigym/components/ui/popover"
 
 export type SettingsPopoverProps<
   T extends Record<string, string>,
