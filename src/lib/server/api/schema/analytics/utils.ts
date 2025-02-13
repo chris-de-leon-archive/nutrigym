@@ -1,4 +1,4 @@
-import { FoodMeasurementKey } from "@nutrigym/lib/client/graphql"
+import { FoodMeasurementKey } from "@nutrigym/lib/server/enums"
 import { BodyMeasurementKey } from "@nutrigym/lib/server/enums"
 import { AssertUnreachable } from "@nutrigym/lib/assert"
 import { schema } from "@nutrigym/lib/server/db/schema"
