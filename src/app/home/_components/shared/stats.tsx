@@ -13,7 +13,7 @@ export function Stats<T extends string>(props: StatsProps<T>) {
         return (
           <Card key={i}>
             <CardHeader className="border-b text-center text-3xl font-bold">
-              {value == null ? Number.NaN : Fmt.formatNumber(value)}
+              {value == null ? "N/A" : Fmt.formatNumber(value)}
             </CardHeader>
             <CardContent className="p-2 text-center text-sm">{key}</CardContent>
           </Card>

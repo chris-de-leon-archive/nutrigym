@@ -1,11 +1,11 @@
 "use client"
 
-import { FoodMeasurementForm } from "./food.log.form"
-import { AddFoodForm } from "./food.add.form"
 import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { Button } from "@nutrigym/components/ui/button"
 import { DateTime } from "@nutrigym/lib/client/common"
+import { FoodMeasurementForm } from "./food.log.form"
 import { MoreHorizontalIcon } from "lucide-react"
+import { AddFoodForm } from "./food.add.form"
 import { useRouter } from "next/navigation"
 import { useState } from "react"
 import {
@@ -40,7 +40,7 @@ import {
 export type NutritionMeasurementsDropdownMenuProps = {
   measurements: FoodMeasurement[]
   foods: Food[]
-  date: Date
+  date: string
 }
 
 export function NutritionMeasurementsDropdownMenu(
@@ -54,7 +54,7 @@ export function NutritionMeasurementsDropdownMenu(
   const onDelete = () => {
     makeRequestOrThrow(RemoveFoodMeasurementsDocument, {
       ids: props.measurements.map(({ id }) => id),
-      date: DateTime.asApiDateString(props.date),
+      date: props.date,
     }).then(() => {
       router.refresh()
     })
@@ -68,8 +68,10 @@ export function NutritionMeasurementsDropdownMenu(
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This will delete all food measurements for{" "}
-              {DateTime.prettyLocalDate(props.date)}. This action cannot be
-              undone.
+              {DateTime.prettyLocalDate(
+                DateTime.parseApiDateString(props.date),
+              )}
+              . This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

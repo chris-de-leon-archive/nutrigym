@@ -57,7 +57,7 @@ export function FractionalPieChart(props: FractionalPieChartProps) {
       <CardContent className="flex-1 pb-0">
         <ChartContainer
           config={chartConf}
-          className="mx-auto aspect-square max-h-[250px] pb-0 [&_.recharts-pie-label-text]:fill-foreground"
+          className="[&_.recharts-pie-label-text]:fill-foreground mx-auto aspect-square max-h-[250px] pb-0"
         >
           <PieChart>
             <ChartTooltip

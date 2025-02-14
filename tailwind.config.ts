@@ -1,18 +1,12 @@
 import type { Config } from "tailwindcss"
 
 export default {
-  darkMode: ["class"],
+  darkMode: "class",
   content: [
     "./src/components/**/*.{js,ts,jsx,tsx,mdx}",
     "./src/app/**/*.{js,ts,jsx,tsx,mdx}",
   ],
   theme: {
-    container: {
-      padding: {
-        DEFAULT: "25px",
-        lg: "100px",
-      },
-    },
     extend: {
       borderRadius: {
         lg: "var(--radius)",
@@ -63,5 +57,4 @@ export default {
       },
     },
   },
-  plugins: [require("tailwindcss-animate")],
 } satisfies Config

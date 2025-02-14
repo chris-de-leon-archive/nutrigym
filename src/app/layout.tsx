@@ -1,9 +1,10 @@
 import "./globals.css"
 
 import { SignedIn, SignedOut, SignUp } from "@clerk/nextjs"
+import { ThemeProvider } from "@nutrigym/components/theme"
 import { Header } from "@nutrigym/components/header"
+import { ClerkProvider } from "@clerk/nextjs"
 import type { Metadata } from "next"
-import Providers from "./providers"
 
 export const metadata: Metadata = {
   title: "NutriGym",
@@ -15,20 +16,27 @@ export default function RootLayout({
   children: React.ReactNode
 }>) {
   return (
-    <Providers>
-      <html lang="en">
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
         <body>
           <SignedOut>
             <SignUp />
           </SignedOut>
           <SignedIn>
-            <Header />
-            <main>
-              <section className="section min-h-screen">{children}</section>
-            </main>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="dark"
+              enableSystem
+              disableTransitionOnChange
+            >
+              <Header />
+              <main>
+                <section className="section min-h-screen">{children}</section>
+              </main>
+            </ThemeProvider>
           </SignedIn>
         </body>
       </html>
-    </Providers>
+    </ClerkProvider>
   )
 }

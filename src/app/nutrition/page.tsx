@@ -22,12 +22,14 @@ import {
 } from "./_components"
 
 export default withUserInfo(async (ctx) => {
+  const date = DateTime.asApiDateString(ctx.searchParams.date)
+
   // TODO: paginate or add virtualization
   const { foods } = await makeRequestOrThrow(FoodsDocument, {})
 
   const { foodMeasurementsByDate } = await makeRequestOrThrow(
     FoodMeasurementsByDateDocument,
-    { date: DateTime.asApiDateString(ctx.searchParams.date) },
+    { date },
   )
 
   return (
@@ -45,10 +47,7 @@ export default withUserInfo(async (ctx) => {
         <PageHeadingContainer>
           <PageSubHeading name="Goals" />
           <PageSubHeadingActions>
-            <NutritionGoalDropdownMenu
-              date={ctx.searchParams.date}
-              goal={ctx.user.goal}
-            />
+            <NutritionGoalDropdownMenu date={date} goal={ctx.user.goal} />
           </PageSubHeadingActions>
         </PageHeadingContainer>
         <NutritionCharts
@@ -63,14 +62,14 @@ export default withUserInfo(async (ctx) => {
             <NutritionMeasurementsDropdownMenu
               measurements={foodMeasurementsByDate}
               foods={foods}
-              date={ctx.searchParams.date}
+              date={date}
             />
           </PageSubHeadingActions>
         </PageHeadingContainer>
         <NutritionMeasurements
           measurements={foodMeasurementsByDate}
           foods={foods}
-          date={ctx.searchParams.date}
+          date={date}
         />
       </PageSubContainer>
     </PageMainContainer>

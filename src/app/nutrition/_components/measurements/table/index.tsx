@@ -10,13 +10,13 @@ import {
 export type NutritionMeasurementsProps = {
   measurements: FoodMeasurement[]
   foods: Food[]
-  date: Date
+  date: string
 }
 
 export function NutritionMeasurements(props: NutritionMeasurementsProps) {
   return (
     <Tabs defaultValue="breakfast" className="flex flex-col">
-      <TabsList className="flex flex-row items-center justify-around">
+      <TabsList className="flex w-full flex-row items-center justify-around">
         <TabsTrigger value="breakfast">Breakfast</TabsTrigger>
         <TabsTrigger value="lunch">Lunch</TabsTrigger>
         <TabsTrigger value="dinner">Dinner</TabsTrigger>

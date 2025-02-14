@@ -8,7 +8,7 @@ export type NutritionMeasurementsDataTableActionsProps<
   T extends { id: string },
 > = {
   table: Table<T>
-  date: Date
+  date: string
 }
 
 export function NutritionMeasurementsDataTableActions<

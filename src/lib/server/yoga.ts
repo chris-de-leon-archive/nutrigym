@@ -59,12 +59,15 @@ export const yoga = createYoga({
       },
     }),
 
+    // TODO: this plugin is very inconsistent and should be removed
+    // Instead we can just implement our own caching solution
     // Response caching: https://the-guild.dev/graphql/envelop/plugins/use-response-cache#envelopresponse-cache
     withResponseCache<GraphQLBaseContext>({
       session: async () => await auth().then(({ userId }) => userId),
       includeExtensionMetadata: env.IS_DEV_MODE,
       ttl: env.IS_DEV_MODE ? undefined : 30_000,
       invalidateViaMutation: false,
+      enabled: () => false,
       cache,
     }),
 

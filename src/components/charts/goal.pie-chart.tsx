@@ -25,7 +25,7 @@ export function GoalChart(props: GoalChartProps) {
   const chartConfig = {
     progress: {
       label: "Progress ",
-      color: "hsl(var(--chart-1))",
+      color: "var(--chart-1)",
     },
   } satisfies ChartConfig
 

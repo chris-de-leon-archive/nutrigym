@@ -13,7 +13,7 @@ import {
 export type NutritionMeasurementCellProps = {
   measurement: FoodMeasurement
   foods: Food[]
-  date: Date
+  date: string
 }
 
 export function NutritionMeasurementCell({
@@ -29,7 +29,7 @@ export function NutritionMeasurementCell({
           <div className="flex flex-col gap-y-1">
             <CardTitle>
               <div className="flex flex-row items-center justify-between">
-                <p className="w-1/2 overflow-clip text-ellipsis text-sm">
+                <p className="w-1/2 overflow-clip text-sm text-ellipsis">
                   {m.food.name}
                 </p>
                 <p className="text-sm">

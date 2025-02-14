@@ -103,21 +103,21 @@ export function PersonalGoalsSetter(props: PersonalGoalsSetterProps) {
               value: stat.proteinInGrams,
               label: "Protein",
               units: "(g)",
-              color: "hsl(var(--chart-1))",
+              color: "var(--chart-1)",
             },
             {
               category: "carbs",
               value: stat.carbsInGrams,
               label: "Carbs",
               units: "(g)",
-              color: "hsl(var(--chart-2))",
+              color: "var(--chart-2)",
             },
             {
               category: "fat",
               value: stat.fatInGrams,
               label: "Fats",
               units: "(g)",
-              color: "hsl(var(--chart-3))",
+              color: "var(--chart-3)",
             },
           ]}
         />

@@ -18,7 +18,7 @@ import {
 export type NutritionMeasurementsDataTableProps = {
   measurements: FoodMeasurement[]
   foods: Food[]
-  date: Date
+  date: string
 }
 
 export function NutritionMeasurementsDataTable(
@@ -54,7 +54,6 @@ export function NutritionMeasurementsDataTable(
     getFilteredRowModel: getFilteredRowModel(),
     getCoreRowModel: getCoreRowModel(),
     onColumnFiltersChange: setColumnFilters,
-
 
     state: {
       columnFilters,

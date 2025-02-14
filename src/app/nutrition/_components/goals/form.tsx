@@ -40,7 +40,7 @@ const formSchema = z.object({
 export type NutritionGoalEditorFormProps = {
   onSubmit: () => void
   goal: Goal
-  date: Date
+  date: string
 }
 
 export function NutritionGoalEditorForm(props: NutritionGoalEditorFormProps) {
@@ -67,8 +67,9 @@ export function NutritionGoalEditorForm(props: NutritionGoalEditorFormProps) {
 
   const router = useRouter()
   const onSubmit = (values: z.infer<typeof formSchema>) => {
+    const currDate = DateTime.parseApiDateString(props.date)
     const goalDate = DateTime.parseApiDateString(goal.date)
-    if (DateTime.isSameDay(goalDate, props.date)) {
+    if (DateTime.isSameDay(goalDate, currDate)) {
       makeRequestOrThrow(UpdateGoalDocument, {
         id: goal.id,
         data: {
@@ -87,7 +88,7 @@ export function NutritionGoalEditorForm(props: NutritionGoalEditorFormProps) {
       })
     } else {
       makeRequestOrThrow(CreateGoalDocument, {
-        date: DateTime.asApiDateString(props.date),
+        date: props.date,
         data: {
           waterInMilliliters: goal.waterInMilliliters,
           proteinPercentage: values.proteinPercentage,

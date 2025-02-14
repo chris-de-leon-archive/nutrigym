@@ -37,7 +37,7 @@ import {
 
 export type BodyMeasurementsDropdownMenuProps = {
   measurement: BodyMeasurement | null | undefined
-  date: Date
+  date: string
 }
 
 export function BodyMeasurementsDropdownMenu(
@@ -51,7 +51,7 @@ export function BodyMeasurementsDropdownMenu(
     if (props.measurement != null) {
       makeRequestOrThrow(RemoveBodyMeasurementsDocument, {
         ids: [props.measurement.id],
-        date: DateTime.asApiDateString(props.date),
+        date: props.date,
       }).then(() => {
         router.refresh()
       })
@@ -66,8 +66,10 @@ export function BodyMeasurementsDropdownMenu(
             <AlertDialogTitle>Are you sure?</AlertDialogTitle>
             <AlertDialogDescription>
               This will delete all body measurements for{" "}
-              {DateTime.prettyLocalDate(props.date)}. This action cannot be
-              undone.
+              {DateTime.prettyLocalDate(
+                DateTime.parseApiDateString(props.date),
+              )}
+              . This action cannot be undone.
             </AlertDialogDescription>
           </AlertDialogHeader>
           <AlertDialogFooter>

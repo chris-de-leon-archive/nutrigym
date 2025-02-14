@@ -2,7 +2,6 @@
 
 import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { Button } from "@nutrigym/components/ui/button"
-import { DateTime } from "@nutrigym/lib/client/common"
 import { FoodMeasurementForm } from "../food.log.form"
 import { MoreVerticalIcon } from "lucide-react"
 import { useRouter } from "next/navigation"
@@ -29,7 +28,7 @@ import {
 export type NutritionMeasurementCellActionsProps = {
   measurement: FoodMeasurement
   foods: Food[]
-  date: Date
+  date: string
 }
 
 export function NutritionMeasurementCellActions({
@@ -42,7 +41,7 @@ export function NutritionMeasurementCellActions({
 
   const onDelete = () => {
     makeRequestOrThrow(RemoveFoodMeasurementsDocument, {
-      date: DateTime.asApiDateString(d),
+      date: d,
       ids: [m.id],
     }).then(() => {
       router.refresh()

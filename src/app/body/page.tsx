@@ -19,9 +19,11 @@ import {
 } from "./_components"
 
 export default withUserInfo(async (ctx) => {
+  const date = DateTime.asApiDateString(ctx.searchParams.date)
+
   const { bodyMeasurementByDate } = await makeRequestOrThrow(
     BodyMeasurementByDateDocument,
-    { date: DateTime.asApiDateString(ctx.searchParams.date) },
+    { date },
   )
 
   return (
@@ -39,10 +41,7 @@ export default withUserInfo(async (ctx) => {
         <PageHeadingContainer>
           <PageSubHeading name="Goals" />
           <PageSubHeadingActions>
-            <BodyGoalDropdownMenu
-              date={ctx.searchParams.date}
-              goal={ctx.user.goal}
-            />
+            <BodyGoalDropdownMenu date={date} goal={ctx.user.goal} />
           </PageSubHeadingActions>
         </PageHeadingContainer>
         <BodyCharts measurement={bodyMeasurementByDate} goal={ctx.user.goal} />
@@ -53,7 +52,7 @@ export default withUserInfo(async (ctx) => {
           <PageSubHeadingActions>
             <BodyMeasurementsDropdownMenu
               measurement={bodyMeasurementByDate}
-              date={ctx.searchParams.date}
+              date={date}
             />
           </PageSubHeadingActions>
         </PageHeadingContainer>

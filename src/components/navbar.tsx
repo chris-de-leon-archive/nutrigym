@@ -21,7 +21,7 @@ export function Navbar() {
         <div className="flex w-full flex-row items-center gap-x-3">
           <div className="relative aspect-square w-1/12 overflow-clip rounded-full">
             <Image
-              className="left-0 top-0 h-full w-full object-cover"
+              className="top-0 left-0 h-full w-full object-cover"
               src="/nutrigym.webp"
               alt="nutrigym-logo"
               fill

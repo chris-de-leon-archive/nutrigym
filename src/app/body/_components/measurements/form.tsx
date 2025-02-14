@@ -2,7 +2,6 @@
 
 import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { Button } from "@nutrigym/components/ui/button"
-import { DateTime } from "@nutrigym/lib/client/common"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@nutrigym/components/ui/input"
 import { useRouter } from "next/navigation"
@@ -44,7 +43,7 @@ const formSchema = z.object({
 export type BodyMeasurementFormProps = {
   measurement: BodyMeasurement | null | undefined
   onSubmit: () => void
-  date: Date
+  date: string
 }
 
 export function BodyMeasurementForm(props: BodyMeasurementFormProps) {
@@ -74,7 +73,7 @@ export function BodyMeasurementForm(props: BodyMeasurementFormProps) {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     if (props.measurement == null) {
       makeRequestOrThrow(CreateBodyMeasurementDocument, {
-        date: DateTime.asApiDateString(props.date),
+        date: props.date,
         data: values,
       }).then(() => {
         props.onSubmit()
@@ -83,7 +82,7 @@ export function BodyMeasurementForm(props: BodyMeasurementFormProps) {
     } else {
       makeRequestOrThrow(UpdateBodyMeasurementDocument, {
         id: props.measurement.id,
-        date: DateTime.asApiDateString(props.date),
+        date: props.date,
         data: values,
       }).then(() => {
         props.onSubmit()

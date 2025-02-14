@@ -5,7 +5,6 @@ import { Card, CardContent } from "@nutrigym/components/ui/card"
 import { makeRequestOrThrow } from "@nutrigym/lib/server"
 import { Combobox } from "@nutrigym/components/combobox"
 import { Button } from "@nutrigym/components/ui/button"
-import { DateTime } from "@nutrigym/lib/client/common"
 import { zodResolver } from "@hookform/resolvers/zod"
 import { Input } from "@nutrigym/components/ui/input"
 import { useForm, useWatch } from "react-hook-form"
@@ -54,7 +53,7 @@ export type FoodMeasurementFormProps = {
   measurement: FoodMeasurement | null | undefined
   onSubmit: () => void
   foods: Food[]
-  date: Date
+  date: string
 }
 
 export function FoodMeasurementForm(props: FoodMeasurementFormProps) {
@@ -111,7 +110,7 @@ export function FoodMeasurementForm(props: FoodMeasurementFormProps) {
   const onSubmit = (values: z.infer<typeof formSchema>) => {
     if (props.measurement == null) {
       makeRequestOrThrow(CreateFoodMeasurementDocument, {
-        date: DateTime.asApiDateString(props.date),
+        date: props.date,
         data: {
           servingsConsumed: values.servingsConsumed,
           mealType: values.mealType,
@@ -124,7 +123,7 @@ export function FoodMeasurementForm(props: FoodMeasurementFormProps) {
     } else {
       makeRequestOrThrow(UpdateFoodMeasurementDocument, {
         id: props.measurement.id,
-        date: DateTime.asApiDateString(props.date),
+        date: props.date,
         data: {
           servingsConsumed: values.servingsConsumed,
           mealType: values.mealType,

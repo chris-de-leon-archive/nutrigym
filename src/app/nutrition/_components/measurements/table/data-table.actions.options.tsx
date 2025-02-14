@@ -3,7 +3,6 @@
 import { RemoveFoodMeasurementsDocument } from "@nutrigym/lib/client/graphql"
 import { DeleteButton } from "@nutrigym/components/button"
 import { makeRequestOrThrow } from "@nutrigym/lib/server"
-import { DateTime } from "@nutrigym/lib/client/common"
 import { Table } from "@tanstack/react-table"
 import { useRouter } from "next/navigation"
 
@@ -11,7 +10,7 @@ export type NutritionMeasurementsDataTableOptionsProps<
   T extends { id: string },
 > = {
   table: Table<T>
-  date: Date
+  date: string
 }
 
 export function NutritionMeasurementsDataTableOptions<
@@ -21,7 +20,7 @@ export function NutritionMeasurementsDataTableOptions<
 
   const data = {
     ids: t.getRowModel().rows.map((r) => r.original.id),
-    date: DateTime.asApiDateString(d),
+    date: d,
   }
 
   const onDelete = () => {

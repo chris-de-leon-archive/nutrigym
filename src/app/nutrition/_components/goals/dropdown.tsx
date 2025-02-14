@@ -35,7 +35,7 @@ import {
 
 export type NutritionGoalDropdownMenuProps = {
   goal: Goal
-  date: Date
+  date: string
 }
 
 export function NutritionGoalDropdownMenu(
