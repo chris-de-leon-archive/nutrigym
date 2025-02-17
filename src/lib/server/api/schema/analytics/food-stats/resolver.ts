@@ -1,5 +1,5 @@
 import { schema } from "@nutrigym/lib/server/db/schema"
-import { and, eq, sql } from "drizzle-orm"
+import { and, avg, count, eq, sql } from "drizzle-orm"
 import { z } from "zod"
 import {
   defineOperationResolver,
@@ -91,11 +91,11 @@ const handler = async (
       // non-null measurements. Keep in mind that it is not correct to use
       // COUNT(*) since it will include all days even those where the user
       // did not record a measurement.
-      measurementCount: sql<number>`COUNT(${totalsByDay.calories})`,
-      avgCalories: sql<number>`AVG(${totalsByDay.calories})`,
-      avgProtein: sql<number>`AVG(${totalsByDay.protein})`,
-      avgCarbs: sql<number>`AVG(${totalsByDay.carbs})`,
-      avgFats: sql<number>`AVG(${totalsByDay.fats})`,
+      measurementCount:  count(totalsByDay.calories),
+      avgCalories:       avg(totalsByDay.calories),
+      avgProtein:        avg(totalsByDay.protein),
+      avgCarbs:          avg(totalsByDay.carbs),
+      avgFats:           avg(totalsByDay.fats),
     })
     .from(totalsByDay)
     .limit(1)

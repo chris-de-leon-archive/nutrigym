@@ -62,7 +62,7 @@ export function NutritionMeasurementsDataTable(
 
   return (
     <div className="grid grid-cols-1 gap-2 rounded border p-2">
-      <NutritionMeasurementsDataTableActions table={table} date={props.date} />
+      <NutritionMeasurementsDataTableActions table={table} />
       <NutritionMeasurementsDataTableContent table={table} />
       <NutritionMeasurementsDataTableNavigation table={table} />
     </div>

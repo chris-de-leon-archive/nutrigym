@@ -1,5 +1,5 @@
-mutation RemoveFoodMeasurements($date: LocalDate!, $ids: [Uuid!]!) {
-  removeFoodMeasurements(date: $date, ids: $ids) {
+mutation RemoveFoodMeasurements($ids: [Uuid!]!) {
+  removeFoodMeasurements(ids: $ids) {
     id
   }
 }

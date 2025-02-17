@@ -123,7 +123,6 @@ export function FoodMeasurementForm(props: FoodMeasurementFormProps) {
     } else {
       makeRequestOrThrow(UpdateFoodMeasurementDocument, {
         id: props.measurement.id,
-        date: props.date,
         data: {
           servingsConsumed: values.servingsConsumed,
           mealType: values.mealType,

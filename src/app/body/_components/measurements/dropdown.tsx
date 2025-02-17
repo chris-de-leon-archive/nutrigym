@@ -51,7 +51,6 @@ export function BodyMeasurementsDropdownMenu(
     if (props.measurement != null) {
       makeRequestOrThrow(RemoveBodyMeasurementsDocument, {
         ids: [props.measurement.id],
-        date: props.date,
       }).then(() => {
         router.refresh()
       })

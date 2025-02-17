@@ -1,9 +1,8 @@
 mutation UpdateBodyMeasurement(
   $id: Uuid!
-  $date: LocalDate!
   $data: UpdateBodyMeasurementInput!
 ) {
-  updateBodyMeasurement(id: $id, date: $date, data: $data) {
+  updateBodyMeasurement(id: $id, data: $data) {
     id
   }
 }

@@ -1,4 +1,9 @@
 services:
+  libsql:
+    image: ghcr.io/tursodatabase/libsql-server:v0.24.32
+    container_name: libsql
+    ports:
+      - "8080:8080"
   redis:
     image: docker.io/redis:7.2.1-alpine3.18
     container_name: redis

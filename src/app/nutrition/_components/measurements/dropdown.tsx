@@ -54,7 +54,6 @@ export function NutritionMeasurementsDropdownMenu(
   const onDelete = () => {
     makeRequestOrThrow(RemoveFoodMeasurementsDocument, {
       ids: props.measurements.map(({ id }) => id),
-      date: props.date,
     }).then(() => {
       router.refresh()
     })

@@ -1,5 +1,5 @@
 import { schema } from "@nutrigym/lib/server/db/schema"
-import { and, eq } from "drizzle-orm"
+import { and, eq, inArray } from "drizzle-orm"
 import { types } from "../types"
 import { z } from "zod"
 import {
@@ -11,7 +11,6 @@ import {
 
 const zInput = z.object({
   id: z.string().uuid(),
-  date: z.string().date(),
   data: z.object({
     heightInInches: z.number().min(0).nullish(),
     weightInPounds: z.number().min(0).nullish(),
@@ -46,16 +45,19 @@ const handler = async (
   }
 
   return await ctx.providers.db.transaction(async (tx) => {
-    const log = await tx.query.userMeasurementLog.findFirst({
-      where: and(
-        eq(schema.userMeasurementLog.userId, ctx.auth.user.id),
-        eq(schema.userMeasurementLog.date, input.date),
-      ),
-    })
-
-    if (log == null) {
-      return []
-    }
+    const sq = tx
+      .select({ id: schema.bodyMeasurement.id })
+      .from(schema.bodyMeasurement)
+      .innerJoin(
+        schema.userMeasurementLog,
+        eq(schema.bodyMeasurement.logId, schema.userMeasurementLog.id),
+      )
+      .where(
+        and(
+          eq(schema.userMeasurementLog.userId, ctx.auth.user.id),
+          eq(schema.bodyMeasurement.id, input.id),
+        ),
+      )
 
     return await tx
       .update(schema.bodyMeasurement)
@@ -64,12 +66,7 @@ const handler = async (
         weightInPounds: stripNull(input.data.weightInPounds),
         heightInInches: stripNull(input.data.heightInInches),
       })
-      .where(
-        and(
-          eq(schema.bodyMeasurement.logId, log.id),
-          eq(schema.bodyMeasurement.id, input.id),
-        ),
-      )
+      .where(inArray(schema.bodyMeasurement.id, sq))
       .returning()
   })
 }

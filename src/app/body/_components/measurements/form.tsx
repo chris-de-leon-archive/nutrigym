@@ -82,7 +82,6 @@ export function BodyMeasurementForm(props: BodyMeasurementFormProps) {
     } else {
       makeRequestOrThrow(UpdateBodyMeasurementDocument, {
         id: props.measurement.id,
-        date: props.date,
         data: values,
       }).then(() => {
         props.onSubmit()

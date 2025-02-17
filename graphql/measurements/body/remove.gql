@@ -1,5 +1,5 @@
-mutation RemoveBodyMeasurements($date: LocalDate!, $ids: [Uuid!]!) {
-  removeBodyMeasurements(date: $date, ids: $ids) {
+mutation RemoveBodyMeasurements($ids: [Uuid!]!) {
+  removeBodyMeasurements(ids: $ids) {
     id
   }
 }

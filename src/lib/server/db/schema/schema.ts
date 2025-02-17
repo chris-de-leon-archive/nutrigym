@@ -1,4 +1,5 @@
 import { Gender, MealType, ServingUnit } from "@nutrigym/lib/server/enums"
+import { CurrentMsTimestamp } from "./sql"
 import { sql } from "drizzle-orm"
 import {
   sqliteTable,
@@ -28,7 +29,7 @@ export const user = sqliteTable("user", {
   id: text("id").primaryKey(),
   createdAt: integer("created_at", { mode: "timestamp_ms" })
     .notNull()
-    .default(sql`(unixepoch() * 1000)`),
+    .default(CurrentMsTimestamp),
 })
 
 // NOTE: the `birthday` is stored as a timezone agnostic date string of the form YYYY-MM-DD.
@@ -50,7 +51,7 @@ export const userBody = sqliteTable(
     id: text("id").primaryKey(),
     createdAt: integer("created_at", { mode: "timestamp_ms" })
       .notNull()
-      .default(sql`(unixepoch() * 1000)`),
+      .default(CurrentMsTimestamp),
     userId: text("user_id")
       .notNull()
       .unique()
@@ -69,7 +70,7 @@ export const userGoal = sqliteTable(
     id: text("id").primaryKey(),
     createdAt: integer("created_at", { mode: "timestamp_ms" })
       .notNull()
-      .default(sql`(unixepoch() * 1000)`),
+      .default(CurrentMsTimestamp),
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
@@ -111,7 +112,7 @@ export const userFood = sqliteTable(
     id: text("id").primaryKey(),
     createdAt: integer("created_at", { mode: "timestamp_ms" })
       .notNull()
-      .default(sql`(unixepoch() * 1000)`),
+      .default(CurrentMsTimestamp),
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
@@ -167,7 +168,7 @@ export const userMeasurementLog = sqliteTable(
     id: text("id").primaryKey(),
     createdAt: integer("created_at", { mode: "timestamp_ms" })
       .notNull()
-      .default(sql`(unixepoch() * 1000)`),
+      .default(CurrentMsTimestamp),
     userId: text("user_id")
       .notNull()
       .references(() => user.id, { onDelete: "cascade" }),
@@ -183,7 +184,7 @@ export const foodMeasurement = sqliteTable(
     id: text("id").primaryKey(),
     createdAt: integer("created_at", { mode: "timestamp_ms" })
       .notNull()
-      .default(sql`(unixepoch() * 1000)`),
+      .default(CurrentMsTimestamp),
     logId: text("log_id")
       .notNull()
       .references(() => userMeasurementLog.id, { onDelete: "cascade" }),
@@ -205,7 +206,7 @@ export const bodyMeasurement = sqliteTable(
     id: text("id").primaryKey(),
     createdAt: integer("created_at", { mode: "timestamp_ms" })
       .notNull()
-      .default(sql`(unixepoch() * 1000)`),
+      .default(CurrentMsTimestamp),
     logId: text("log_id")
       .notNull()
       .unique()
@@ -247,7 +248,7 @@ export const photoMeasurement = sqliteTable("photo_measurement", {
   id: text("id").primaryKey(),
   createdAt: integer("created_at", { mode: "timestamp_ms" })
     .notNull()
-    .default(sql`(unixepoch() * 1000)`),
+    .default(CurrentMsTimestamp),
   logId: text("log_id")
     .notNull()
     .references(() => userMeasurementLog.id, { onDelete: "cascade" }),

@@ -41,7 +41,6 @@ export function NutritionMeasurementCellActions({
 
   const onDelete = () => {
     makeRequestOrThrow(RemoveFoodMeasurementsDocument, {
-      date: d,
       ids: [m.id],
     }).then(() => {
       router.refresh()

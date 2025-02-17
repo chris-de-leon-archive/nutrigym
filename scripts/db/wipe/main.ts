@@ -1,6 +1,7 @@
-import * as fs from "node:fs"
-import { env } from "../env"
+import { schema } from "@nutrigym/lib/server/db/schema";
+import { reset } from "drizzle-seed";
+import { db } from "../db";
 
 if (require.main === module) {
-  fs.rmSync(env.DATABASE_URL.replace(/^file:/, ""), { force: true })
+  reset(db, schema)
 }

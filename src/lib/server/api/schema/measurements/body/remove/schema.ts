@@ -14,7 +14,6 @@ builder.mutationField(name, (t) =>
     type: [types.objects.bodyMeasurement],
     args: {
       ids: t.arg({ type: [scalars.uuid], required: true }),
-      date: t.arg({ type: scalars.localdate, required: true }),
     },
     validate: {
       schema: resolver.input,

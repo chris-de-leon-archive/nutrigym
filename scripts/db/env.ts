@@ -1,9 +1,12 @@
+import { environment } from "@nutrigym/lib/env"
 import { randomUUID } from "node:crypto"
 import { z } from "zod"
 
+console.log(environment().entries())
+
 export const env = z
   .object({
-    DATABASE_URL: z.string().startsWith("file:").endsWith(".db"),
     CLERK_USER_ID: z.string().default(randomUUID()),
+    DATABASE_URL: z.string(),
   })
-  .parse(process.env)
+  .parse(environment().entries())

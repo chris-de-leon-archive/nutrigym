@@ -1,7 +1,7 @@
 import { schema } from "@nutrigym/lib/server/db/schema"
 import { MealType } from "@nutrigym/lib/server/enums"
 import { foods } from "../../../food"
-import { and, eq } from "drizzle-orm"
+import { and, eq, inArray } from "drizzle-orm"
 import { types } from "../types"
 import { z } from "zod"
 import {
@@ -14,7 +14,6 @@ import {
 
 const zInput = z.object({
   id: z.string().uuid(),
-  date: z.string().date(),
   data: z.object({
     servingsConsumed: z.number().min(0).nullish(),
     mealType: z.nativeEnum(MealType).nullish(),
@@ -53,6 +52,7 @@ const handler = async (
               eq(schema.userFood.id, input.data.food.id),
             ),
           })
+
     if (input.data.food != null && food == null) {
       throw ERR_ENTITY_NOT_FOUND(
         foods.types.objects.food.name,
@@ -60,15 +60,19 @@ const handler = async (
       )
     }
 
-    const log = await tx.query.userMeasurementLog.findFirst({
-      where: and(
-        eq(schema.userMeasurementLog.userId, userId),
-        eq(schema.userMeasurementLog.date, input.date),
-      ),
-    })
-    if (log == null) {
-      return []
-    }
+    const sq = tx
+      .select({ id: schema.foodMeasurement.id })
+      .from(schema.foodMeasurement)
+      .innerJoin(
+        schema.userMeasurementLog,
+        eq(schema.foodMeasurement.logId, schema.userMeasurementLog.id),
+      )
+      .where(
+        and(
+          eq(schema.userMeasurementLog.userId, ctx.auth.user.id),
+          eq(schema.foodMeasurement.id, input.id),
+        ),
+      )
 
     return await tx
       .update(schema.foodMeasurement)
@@ -78,12 +82,7 @@ const handler = async (
         mealType: stripNull(input.data.mealType),
         foodId: stripNull(food?.id),
       })
-      .where(
-        and(
-          eq(schema.foodMeasurement.logId, log.id),
-          eq(schema.foodMeasurement.id, input.id),
-        ),
-      )
+      .where(inArray(schema.foodMeasurement.id, sq))
       .returning()
   })
 }

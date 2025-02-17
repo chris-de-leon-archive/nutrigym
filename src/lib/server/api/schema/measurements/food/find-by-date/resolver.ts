@@ -1,5 +1,5 @@
 import { schema } from "@nutrigym/lib/server/db/schema"
-import { and, eq } from "drizzle-orm"
+import { and, eq, getTableColumns } from "drizzle-orm"
 import { z } from "zod"
 import {
   defineOperationResolver,
@@ -15,20 +15,19 @@ const handler = async (
   ctx: GraphQLAuthContext,
 ) => {
   return await ctx.providers.db.transaction(async (tx) => {
-    const log = await tx.query.userMeasurementLog.findFirst({
-      where: and(
-        eq(schema.userMeasurementLog.userId, ctx.auth.user.id),
-        eq(schema.userMeasurementLog.date, input.date),
-      ),
-    })
-
-    if (log == null) {
-      return []
-    }
-
-    return await ctx.providers.db.query.foodMeasurement.findMany({
-      where: eq(schema.foodMeasurement.logId, log.id),
-    })
+    return await tx
+      .select({ ...getTableColumns(schema.foodMeasurement) })
+      .from(schema.foodMeasurement)
+      .innerJoin(
+        schema.userMeasurementLog,
+        eq(schema.foodMeasurement.logId, schema.userMeasurementLog.id),
+      )
+      .where(
+        and(
+          eq(schema.userMeasurementLog.userId, ctx.auth.user.id),
+          eq(schema.userMeasurementLog.date, input.date),
+        ),
+      )
   })
 }
 

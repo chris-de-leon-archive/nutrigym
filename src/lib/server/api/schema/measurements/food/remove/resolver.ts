@@ -9,7 +9,6 @@ import {
 
 const zInput = z.object({
   ids: z.string().uuid().array(),
-  date: z.string().date(),
 })
 
 const handler = async (
@@ -29,25 +28,23 @@ const handler = async (
   }
 
   return await ctx.providers.db.transaction(async (tx) => {
-    const log = await tx.query.userMeasurementLog.findFirst({
-      where: and(
-        eq(schema.userMeasurementLog.userId, ctx.auth.user.id),
-        eq(schema.userMeasurementLog.date, input.date),
-      ),
-    })
-
-    if (log == null) {
-      return []
-    }
-
-    return await tx
-      .delete(schema.foodMeasurement)
+    const sq = tx
+      .select({ id: schema.foodMeasurement.id })
+      .from(schema.foodMeasurement)
+      .innerJoin(
+        schema.userMeasurementLog,
+        eq(schema.foodMeasurement.logId, schema.userMeasurementLog.id),
+      )
       .where(
         and(
-          eq(schema.foodMeasurement.logId, log.id),
+          eq(schema.userMeasurementLog.userId, ctx.auth.user.id),
           inArray(schema.foodMeasurement.id, input.ids),
         ),
       )
+
+    return await tx
+      .delete(schema.foodMeasurement)
+      .where(inArray(schema.foodMeasurement.id, sq))
       .returning()
   })
 }
