@@ -1,6 +1,5 @@
 import { schema } from "@nutrigym/lib/server/db/schema"
 import { and, eq, inArray } from "drizzle-orm"
-import { types } from "../types"
 import { z } from "zod"
 import {
   defineOperationResolver,
@@ -17,14 +16,6 @@ const handler = async (
 ) => {
   if (input.ids.length === 0) {
     return []
-  } else {
-    ctx.providers.invalidator.registerInvalidation({
-      request: ctx.yoga.request,
-      invalidations: input.ids.map((id) => ({
-        typename: types.objects.foodMeasurement.name,
-        id,
-      })),
-    })
   }
 
   return await ctx.providers.db.transaction(async (tx) => {

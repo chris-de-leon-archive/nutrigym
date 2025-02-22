@@ -78,12 +78,12 @@ export class DateTime {
   }
 
   static asApiDateString = (date: Date) => {
-    // NOTE: the API cache uses the input data to construct a cache key. If the
-    // input variables change, then a new cache key will be created, so we need
-    // to be especially careful with dates. Many API endpoints only care about
-    // the YYYY-MM-DD portion of a date, so if we pass in dates that reference
-    // the same YYYY-MM-DD but have different times attached to them, then this
-    // will cause new cache keys to be created, which will reduce performance.
+    // NOTE: for caching, the input data is usually used to construct a cache key.
+    // If the input variables change, then a new cache key will be created, so we
+    // need to be especially careful with dates. Many API endpoints only care about
+    // the YYYY-MM-DD portion of a date, so if we pass in dates that reference the
+    // same YYYY-MM-DD but have different times attached to them, then this will
+    // cause new cache keys to be created, which will reduce performance.
     return new Intl.DateTimeFormat("en-CA", {
       year: "numeric",
       month: "2-digit",

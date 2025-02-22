@@ -1,7 +1,6 @@
 import { schema } from "@nutrigym/lib/server/db/schema"
 import { doPercentagesSumTo100 } from "../utils"
 import { and, eq } from "drizzle-orm"
-import { types } from "../types"
 import { z } from "zod"
 import {
   defineOperationResolver,
@@ -42,11 +41,6 @@ const handler = async (
 ) => {
   if (allValuesUndefined(input.data)) {
     return []
-  } else {
-    ctx.providers.invalidator.registerInvalidation({
-      request: ctx.yoga.request,
-      invalidations: [{ typename: types.objects.goal.name, id: input.id }],
-    })
   }
 
   return await ctx.providers.db.transaction(async (tx) => {

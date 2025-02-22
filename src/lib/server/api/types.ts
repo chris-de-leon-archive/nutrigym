@@ -1,7 +1,5 @@
 import { tracer } from "@nutrigym/lib/server/api/providers/tracer"
-import { cache } from "@nutrigym/lib/server/api/providers/cache"
 import { clerk } from "@nutrigym/lib/server/api/providers/clerk"
-import { invalidator } from "./providers/cache-invalidator"
 import { db } from "@nutrigym/lib/server/api/providers/db"
 import { YogaInitialContext } from "graphql-yoga"
 import { env } from "@nutrigym/lib/server/env"
@@ -30,10 +28,8 @@ export type BaseContext = Readonly<{
   date: Date
   env: typeof env
   providers: Readonly<{
-    invalidator: typeof invalidator
     tracer: typeof tracer
     clerk: typeof clerk
-    cache: typeof cache
     db: typeof db
   }>
 }>

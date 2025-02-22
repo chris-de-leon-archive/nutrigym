@@ -2,7 +2,6 @@ import { schema } from "@nutrigym/lib/server/db/schema"
 import { Gender } from "@nutrigym/lib/server/enums"
 import { isBirthdayInFuture } from "../utils"
 import { eq } from "drizzle-orm"
-import { types } from "../types"
 import { z } from "zod"
 import {
   defineOperationResolver,
@@ -26,11 +25,6 @@ const handler = async (
 ) => {
   if (allValuesUndefined(input.data)) {
     return []
-  } else {
-    ctx.providers.invalidator.registerInvalidation({
-      request: ctx.yoga.request,
-      invalidations: [{ typename: types.objects.body.name }],
-    })
   }
 
   if (input.data.birthday != null) {

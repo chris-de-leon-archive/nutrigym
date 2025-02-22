@@ -34,7 +34,6 @@
             pkgs.lastpass-cli
             pkgs.nodejs
             pkgs.sqlite
-            pkgs.redis
             pkgs.scli
           ];
         };

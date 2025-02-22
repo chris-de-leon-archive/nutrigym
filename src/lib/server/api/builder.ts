@@ -15,6 +15,7 @@ export const builder = new SchemaBuilder<BuilderContext>({
     },
   },
   tracing: {
+    // TODO: decide whether or not we need the tracing plugin
     default: (c) => isRootField(c),
     wrap: (resolver, opts, field) => {
       return (source, args, ctx, info) => {

@@ -105,27 +105,27 @@ const handler = async (
     data: [
       {
         key: "Total Number of Measurements",
-        value: result.measurementCount,
+        value: result.measurementCount.toString(),
       },
       {
         key: "Consistency %",
-        value: (result.measurementCount / totalDays) * 100,
+        value: ((result.measurementCount / totalDays) * 100).toString(),
       },
       {
         key: "Avg. Calories Eaten Per Day",
-        value: result.avgCalories,
+        value: result.avgCalories ?? "N/A",
       },
       {
         key: "Avg. Protein (g) Eaten Per Day",
-        value: result.avgProtein,
+        value: result.avgProtein ?? "N/A",
       },
       {
         key: "Avg. Carbs (g) Eaten Per Day",
-        value: result.avgCarbs,
+        value: result.avgCarbs ?? "N/A",
       },
       {
         key: "Avg. Fat (g) Eaten Per Day",
-        value: result.avgFats,
+        value: result.avgFats ?? "N/A",
       },
     ],
   }

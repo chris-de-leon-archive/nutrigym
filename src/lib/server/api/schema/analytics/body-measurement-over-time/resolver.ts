@@ -51,7 +51,7 @@ const handler = async (
     ctx.providers.db
       .select({
         date: schema.userMeasurementLog.date,
-        value: column,
+        value: sql<(typeof column)["dataType"]>`${column}`.as("value"),
       })
       .from(schema.userMeasurementLog)
       .leftJoin(
@@ -68,7 +68,7 @@ const handler = async (
         date: measurementByDate.date,
         value:
           window != null
-            ? sql<number>`AVG(${measurementByDate.value}) OVER (ORDER BY strftime('%s', ${measurementByDate.date}) ROWS BETWEEN ${window - 1} PRECEDING AND CURRENT ROW)`.as(
+            ? sql<string>`AVG(${measurementByDate.value}) OVER (ORDER BY strftime('%s', ${measurementByDate.date}) ROWS BETWEEN ${window - 1} PRECEDING AND CURRENT ROW)`.as(
                 "value",
               )
             : measurementByDate.value,

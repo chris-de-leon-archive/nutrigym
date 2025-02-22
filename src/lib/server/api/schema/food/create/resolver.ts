@@ -1,7 +1,6 @@
 import { ServingUnit } from "@nutrigym/lib/server/enums"
 import { schema } from "@nutrigym/lib/server/db/schema"
 import { randomUUID } from "node:crypto"
-import { types } from "../types"
 import { z } from "zod"
 import {
   defineOperationResolver,
@@ -35,11 +34,6 @@ const handler = async (
   input: z.infer<typeof zInput>,
   ctx: GraphQLAuthContext,
 ) => {
-  ctx.providers.invalidator.registerInvalidation({
-    request: ctx.yoga.request,
-    invalidations: [{ typename: types.objects.food.name }],
-  })
-
   return await ctx.providers.db.transaction(async (tx) => {
     // TODO: throw better error message if food name already exists
     // (e.g. if (err instanceof LibsqlError) {...}) or remove unique

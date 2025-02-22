@@ -1,7 +1,7 @@
 import { FoodMeasurementKey } from "@nutrigym/lib/server/enums"
 import { schema } from "@nutrigym/lib/server/db/schema"
 import { foodMeasurementKeyToColumn } from "../utils"
-import { eq, sql } from "drizzle-orm"
+import { eq, sql, sum } from "drizzle-orm"
 import { z } from "zod"
 import {
   defineOperationResolver,
@@ -51,10 +51,11 @@ const handler = async (
     ctx.providers.db
       .select({
         date: schema.userMeasurementLog.date,
-        value:
-          sql<number>`SUM(${column} * ${schema.foodMeasurement.servingsConsumed})`.as(
-            "value",
-          ),
+        value: sum(
+          sql`COALESCE(${column}, 0) * ${schema.foodMeasurement.servingsConsumed}`,
+        )
+          .mapWith(String)
+          .as("value"),
       })
       .from(schema.userMeasurementLog)
       .leftJoin(
@@ -75,7 +76,7 @@ const handler = async (
         date: measurementByDate.date,
         value:
           window != null
-            ? sql<number>`AVG(${measurementByDate.value}) OVER (ORDER BY strftime('%s', ${measurementByDate.date}) ROWS BETWEEN ${window - 1} PRECEDING AND CURRENT ROW)`.as(
+            ? sql<string>`AVG(${measurementByDate.value}) OVER (ORDER BY strftime('%s', ${measurementByDate.date}) ROWS BETWEEN ${window - 1} PRECEDING AND CURRENT ROW)`.as(
                 "value",
               )
             : measurementByDate.value,

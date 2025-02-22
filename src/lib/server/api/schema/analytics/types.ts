@@ -3,7 +3,7 @@ import { scalars } from "../scalars"
 
 type DataPoint = {
   key: string
-  value: number
+  value: string
 }
 
 type Statistic = {
@@ -11,12 +11,11 @@ type Statistic = {
   data: DataPoint[]
 }
 
-// TODO: this does not have an ID field - will it still be cached? If so, how?
 const datapoint = builder.objectRef<DataPoint>("DataPoint")
 builder.objectType(datapoint, {
   fields: (t) => ({
     key: t.exposeString("key", { nullable: false }),
-    value: t.exposeFloat("value", { nullable: true }),
+    value: t.exposeString("value", { nullable: true }),
   }),
 })
 

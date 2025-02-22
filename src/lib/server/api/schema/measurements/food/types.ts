@@ -18,11 +18,6 @@ builder.objectType(foodMeasurement, {
   }),
 })
 
-// NOTE: if a food gets updated/removed, then all food measurements that reference
-// the modified food will automatically be invalidated by the response cache plugin
-//
-// NOTE: if a new food is created, then we only need to invalidate all foods. It is
-// not necessary to invalidate food measurements
 builder.objectField(foodMeasurement, "food", (t) =>
   t.loadable({
     type: foods.types.objects.food,

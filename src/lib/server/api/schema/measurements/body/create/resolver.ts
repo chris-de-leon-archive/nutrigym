@@ -1,7 +1,6 @@
 import { schema, sqlite } from "@nutrigym/lib/server/db/schema"
 import { and, eq, getTableColumns, sql } from "drizzle-orm"
 import { randomUUID } from "node:crypto"
-import { types } from "../types"
 import { z } from "zod"
 import {
   defineOperationResolver,
@@ -36,11 +35,6 @@ const handler = async (
   const measurementId = randomUUID()
   const userId = ctx.auth.user.id
   const date = input.date
-
-  ctx.providers.invalidator.registerInvalidation({
-    request: ctx.yoga.request,
-    invalidations: [{ typename: types.objects.bodyMeasurement.name }],
-  })
 
   const sq = ctx.providers.db
     .select({ logId: schema.userMeasurementLog.id })

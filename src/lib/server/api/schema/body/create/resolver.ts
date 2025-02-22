@@ -2,7 +2,6 @@ import { schema } from "@nutrigym/lib/server/db/schema"
 import { Gender } from "@nutrigym/lib/server/enums"
 import { isBirthdayInFuture } from "../utils"
 import { randomUUID } from "node:crypto"
-import { types } from "../types"
 import { z } from "zod"
 import {
   defineOperationResolver,
@@ -25,11 +24,6 @@ const handler = async (
   const birthday = parseZodDateString(input.data.birthday)
   if (isBirthdayInFuture(ctx.date, birthday)) {
     throw ERR_BIRTHDAY_IN_FUTURE
-  } else {
-    ctx.providers.invalidator.registerInvalidation({
-      request: ctx.yoga.request,
-      invalidations: [{ typename: types.objects.body.name }],
-    })
   }
 
   return await ctx.providers.db.transaction(async (tx) => {

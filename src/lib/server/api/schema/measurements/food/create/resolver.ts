@@ -3,7 +3,6 @@ import { and, eq, getTableColumns, sql } from "drizzle-orm"
 import { MealType } from "@nutrigym/lib/server/enums"
 import { randomUUID } from "node:crypto"
 import { foods } from "../../../food"
-import { types } from "../types"
 import { z } from "zod"
 import {
   defineOperationResolver,
@@ -30,11 +29,6 @@ const handler = async (
   const measurementId = randomUUID()
   const userId = ctx.auth.user.id
   const date = input.date
-
-  ctx.providers.invalidator.registerInvalidation({
-    request: ctx.yoga.request,
-    invalidations: [{ typename: types.objects.foodMeasurement.name }],
-  })
 
   const food = await ctx.providers.db.query.userFood.findFirst({
     where: and(

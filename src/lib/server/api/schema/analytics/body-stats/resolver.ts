@@ -90,27 +90,27 @@ const handler = async (
     data: [
       {
         key: "Total Number of Measurements",
-        value: result.measurementCount,
+        value: result.measurementCount.toString(),
       },
       {
         key: "Consistency %",
-        value: (result.measurementCount / totalDays) * 100,
+        value: ((result.measurementCount / totalDays) * 100).toString(),
       },
       {
         key: "Avg. Weight (lbs)",
-        value: result.avgWeight,
+        value: result.avgWeight ?? "N/A",
       },
       {
         key: "Avg. Water (ml) Intake",
-        value: result.avgWater,
+        value: result.avgWater ?? "N/A",
       },
       {
         key: "Avg. Sleep (hrs)",
-        value: result.avgSleep,
+        value: result.avgSleep ?? "N/A",
       },
       {
         key: "Avg. Number of Steps",
-        value: result.avgSteps,
+        value: result.avgSteps ?? "N/A",
       },
     ],
   }
