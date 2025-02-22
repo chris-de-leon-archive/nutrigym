@@ -26,6 +26,6 @@ export const tracer = new (class {
   }
 
   get(req: Request) {
-    return this.traces.get(req)
+    return this.traces.get(req) ?? []
   }
 })()

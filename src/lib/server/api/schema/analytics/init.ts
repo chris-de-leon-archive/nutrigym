@@ -1,4 +1,4 @@
-import { CacheInvalidator } from "../../providers/cache-invalidator"
+import { CacheInvalidator } from "../../plugins/cache-invalidator"
 import { foodMeasurements } from "../measurements/food"
 import { bodyMeasurements } from "../measurements/body"
 import { types } from "./types"

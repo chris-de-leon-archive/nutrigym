@@ -91,11 +91,11 @@ const handler = async (
       // non-null measurements. Keep in mind that it is not correct to use
       // COUNT(*) since it will include all days even those where the user
       // did not record a measurement.
-      measurementCount:  count(totalsByDay.calories),
-      avgCalories:       avg(totalsByDay.calories),
-      avgProtein:        avg(totalsByDay.protein),
-      avgCarbs:          avg(totalsByDay.carbs),
-      avgFats:           avg(totalsByDay.fats),
+      measurementCount: count(totalsByDay.calories),
+      avgCalories: avg(totalsByDay.calories),
+      avgProtein: avg(totalsByDay.protein),
+      avgCarbs: avg(totalsByDay.carbs),
+      avgFats: avg(totalsByDay.fats),
     })
     .from(totalsByDay)
     .limit(1)

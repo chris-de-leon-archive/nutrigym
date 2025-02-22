@@ -1,7 +1,7 @@
 import { useDisableIntrospection as withDisableIntrospection } from "@graphql-yoga/plugin-disable-introspection"
 import { usePersistedOperations as withPersistedOperations } from "@graphql-yoga/plugin-persisted-operations"
-import { withCacheInvalidatorPlugin } from "@nutrigym/lib/server/api/plugins/cache-invalidator"
 import { useResponseCache as withResponseCache } from "@graphql-yoga/plugin-response-cache"
+import { withGqlCachePlugin } from "@nutrigym/lib/server/api/plugins/cache-invalidator"
 import { invalidator } from "@nutrigym/lib/server/api/providers/cache-invalidator"
 import { withRequestID } from "@nutrigym/lib/server/api/plugins/request-id"
 import { withLogger } from "@nutrigym/lib/server/api/plugins/logger"
@@ -17,6 +17,7 @@ import { auth } from "@clerk/nextjs/server"
 import { createYoga } from "graphql-yoga"
 
 import PersistedDocuments from "../client/graphql/generated/persisted-documents.json"
+import { redis } from "./api/providers/redis"
 
 export const yoga = createYoga({
   fetchAPI: { Response },
@@ -72,6 +73,9 @@ export const yoga = createYoga({
     }),
 
     // Cache invalidation
-    withCacheInvalidatorPlugin(),
+    withGqlCachePlugin({
+      session: async () => await auth().then(({ userId }) => userId),
+      client: redis,
+    }),
   ],
 })

@@ -1,7 +1,4 @@
-mutation UpdateBodyMeasurement(
-  $id: Uuid!
-  $data: UpdateBodyMeasurementInput!
-) {
+mutation UpdateBodyMeasurement($id: Uuid!, $data: UpdateBodyMeasurementInput!) {
   updateBodyMeasurement(id: $id, data: $data) {
     id
   }
