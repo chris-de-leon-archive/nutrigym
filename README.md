@@ -1,34 +1,62 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Nutrigym
 
-## Getting Started
+## Pitfalls / Lessons Learned
 
-First, run the development server:
+I've decided to pause development work on this project for the time being. This app was mostly meant to be an exercise that looked into consolidating the features of a nutrition tracking app and an exercise training app so that users would have an all in one place to track their health. The nutrition portion is completed, but the exercise tracking portion is not fully finished. The original idea was that you'd be able to log the sets, exercises, reps, etc. as you worked out with the app, but this level of interactivity would be much better suited for a mobile app built with something like react native. Mobile apps have a much more extensive toolset for real time activity and doing this with a traditional web app would add a lot more complexity / limitations.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## Development
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+1. Create a clerk account and setup an project in the UI
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+1. Create a `.env` file with the following format:
 
-## Learn More
+    ```text
+    IP_ADDR="127.0.0.1"
 
-To learn more about Next.js, take a look at the following resources:
+    NEXT_PUBLIC_CLERK_SIGN_IN_FORCE_REDIRECT_URL="http://${IP_ADDR}:3000/api/auth/callback"
+    NEXT_PUBLIC_CLERK_SIGN_UP_FORCE_REDIRECT_URL="http://${IP_ADDR}:3000/api/auth/callback"
+    NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY="..."
+    NEXT_PUBLIC_API_URL="http://${IP_ADDR}:3000/api/graphql"
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+    CLERK_PUBLISHABLE_KEY="${NEXT_PUBLIC_CLERK_PUBLISHABLE_KEY}"
+    CLERK_SECRET_KEY="..."
+    CLERK_JWT_KEY="-----BEGIN PUBLIC KEY-----
+    ...
+    -----END PUBLIC KEY-----"
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+    CLERK_USER_ID="user_..."
+    DATABASE_URL="http://${IP_ADDR}:8080"
+    NODE_ENV="development"
+    ```
 
-## Deploy on Vercel
+1. Enter a nix shell:
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+    ```sh
+    nix develop
+    ```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1. Install dependencies, generate GQL client code, setup the DB:
+
+    ```sh
+    pnpm run init
+    ```
+
+1. Run the app:
+
+    ```sh
+    pnpm run dev
+    ```
+
+1. To add some dummy data to the app, run:
+
+    ```sh
+    pnpm run db:seed
+    ```
+
+1. Start the app again:
+
+    ```sh
+    pnpm run dev
+    ```
+
+1. Navigate to `/api/auth/callback`
