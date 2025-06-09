@@ -1,6 +1,6 @@
 # Nutrigym
 
-## Pitfalls / Lessons Learned
+## Archive Notice
 
 I've decided to pause development work on this project for the time being. This app was mostly meant to be an exercise that looked into consolidating the features of a nutrition tracking app and an exercise training app so that users would have an all in one place to track their health. The nutrition portion is completed, but the exercise tracking portion is not fully finished. The original idea was that you'd be able to log the sets, exercises, reps, etc. as you worked out with the app, but this level of interactivity would be much better suited for a mobile app built with something like react native. Mobile apps have a much more extensive toolset for real time activity and doing this with a traditional web app would add a lot more complexity / limitations.
 
