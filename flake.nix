@@ -1,5 +1,3 @@
-# https://github.com/NixOS/nixpkgs/commit/e032e7ed264d9cae8793b947fce8c6205efeb272 
-
 # Project generated with:
 #   nix develop .
 #   npx create-next-app@latest ./  --typescript --tailwind --eslint --app --src-dir --import-alias "@nutrigym/*" --empty --use-pnpm

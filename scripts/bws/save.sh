@@ -7,10 +7,22 @@ if [[ -z "${BWS_PROJECT_ID:-}" ]]; then
   exit 1
 fi
 
-SECRET_DEV_VAL="$(cat .env)"
-if [[ -z "${DEV:-}" ]]; then
-  bws secret create "DEV" "${SECRET_DEV_VAL}" "${BWS_PROJECT_ID}"
-else
-  SECRET_ID="$(bws secret list "${BWS_PROJECT_ID}" | jq -rc --arg k "DEV" 'first(.[] | select(.key == $k)).id')"
-  bws secret edit --value "${SECRET_DEV_VAL}" --project-id "${BWS_PROJECT_ID}" "${SECRET_ID}"
-fi
+declare -A SECRET_TO_PATH
+SECRET_TO_PATH["DEV"]="./.env"
+
+CACHE=""
+for SECRET_KEY in "${!SECRET_TO_PATH[@]}"; do
+  SECRET_VAL="$(cat "${SECRET_TO_PATH[${SECRET_KEY}]}")"
+
+  if [[ -z "${!SECRET_KEY}" ]]; then
+    bws secret create "${SECRET_KEY}" "${SECRET_VAL}" "${BWS_PROJECT_ID}"
+    continue
+  fi
+
+  if [[ -z "${CACHE}" ]]; then
+    CACHE="$(bws secret list "${BWS_PROJECT_ID}")"
+  fi
+
+  SECRET_ID="$(echo "${CACHE}" | jq -erc --arg k "${SECRET_KEY}" 'first(.[] | select(.key == $k)).id')"
+  bws secret edit --value "${SECRET_VAL}" --project-id "${BWS_PROJECT_ID}" "${SECRET_ID}"
+done
